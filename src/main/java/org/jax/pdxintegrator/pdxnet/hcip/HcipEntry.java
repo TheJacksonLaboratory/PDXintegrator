@@ -1,7 +1,12 @@
 package org.jax.pdxintegrator.pdxnet.hcip;
 
 import org.jax.pdxintegrator.model.PdxSex;
-
+/**
+ * Represent one entry (line) in the HCIP data.
+ * TODO understand the format of the HCIP file and make this more nearly complete.
+ * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
+ * @version 0.1.0
+ */
 public class HcipEntry {
 
     private static final String HCIP_PREFIX="hcip";
