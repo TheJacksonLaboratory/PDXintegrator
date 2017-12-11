@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jax.pdxintegrator.command.Command;
 import org.jax.pdxintegrator.command.DownloadCommand;
+import org.jax.pdxintegrator.command.MapCommand;
 
 
 import java.io.PrintWriter;
@@ -20,6 +21,8 @@ public class CommandParser {
 
     private String mycommand=null;
 
+    private String configFile=null;
+
     private Command command=null;
 
     public String getHpoPath() {
@@ -31,6 +34,13 @@ public class CommandParser {
     }
 
     public String getPatientAnnotations() { return patientAnnotations; }
+
+
+    private String getConfigFile() {
+        ClassLoader classLoader = CommandParser.class.getClassLoader();
+        String path = classLoader.getResource("config.properties").getFile();
+        return path;
+    }
 
     public CommandParser(String args[]) {
         final CommandLineParser cmdLineGnuParser = new DefaultParser();
@@ -52,7 +62,11 @@ public class CommandParser {
                 printUsage("no arguments passed");
                 return;
             }
-
+            if (commandLine.hasOption("c")) {
+                this.configFile=commandLine.getOptionValue("c");
+            } else {
+                this.configFile=getConfigFile();
+            }
 
             if (commandLine.hasOption("o")) {
                 hpoPath=commandLine.getOptionValue("o");
@@ -74,6 +88,9 @@ public class CommandParser {
                 }
                 logger.warn(String.format("Download command to %s",dataDownloadDirectory));
                 this.command=new DownloadCommand(dataDownloadDirectory);
+            } else if (mycommand.equals("map")) {
+                logger.trace("map command");
+                this.command = new MapCommand(configFile);
             } else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));
             }
@@ -102,6 +119,7 @@ public class CommandParser {
         final Options gnuOptions = new Options();
         gnuOptions.addOption("o", "hpo", true, "HPO OBO file path")
                 .addOption("d", "download", true, "path of directory to download files")
+                .addOption("c", "config", true, "path of configuration file")
                 .addOption("i","patient-hpo-terms",true, "list of HPO terms for the patient")
                 .addOption("a", "annotations", true, "Annotation file path");
         return gnuOptions;
