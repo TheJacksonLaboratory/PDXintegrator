@@ -1,9 +1,16 @@
 package org.jax.pdxintegrator.ncit;
 
-import com.github.phenomics.ontolib.formats.mpo.MpoRelationQualifier;
+
 import com.github.phenomics.ontolib.ontology.data.TermId;
 import com.github.phenomics.ontolib.ontology.data.TermRelation;
 
+/**
+ * Class for a relation in the National Cancer Institute's Thesaurus (NCIT).
+ *
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
+ * @version 0.1.1
+ */
 public class NcitTermRelation implements TermRelation {
 
     /** Serial UId for serialization. */

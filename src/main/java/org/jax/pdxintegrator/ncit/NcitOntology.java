@@ -1,7 +1,6 @@
 package org.jax.pdxintegrator.ncit;
 
-import com.github.phenomics.ontolib.formats.mpo.MpoTerm;
-import com.github.phenomics.ontolib.formats.mpo.MpoTermRelation;
+
 import com.github.phenomics.ontolib.graph.data.ImmutableDirectedGraph;
 import com.github.phenomics.ontolib.graph.data.ImmutableEdge;
 import com.github.phenomics.ontolib.ontology.data.ImmutableOntology;
@@ -10,7 +9,14 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 
 import java.util.Collection;
-
+/**
+ * Class for the {@link com.github.phenomics.ontolib.ontology.data.Ontology} based on
+ * the National Cancer Institute's Thesaurus (NCIT).
+ *
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
+ * @version 0.1.1
+ */
 public class NcitOntology extends ImmutableOntology<NcitTerm,NcitTermRelation> {
     /** Serial UId for serialization. */
     private static final long serialVersionUID = 1L;
@@ -24,7 +30,7 @@ public class NcitOntology extends ImmutableOntology<NcitTerm,NcitTermRelation> {
      * @param nonObsoleteTermIds {@link Collection} of {@link TermId}s of non-obsolete terms.
      * @param obsoleteTermIds {@link Collection} of {@link TermId}s of obsolete terms.
      * @param termMap Mapping from {@link TermId} to MPO term.
-     * @param relationMap Mapping from numeric edge identifier to {@link MpoTermRelation}.
+     * @param relationMap Mapping from numeric edge identifier to {@link NcitTermRelation}.
      */
     public NcitOntology(ImmutableSortedMap<String, String> metaInfo,
                        ImmutableDirectedGraph<TermId, ImmutableEdge<TermId>> graph, TermId rootTermId,

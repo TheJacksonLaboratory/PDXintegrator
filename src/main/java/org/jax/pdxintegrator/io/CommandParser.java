@@ -8,8 +8,13 @@ import org.jax.pdxintegrator.command.DownloadCommand;
 import org.jax.pdxintegrator.command.MapCommand;
 
 
-import java.io.PrintWriter;
 
+import java.io.PrintWriter;
+/**
+ * Class to parse command-line arguments
+ * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
+ * @version 0.1.1
+ */
 public class CommandParser {
     private static final Logger logger = LogManager.getLogger();
     private String hpoPath=null;
@@ -119,9 +124,7 @@ public class CommandParser {
         final Options gnuOptions = new Options();
         gnuOptions.addOption("o", "hpo", true, "HPO OBO file path")
                 .addOption("d", "download", true, "path of directory to download files")
-                .addOption("c", "config", true, "path of configuration file")
-                .addOption("i","patient-hpo-terms",true, "list of HPO terms for the patient")
-                .addOption("a", "annotations", true, "Annotation file path");
+                .addOption("c", "config", true, "path of configuration file");
         return gnuOptions;
     }
 

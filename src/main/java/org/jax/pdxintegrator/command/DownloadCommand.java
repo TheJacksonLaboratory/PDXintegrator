@@ -10,6 +10,11 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * The command to coordinate downloading of the NCIT obo format thesaurus file
+ * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
+ * @version 0.1.0
+ */
 public class DownloadCommand extends Command {
     private static final Logger logger = LogManager.getLogger();
 

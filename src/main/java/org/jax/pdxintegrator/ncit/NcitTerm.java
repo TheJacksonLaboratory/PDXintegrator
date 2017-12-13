@@ -8,6 +8,13 @@ import com.github.phenomics.ontolib.ontology.data.TermSynonym;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Class for a term (concept) in the National Cancer Institute's Thesaurus (NCIT).
+ *
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
+ * @version 0.1.1
+ */
 public class NcitTerm implements Term {
     /** Serial UId for serialization. */
     private static final long serialVersionUID = 1L;

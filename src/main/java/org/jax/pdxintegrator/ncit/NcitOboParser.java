@@ -5,6 +5,8 @@ import com.github.phenomics.ontolib.graph.data.ImmutableDirectedGraph;
 import com.github.phenomics.ontolib.graph.data.ImmutableEdge;
 import com.github.phenomics.ontolib.io.base.OntologyOboParser;
 import com.github.phenomics.ontolib.io.obo.OboImmutableOntologyLoader;
+import com.github.phenomics.ontolib.io.obo.OboOntologyEntryFactory;
+import com.github.phenomics.ontolib.io.obo.Stanza;
 import com.github.phenomics.ontolib.ontology.data.ImmutableOntology;
 import com.github.phenomics.ontolib.ontology.data.TermId;
 import com.google.common.collect.ImmutableMap;
@@ -13,6 +15,13 @@ import com.google.common.collect.ImmutableSortedMap;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Parser for the National Cancer Institute's Thesaurus (NCIT) obo file {@code ncit.obo}.
+ *
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
+ * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
+ * @version 0.1.1
+ */
 public class NcitOboParser implements OntologyOboParser<NcitOntology> {
 
     /** Path to the OBO file to parse. */
