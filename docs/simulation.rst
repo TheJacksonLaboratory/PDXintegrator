@@ -97,3 +97,7 @@ document :
 https://docs.google.com/document/d/1M81y8wbT5gegUe35RZwS92bvHLYJrVPhaFnnkECgbto/edit
 and will implement RDF patterns, and will test the ability to query the data with SPARQL. Once this
 is mature and tested, we will adapt the code to provide ETL and Q/C functionalities.
+
+Visualization
+~~~~~~~~~~~~~
+This is a nice tool for visualizing RDF graphs: http://visgraph3.org/
