@@ -31,7 +31,11 @@ public class CommandParser {
 
     private String configFile=null;
 
+    private String ncitPath=null;
+
     private Command command=null;
+
+    private final static String DEFAULT_NCIT_PATH="data/ncit.obo";
 
     public String getHpoPath() {
         return hpoPath;
@@ -79,6 +83,11 @@ public class CommandParser {
             if (commandLine.hasOption("a")) {
                 annotationPath=commandLine.getOptionValue("a");
             }
+            if (commandLine.hasOption("n")) {
+                ncitPath=commandLine.getOptionValue("n");
+            } else {
+                ncitPath=DEFAULT_NCIT_PATH;
+            }
             if (commandLine.hasOption("i")) {
                 patientAnnotations=commandLine.getOptionValue("i");
             }
@@ -94,7 +103,7 @@ public class CommandParser {
                 logger.warn(String.format("Download command to %s",dataDownloadDirectory));
                 this.command=new DownloadCommand(dataDownloadDirectory);
             } else if (mycommand.equals("map")) {
-                this.command = new MapCommand(configFile);
+                this.command = new MapCommand(ncitPath);
             }else if (mycommand.equals("simulate")) {
                 this.command = new SimulateCommand();
             } else {
@@ -125,6 +134,7 @@ public class CommandParser {
         final Options gnuOptions = new Options();
         gnuOptions.addOption("o", "hpo", true, "HPO OBO file path")
                 .addOption("d", "download", true, "path of directory to download files")
+                .addOption("n","ncit",true, "path to ncit.obo")
                 .addOption("c", "config", true, "path of configuration file");
         return gnuOptions;
     }

@@ -20,12 +20,13 @@ public class MapCommand extends Command{
 
     private String hcipPath=null;
 
-    private final static String DEFAULT_NCIT_PATH="data/ncit.obo";
-    private String ncitPath=DEFAULT_NCIT_PATH;
+   /** Path to the ncit.obo file. */
+    private final String ncitPath;
 
-    public MapCommand(String configFile) {
-        loadProperties(configFile);
+    public MapCommand(String ncitpath) {
+        ncitPath=ncitpath;
     }
+
 
 
     @Override
