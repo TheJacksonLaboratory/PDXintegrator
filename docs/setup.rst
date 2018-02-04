@@ -1,9 +1,24 @@
 Setting up PDXIntegrator
 ========================
 
-PDXIntegrator is a Java program that requires at least Java version 8. PDXIntegrator is provided
+PDXIntegrator is a Java program that requires at least Java version 8.
+
+Note that for now, we are using a private fork of the ontolib library for parsing the NCIT obo file.
+Go to https://github.com/monarch-initiative/OLPG and enter the following commands (notify Peter if
+you need access). ::
+
+    $ git clone https://github.com/monarch-initiative/OLPG
+    $ cd OLPG
+    $ mvn install
+
+This will put the OLPG library files into your local maven repository (.m2 directory) and let you
+build PDXIntegrator.
+
+
+PDXIntegrator is provided
 as a maven project. The quickest way to set it up is to clone the project from the GitHub site
-at https://github.com/TheJacksonLaboratory/PDXintegrator and then to use maven to build the project. In the
+at https://github.com/TheJacksonLaboratory/PDXintegrator and then to use maven to build the project.
+In the
 following, we show a command that will display a help message--if you see this, then you have successfully
 built the program. ::
 
