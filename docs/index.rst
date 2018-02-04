@@ -9,7 +9,9 @@ Welcome to PDXIntegrator's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   Setting up PDXIntegrator <setup>
+    Setting up PDXIntegrator <setup>
+    Simulated cases and queries <simulation>
+    National Cancer Institute Thesaurus <ncit>
 
 PDXIntegrator
 ~~~~~~~~~~~~~
@@ -18,6 +20,8 @@ stage and we do not recommend use of any of this code in production environments
 provide information about current plans for collaborators. Please visit https://github.com/TheJacksonLaboratory/PDXintegrator
 to view the current code base.
 
+To get a very first impression of this project, we recommend that you go through the
+:ref:`Demonstration of simulating cases and performing SPARQL queries <simulation>`.
 
 
 

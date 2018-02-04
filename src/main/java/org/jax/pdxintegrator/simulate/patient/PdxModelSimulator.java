@@ -6,10 +6,9 @@ import com.github.phenomics.ontolib.ontology.data.ImmutableTermId;
 import com.github.phenomics.ontolib.ontology.data.ImmutableTermPrefix;
 import com.github.phenomics.ontolib.ontology.data.TermId;
 import com.github.phenomics.ontolib.ontology.data.TermPrefix;
-import org.jax.pdxintegrator.model.patient.Age;
-import org.jax.pdxintegrator.model.patient.Consent;
-import org.jax.pdxintegrator.model.patient.EthnicityRace;
-import org.jax.pdxintegrator.model.patient.Gender;
+import javafx.scene.control.RadioMenuItem;
+import org.jax.pdxintegrator.model.PdxModel;
+import org.jax.pdxintegrator.model.patient.*;
 
 /**
  * This class is intended to illustrate how to instantiate the PdxPatient module with data.
@@ -17,7 +16,7 @@ import org.jax.pdxintegrator.model.patient.Gender;
  * for any analysis--for demonstration only!
  * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
  */
-public class PatientSimulator {
+public class PdxModelSimulator {
 
     private final String patientID;
     private final Gender gender;
@@ -28,14 +27,47 @@ public class PatientSimulator {
 
     private final Random random=new Random();
 
-    public PatientSimulator(int id) {
+
+
+    PdxModel pdxmodel=null;
+
+    public PdxModelSimulator(int id) {
         this.patientID=String.format("PAT-%d",id);
         this.gender=getRandomGender();
         this.age=getRandomAge();
         this.consent=getRandomConsent();
         this.ethnicityRace=getRandomEthnicity();
         diagnosis=getRandomNCITTermId();
+        PdxPatient patient  = buildPatient();
+        // same for other categories
+        buildModel(patient);
     }
+
+
+    public PdxModel getPdxmodel() {
+        return pdxmodel;
+    }
+
+    private void buildModel(PdxPatient patient ) {
+        this.pdxmodel = new PdxModel(patient);
+    }
+
+
+
+
+    private PdxPatient buildPatient() {
+        PdxPatient.Builder builder= new PdxPatient.Builder(patientID,
+                gender,
+                age,
+                diagnosis,
+                consent,
+                ethnicityRace);
+        return builder.build();
+    }
+
+
+
+
 
     /**
      * ToDo -- input the NCIT for this.
@@ -43,7 +75,9 @@ public class PatientSimulator {
      */
     private TermId getRandomNCITTermId() {
         TermPrefix NCIT_PREFIX = new ImmutableTermPrefix("NCIT");
-        TermId ncitTermId = new ImmutableTermId(NCIT_PREFIX,"321");
+        Random r = new Random();
+        int diagnosisCode=r.nextInt(10_000);
+        TermId ncitTermId = new ImmutableTermId(NCIT_PREFIX,String.valueOf(diagnosisCode));
         return ncitTermId;
     }
 

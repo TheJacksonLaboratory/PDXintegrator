@@ -3,10 +3,7 @@ package org.jax.pdxintegrator.io;
 import org.apache.commons.cli.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jax.pdxintegrator.command.Command;
-import org.jax.pdxintegrator.command.DownloadCommand;
-import org.jax.pdxintegrator.command.MapCommand;
-import org.jax.pdxintegrator.command.SimulateCommand;
+import org.jax.pdxintegrator.command.*;
 
 
 import java.io.PrintWriter;
@@ -33,9 +30,13 @@ public class CommandParser {
 
     private String ncitPath=null;
 
+    private String rdfFilename=null;
+
     private Command command=null;
 
     private final static String DEFAULT_NCIT_PATH="data/ncit.obo";
+
+    private final static String DEFAULT_RDF_FILENAME="simulatedCases.rdf";
 
     public String getHpoPath() {
         return hpoPath;
@@ -88,6 +89,11 @@ public class CommandParser {
             } else {
                 ncitPath=DEFAULT_NCIT_PATH;
             }
+            if (commandLine.hasOption("r")) {
+                rdfFilename=commandLine.getOptionValue("r");
+            } else {
+                rdfFilename=DEFAULT_RDF_FILENAME;
+            }
             if (commandLine.hasOption("i")) {
                 patientAnnotations=commandLine.getOptionValue("i");
             }
@@ -104,8 +110,10 @@ public class CommandParser {
                 this.command=new DownloadCommand(dataDownloadDirectory);
             } else if (mycommand.equals("map")) {
                 this.command = new MapCommand(ncitPath);
+            } else if (mycommand.equals("query")) {
+                this.command = new QueryCommand(rdfFilename);
             }else if (mycommand.equals("simulate")) {
-                this.command = new SimulateCommand();
+                this.command = new SimulateCommand(rdfFilename);
             } else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));
             }
@@ -135,6 +143,7 @@ public class CommandParser {
         gnuOptions.addOption("o", "hpo", true, "HPO OBO file path")
                 .addOption("d", "download", true, "path of directory to download files")
                 .addOption("n","ncit",true, "path to ncit.obo")
+                .addOption("r","rdf",true, "RDF filename (simulated cases)")
                 .addOption("c", "config", true, "path of configuration file");
         return gnuOptions;
     }
@@ -178,6 +187,9 @@ public class CommandParser {
         writer.println();
         writer.println("map");
         writer.println("\tjava -jar PdxIntegrator.jar map [-d directory]: todo.");
+        writer.println();
+        writer.println("query");
+        writer.println("\tjava -jar PdxIntegrator.jar query [-i file]: todo.");
         writer.println();
         writer.close();
         System.exit(0);

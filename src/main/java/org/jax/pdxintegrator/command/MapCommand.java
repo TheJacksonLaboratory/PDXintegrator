@@ -4,10 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jax.pdxintegrator.ncit.NcitOboParser;
 import org.jax.pdxintegrator.ncit.NcitOntology;
-import org.jax.pdxintegrator.pdxnet.hcip.HcipParser;
+
 
 import java.io.*;
-import java.util.Comparator;
 import java.util.Properties;
 /**
  * This is the command to coordinate mapping of the PDX center data to the common RDF format of PDXnet
@@ -47,14 +46,6 @@ public class MapCommand extends Command{
         NcitOntology ontology = parser.parse();
     }
 
-
-
-    private void parseHCIP() {
-        HcipParser parser = new HcipParser(this.hcipPath);
-        parser.parseHcipData();
-        parser.debugPrint();
-
-    }
 
 
 

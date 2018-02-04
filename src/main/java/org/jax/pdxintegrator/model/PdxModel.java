@@ -1,5 +1,11 @@
 package org.jax.pdxintegrator.model;
 
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.jax.pdxintegrator.model.patient.Consent;
+import org.jax.pdxintegrator.model.patient.Gender;
 import org.jax.pdxintegrator.model.patient.PdxPatient;
 
 /**
@@ -7,7 +13,10 @@ import org.jax.pdxintegrator.model.patient.PdxPatient;
  */
 public class PdxModel {
 
+
     private final PdxPatient patient;
+
+
 
 
     public PdxModel(PdxPatient pat){
@@ -15,4 +24,7 @@ public class PdxModel {
     }
 
 
+    public PdxPatient getPatient() {
+        return patient;
+    }
 }

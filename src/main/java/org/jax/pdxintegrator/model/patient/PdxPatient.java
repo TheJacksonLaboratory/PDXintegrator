@@ -8,9 +8,44 @@ import java.util.List;
 
 public class PdxPatient {
 
+    private final String submitterPatientID;
+    private final Gender gender;
+    private final Age age;
+    private final TermId diagnosis;
+    private final Consent consent;
+    private final EthnicityRace ethnicityRace;
 
-    public PdxPatient(){
+    public String getSubmitterPatientID() {
+        return submitterPatientID;
+    }
 
+    public Gender getGender() {
+        return gender;
+    }
+
+    public Age getAge() {
+        return age;
+    }
+
+    public TermId getDiagnosis() {
+        return diagnosis;
+    }
+
+    public Consent getConsent() {
+        return consent;
+    }
+
+    public EthnicityRace getEthnicityRace() {
+        return ethnicityRace;
+    }
+
+    private PdxPatient(String id, Gender g, Age a, TermId dx, Consent c, EthnicityRace er){
+        submitterPatientID=id;
+        gender=g;
+        age=a;
+        diagnosis=dx;
+        consent=c;
+        ethnicityRace =er;
     }
 
 
@@ -68,6 +103,16 @@ public class PdxPatient {
             virologyStatus=status;
             return this;
         }
+        // ToDO include other fields.
+        public PdxPatient build() {
+            PdxPatient pat = new PdxPatient(submitterPatientID,gender,age,diagnosis,consent,ethnicityRace);
+//            if (currentTreatmentDrugs != null) {
+//                pat.setCurrentTreatmentDrugs(currentTreatmentDrugs);
+//            } //etc
+            return pat;
+        }
+
+
     }
 
 }
