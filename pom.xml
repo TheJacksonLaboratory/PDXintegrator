@@ -5,10 +5,10 @@
 
     <groupId>org.jax</groupId>
     <artifactId>pdxintegrator</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
 
-    <name>diachromatic</name>
+    <name>PdxIntegrator</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -16,7 +16,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jdk.version>1.8</jdk.version>
         <htsjdk.version>2.10.1</htsjdk.version>
-        <ontolib.version>0.3</ontolib.version>
+        <ontolib.version>0.1.1</ontolib.version>
+        <jena.version>3.6.0</jena.version>
     </properties>
 
     <dependencies>
@@ -81,6 +82,13 @@
             <version>23.4-jre</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.jena</groupId>
+            <artifactId>apache-jena-libs</artifactId>
+            <type>pom</type>
+            <version>${jena.version}</version>
+        </dependency>
+
 
         <!-- End of libraries for GUI testing -->
 
@@ -100,7 +108,7 @@
 
     <build>
 
-        <finalName>pdxintegrator</finalName>
+        <finalName>PdxIntegrator</finalName>
 
         <resources>
             <resource>
@@ -152,6 +160,7 @@
                             <classpathPrefix>lib/</classpathPrefix>
                             <useUniqueVersions>false</useUniqueVersions>
                             <mainClass>org.jax.pdxintegrator.PdxIntegrator</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                     </archive>
                 </configuration>

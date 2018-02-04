@@ -6,10 +6,13 @@ import org.apache.logging.log4j.Logger;
 import org.jax.pdxintegrator.command.Command;
 import org.jax.pdxintegrator.command.DownloadCommand;
 import org.jax.pdxintegrator.command.MapCommand;
-
+import org.jax.pdxintegrator.command.SimulateCommand;
 
 
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * Class to parse command-line arguments
  * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
@@ -57,22 +60,19 @@ public class CommandParser {
         {
             commandLine = cmdLineGnuParser.parse(gnuOptions, args);
             String category[] = commandLine.getArgs();
-            if (category.length != 1) {
-                printUsage("command missing");
-            } else {
+            if (category.length < 1) {
+                printUsage("[ERROR] no command");
+            } else if (category.length >1) {
+                String cmd= Arrays.stream(args).collect(Collectors.joining(" "));
+                printUsage(String.format("Malformed command line with %d arguments: %s",category.length,cmd));
+            } else{
                 mycommand = category[0];
-                logger.trace(String.format("I GOT COMMANT %s",mycommand));
-            }
-            if (commandLine.getArgs().length < 1) {
-                printUsage("no arguments passed");
-                return;
             }
             if (commandLine.hasOption("c")) {
                 this.configFile=commandLine.getOptionValue("c");
             } else {
                 this.configFile=getConfigFile();
             }
-
             if (commandLine.hasOption("o")) {
                 hpoPath=commandLine.getOptionValue("o");
             }
@@ -94,8 +94,9 @@ public class CommandParser {
                 logger.warn(String.format("Download command to %s",dataDownloadDirectory));
                 this.command=new DownloadCommand(dataDownloadDirectory);
             } else if (mycommand.equals("map")) {
-                logger.trace("map command");
                 this.command = new MapCommand(configFile);
+            }else if (mycommand.equals("simulate")) {
+                this.command = new SimulateCommand();
             } else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));
             }
@@ -128,6 +129,16 @@ public class CommandParser {
         return gnuOptions;
     }
 
+    public static String getVersion() {
+        String version = "0.0.0";// default, should be overwritten by the following.
+        try {
+            Package p = CommandParser.class.getPackage();
+            version = p.getImplementationVersion();
+        } catch (Exception e) {
+            // do nothing
+        }
+        return version;
+    }
 
 
     /**
@@ -136,11 +147,28 @@ public class CommandParser {
     public static void printUsage(String message) {
         final PrintWriter writer = new PrintWriter(System.out);
         final HelpFormatter usageFormatter = new HelpFormatter();
-        final String applicationName = "java -jar pdxintegrator.jar command";
+        writer.println();
+        if (message!=null) {
+            writer.println(message);
+            writer.println();
+        }
+        writer.println("Program: PdxIntegrator (Common Knowledge Graph PdxModel for PDXNet)");
+        writer.println("Version: " + getVersion());
+        writer.println();
+        final String applicationName = "java -jar PdxIntegrator.jar command";
         final Options options = constructOptions();
         usageFormatter.printUsage(writer, 120, applicationName, options);
-        writer.println("\twhere command is one of download,....");
-        writer.println("\t- download [-d directory]: Download neeeded files to directory at (-d).");
+        writer.println("Available commands:");
+        writer.println();
+        writer.println("download");
+        writer.println("\tjava -jar PdxIntegrator.jar download [-d directory]: Download NCI files to directory at -d (default=\"data\").");
+        writer.println();
+        writer.println("simulate");
+        writer.println("\tjava -jar PdxIntegrator.jar simulate [-d directory]: Requires NCI files in directory at -d (default=\"data\").");
+        writer.println();
+        writer.println("map");
+        writer.println("\tjava -jar PdxIntegrator.jar map [-d directory]: todo.");
+        writer.println();
         writer.close();
         System.exit(0);
     }

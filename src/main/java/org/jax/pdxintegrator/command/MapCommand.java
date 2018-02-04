@@ -62,6 +62,11 @@ public class MapCommand extends Command{
     private void loadProperties(String config) {
         Properties prop = new Properties();
         InputStream input = null;
+        File f = new File(config);
+        if (!f.exists()) {
+            logger.error(String.format("Could not find config file at %s",config));
+            return;
+        }
         try {
             input = new FileInputStream(config);
             prop.load(input);
