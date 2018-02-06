@@ -1,6 +1,11 @@
 NCIT
 ====
-We will use the NCIT thesaurus to provide IDs for the concepts in PDXnet.
+We will use the NCIT thesaurus to provide IDs for the concepts in PDXnet. This is a big file with about 400000 terms
+and it is difficult to parse with ontolib, Jena, or OWLAPI. However, we need only a small subset of the NCIT for
+this project.
+
+
+
 ontolib currently does not sufficiently support this. We will use OWLAPI or a JSON obo parser (to do).
 
 Note that the NCIT code is not being used in the current demonstration program.

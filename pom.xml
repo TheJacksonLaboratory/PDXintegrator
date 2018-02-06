@@ -95,6 +95,12 @@
             <version>5.1.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.berkeleybop</groupId>
+            <artifactId>robot</artifactId>
+            <version>0.1</version>
+            <scope>package</scope>
+        </dependency>
 
     </dependencies>
     <dependencyManagement>
