@@ -3,6 +3,8 @@ package org.jax.pdxintegrator.command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jax.pdxintegrator.model.PdxModel;
+import org.jax.pdxintegrator.ncit.NciJenaParser;
+import org.jax.pdxintegrator.ncit.NcitOwlApiParser;
 import org.jax.pdxintegrator.rdf.PdxModel2Rdf;
 import org.jax.pdxintegrator.simulate.patient.PdxModelSimulator;
 
@@ -21,14 +23,25 @@ public class SimulateCommand extends Command{
 
     private final String outfilename;
 
-    public SimulateCommand(String fname) {
+    private final String ncitOboPath;
+
+    public SimulateCommand(String fname, String ncit) {
         logger.trace("Simulating PDF net data...");
         outfilename=fname;
+        ncitOboPath=ncit;
     }
 
 
     @Override
     public void execute() {
+
+        inputNcit();
+
+
+    }
+
+
+    private void outputSimulation() {
         for (int i = 0; i < N_cases; i++) {
             PdxModel pm = simulateCase(i);
             simulatedModels.add(pm);
@@ -41,6 +54,19 @@ public class SimulateCommand extends Command{
             fne.printStackTrace();
         }
     }
+
+
+
+
+
+    private void inputNcit() {
+        NcitOwlApiParser parser = new NcitOwlApiParser(this.ncitOboPath);
+        parser.parse();
+//        NciJenaParser parser = new NciJenaParser();
+//        parser.parse();
+    }
+
+
 
 
     private PdxModel simulateCase(int i) {

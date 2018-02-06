@@ -89,8 +89,12 @@
             <version>${jena.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.sourceforge.owlapi</groupId>
+            <artifactId>owlapi-distribution</artifactId>
+            <version>5.1.0</version>
+        </dependency>
 
-        <!-- End of libraries for GUI testing -->
 
     </dependencies>
     <dependencyManagement>

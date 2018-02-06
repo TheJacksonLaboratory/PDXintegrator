@@ -113,7 +113,7 @@ public class CommandParser {
             } else if (mycommand.equals("query")) {
                 this.command = new QueryCommand(rdfFilename);
             }else if (mycommand.equals("simulate")) {
-                this.command = new SimulateCommand(rdfFilename);
+                this.command = new SimulateCommand(rdfFilename, ncitPath);
             } else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));
             }
