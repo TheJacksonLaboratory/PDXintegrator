@@ -1,5 +1,7 @@
 package org.jax.pdxintegrator.simulate.patient;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import com.github.phenomics.ontolib.ontology.data.ImmutableTermId;
@@ -7,8 +9,11 @@ import com.github.phenomics.ontolib.ontology.data.ImmutableTermPrefix;
 import com.github.phenomics.ontolib.ontology.data.TermId;
 import com.github.phenomics.ontolib.ontology.data.TermPrefix;
 import javafx.scene.control.RadioMenuItem;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jax.pdxintegrator.model.PdxModel;
 import org.jax.pdxintegrator.model.patient.*;
+import org.jax.pdxintegrator.ncit.neoplasm.NcitNeoplasmTerm;
 
 /**
  * This class is intended to illustrate how to instantiate the PdxPatient module with data.
@@ -17,27 +22,33 @@ import org.jax.pdxintegrator.model.patient.*;
  * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
  */
 public class PdxModelSimulator {
-
+    private static final Logger logger = LogManager.getLogger();
     private final String patientID;
     private final Gender gender;
     private final Age age;
     private final TermId diagnosis;
     private final Consent consent;
     private final EthnicityRace ethnicityRace;
+    private Random random=new Random();
 
-    private final Random random=new Random();
+    /** List of NCIT Terms for neoplasms. Our simulation will choose one of these diagnoses at random. */
+    private final List<NcitNeoplasmTerm> neoplasmTerms;
 
 
 
     PdxModel pdxmodel=null;
 
-    public PdxModelSimulator(int id) {
+    public PdxModelSimulator(int id, List<NcitNeoplasmTerm> neoplasms) {
         this.patientID=String.format("PAT-%d",id);
+        logger.trace(String.format("Simulating patient %s (will choose random diagnosis from %d NCIT terms",patientID,neoplasms.size()));
         this.gender=getRandomGender();
         this.age=getRandomAge();
         this.consent=getRandomConsent();
         this.ethnicityRace=getRandomEthnicity();
+        this.neoplasmTerms=neoplasms;
         diagnosis=getRandomNCITTermId();
+        Objects.requireNonNull(neoplasms);
+
         PdxPatient patient  = buildPatient();
         // same for other categories
         buildModel(patient);
@@ -70,14 +81,14 @@ public class PdxModelSimulator {
 
 
     /**
-     * ToDo -- input the NCIT for this.
-     * @return
+     * @return a TermId that represents an NCIT neoplasm term.
      */
     private TermId getRandomNCITTermId() {
-        TermPrefix NCIT_PREFIX = new ImmutableTermPrefix("NCIT");
-        Random r = new Random();
-        int diagnosisCode=r.nextInt(10_000);
-        TermId ncitTermId = new ImmutableTermId(NCIT_PREFIX,String.valueOf(diagnosisCode));
+
+        logger.trace("getting random number for size="+neoplasmTerms.size());
+        int randomIndex=random.nextInt(this.neoplasmTerms.size());
+        NcitNeoplasmTerm term = neoplasmTerms.get(randomIndex);
+        TermId ncitTermId = term.getTermId();
         return ncitTermId;
     }
 

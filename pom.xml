@@ -5,7 +5,7 @@
 
     <groupId>org.jax</groupId>
     <artifactId>pdxintegrator</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
 
     <name>PdxIntegrator</name>
@@ -95,12 +95,7 @@
             <version>5.1.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.berkeleybop</groupId>
-            <artifactId>robot</artifactId>
-            <version>0.1</version>
-            <scope>package</scope>
-        </dependency>
+
 
     </dependencies>
     <dependencyManagement>

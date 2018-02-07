@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * This class coordinates the transformation of one or more {@link org.jax.pdxintegrator.model.PdxModel} objects
  * as an RDF graph.
+ * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
  */
 public class PdxModel2Rdf {
 

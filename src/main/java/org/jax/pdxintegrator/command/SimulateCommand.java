@@ -3,12 +3,12 @@ package org.jax.pdxintegrator.command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jax.pdxintegrator.model.PdxModel;
-import org.jax.pdxintegrator.ncit.NciJenaParser;
 import org.jax.pdxintegrator.ncit.NcitOwlApiParser;
+import org.jax.pdxintegrator.ncit.neoplasm.NcitNeoplasmTerm;
 import org.jax.pdxintegrator.rdf.PdxModel2Rdf;
 import org.jax.pdxintegrator.simulate.patient.PdxModelSimulator;
 
-import java.io.FileDescriptor;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -20,6 +20,8 @@ public class SimulateCommand extends Command{
     private static final int N_cases=5;
 
     private List<PdxModel> simulatedModels=new ArrayList<>();
+
+    private List<NcitNeoplasmTerm> neoplasmTerms=null;
 
     private final String outfilename;
 
@@ -36,12 +38,14 @@ public class SimulateCommand extends Command{
     public void execute() {
 
         inputNcit();
+        outputSimulation();
 
 
     }
 
 
     private void outputSimulation() {
+        logger.trace("We will now output simulated PDX cases...");
         for (int i = 0; i < N_cases; i++) {
             PdxModel pm = simulateCase(i);
             simulatedModels.add(pm);
@@ -62,15 +66,14 @@ public class SimulateCommand extends Command{
     private void inputNcit() {
         NcitOwlApiParser parser = new NcitOwlApiParser(this.ncitOboPath);
         parser.parse();
-//        NciJenaParser parser = new NciJenaParser();
-//        parser.parse();
+        this.neoplasmTerms=parser.getTermlist();
     }
 
 
 
 
     private PdxModel simulateCase(int i) {
-        PdxModelSimulator simulator = new PdxModelSimulator(i);
+        PdxModelSimulator simulator = new PdxModelSimulator(i, this.neoplasmTerms);
         return simulator.getPdxmodel();
     }
 
