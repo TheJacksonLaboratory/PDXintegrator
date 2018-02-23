@@ -2,8 +2,6 @@ package org.jax.pdxintegrator.command;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jax.pdxintegrator.ncit.NcitOboParser;
-import org.jax.pdxintegrator.ncit.NcitOntology;
 
 
 import java.io.*;
@@ -42,8 +40,9 @@ public class MapCommand extends Command{
 
 
     private void parseNcit() throws IOException {
-        NcitOboParser parser = new NcitOboParser(new File(ncitPath));
-        NcitOntology ontology = parser.parse();
+       //
+        System.err.println("Not supported/to-do");
+
     }
 
 

@@ -30,11 +30,15 @@ public class CommandParser {
 
     private String ncitPath=null;
 
+    private String uberonPath=null;
+
     private String rdfFilename=null;
 
     private Command command=null;
 
     private final static String DEFAULT_NCIT_PATH="data/ncit.obo";
+
+    private final static String DEFAULT_UBERON_PATH="data/basic.obo";
 
     private final static String DEFAULT_RDF_FILENAME="simulatedCases.rdf";
 
@@ -51,8 +55,7 @@ public class CommandParser {
 
     private String getConfigFile() {
         ClassLoader classLoader = CommandParser.class.getClassLoader();
-        String path = classLoader.getResource("config.properties").getFile();
-        return path;
+        return classLoader.getResource("config.properties").getFile();
     }
 
     public CommandParser(String args[]) {
@@ -77,6 +80,11 @@ public class CommandParser {
                 this.configFile=commandLine.getOptionValue("c");
             } else {
                 this.configFile=getConfigFile();
+            }
+            if (commandLine.hasOption("u")) {
+                this.uberonPath=commandLine.getOptionValue("u");
+            } else {
+                this.uberonPath=DEFAULT_UBERON_PATH;
             }
             if (commandLine.hasOption("o")) {
                 hpoPath=commandLine.getOptionValue("o");
@@ -113,7 +121,7 @@ public class CommandParser {
             } else if (mycommand.equals("query")) {
                 this.command = new QueryCommand(rdfFilename);
             }else if (mycommand.equals("simulate")) {
-                this.command = new SimulateCommand(rdfFilename, ncitPath);
+                this.command = new SimulateCommand(rdfFilename, ncitPath,uberonPath);
             } else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));
             }
@@ -137,13 +145,13 @@ public class CommandParser {
      *
      * @return Options expected from command-line of GNU form.
      */
-    public static Options constructOptions()
-    {
+    private static Options constructOptions() {
         final Options gnuOptions = new Options();
         gnuOptions.addOption("o", "hpo", true, "HPO OBO file path")
                 .addOption("d", "download", true, "path of directory to download files")
                 .addOption("n","ncit",true, "path to ncit.obo")
                 .addOption("r","rdf",true, "RDF filename (simulated cases)")
+                .addOption("u","uberon",true, "path to uberon (basic.obo)")
                 .addOption("c", "config", true, "path of configuration file");
         return gnuOptions;
     }
@@ -163,7 +171,7 @@ public class CommandParser {
     /**
      * Print usage information to provided OutputStream.
      */
-    public static void printUsage(String message) {
+    private static void printUsage(String message) {
         final PrintWriter writer = new PrintWriter(System.out);
         final HelpFormatter usageFormatter = new HelpFormatter();
         writer.println();

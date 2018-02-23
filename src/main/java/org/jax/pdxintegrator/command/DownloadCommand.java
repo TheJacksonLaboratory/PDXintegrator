@@ -24,9 +24,11 @@ public class DownloadCommand extends Command {
 
     private final static String NCIT_OBO="https://stars.renci.org/var/NCIt/ncit.obo";
 
+    private final static String UBERON_URL="http://ontologies.berkeleybop.org/uberon/basic.obo";
+
      /**
      * Download all three files that we need for the analysis.
-     * @param path
+     * @param path Path to the directory which the files will be downloaded to
      */
     public DownloadCommand(String path){
         this.downloadDirectory=path;
@@ -37,6 +39,7 @@ public class DownloadCommand extends Command {
      * Download the hp.obo and the phenotype_annotation.tab files.
      */
     public void execute() {
+        downloadUberonIfNeeded();
         downloadNcitOntologyIfNeeded();
     }
 
@@ -59,6 +62,29 @@ public class DownloadCommand extends Command {
             logger.error(e,e);
         }
         logger.trace(String.format("Successfully downloaded ncit.obo file at %s",f.getAbsolutePath()));
+    }
+
+
+
+    private void downloadUberonIfNeeded() {
+        File f = new File(String.format("%s%sbasic.obo",downloadDirectory,File.separator));
+        if (f.exists()) {
+            logger.warn(String.format("Cowardly refusing to download uberon (basic.obo) since we found it at %s",f.getAbsolutePath()));
+            return;
+        }
+        FileDownloader downloader=new FileDownloader();
+        try {
+            URL url = new URL(UBERON_URL);
+            logger.debug("Created url from "+UBERON_URL+": "+url.toString());
+            downloader.copyURLToFile(url, new File(f.getAbsolutePath()));
+        } catch (MalformedURLException e) {
+            logger.error("Malformed URL for basic.obo");
+            logger.error(e,e);
+        } catch (FileDownloadException e) {
+            logger.error("Error downloading basic.obo");
+            logger.error(e,e);
+        }
+        logger.trace(String.format("Successfully downloaded uberon (basic.obo) file at %s",f.getAbsolutePath()));
     }
 
 }

@@ -4,9 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jax.pdxintegrator.model.PdxModel;
 import org.jax.pdxintegrator.ncit.NcitOwlApiParser;
-import org.jax.pdxintegrator.ncit.neoplasm.NcitNeoplasmTerm;
+import org.jax.pdxintegrator.ncit.neoplasm.NcitTerm;
 import org.jax.pdxintegrator.rdf.PdxModel2Rdf;
-import org.jax.pdxintegrator.simulate.patient.PdxModelSimulator;
+import org.jax.pdxintegrator.simulate.PdxModelSimulator;
+import org.jax.pdxintegrator.uberon.UberonOntologyParser;
+import org.jax.pdxintegrator.uberon.UberonTerm;
 
 
 import java.io.FileNotFoundException;
@@ -17,20 +19,29 @@ import java.util.List;
 public class SimulateCommand extends Command{
     private static final Logger logger = LogManager.getLogger();
 
-    private static final int N_cases=5;
+    private static final int N_cases=2;
 
     private List<PdxModel> simulatedModels=new ArrayList<>();
 
-    private List<NcitNeoplasmTerm> neoplasmTerms=null;
+    private List<NcitTerm> neoplasmTerms=null;
+    /** List of terms like "Grade 2" */
+    private List<NcitTerm> gradeTerms;
+
+    private List<NcitTerm> stageTerms;
+
+    private List<UberonTerm> uberonTerms=null;
 
     private final String outfilename;
 
     private final String ncitOboPath;
 
-    public SimulateCommand(String fname, String ncit) {
+    private final String uberonPath;
+
+    public SimulateCommand(String fname, String ncit,String uberon) {
         logger.trace("Simulating PDF net data...");
         outfilename=fname;
         ncitOboPath=ncit;
+        uberonPath=uberon;
     }
 
 
@@ -38,6 +49,7 @@ public class SimulateCommand extends Command{
     public void execute() {
 
         inputNcit();
+        inputUberon();
         outputSimulation();
 
 
@@ -67,13 +79,21 @@ public class SimulateCommand extends Command{
         NcitOwlApiParser parser = new NcitOwlApiParser(this.ncitOboPath);
         parser.parse();
         this.neoplasmTerms=parser.getTermlist();
+        this.gradeTerms=parser.getGradeTermList();
+        this.stageTerms=parser.getStageTermList();
+    }
+
+    private void inputUberon() {
+        UberonOntologyParser parser = new UberonOntologyParser(this.uberonPath);
+        parser.parse();
+        this.uberonTerms=parser.getTermlist();
     }
 
 
 
 
     private PdxModel simulateCase(int i) {
-        PdxModelSimulator simulator = new PdxModelSimulator(i, this.neoplasmTerms);
+        PdxModelSimulator simulator = new PdxModelSimulator(i, this.neoplasmTerms, this.gradeTerms, this.stageTerms,this.uberonTerms);
         return simulator.getPdxmodel();
     }
 

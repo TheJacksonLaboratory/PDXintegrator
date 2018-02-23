@@ -9,8 +9,10 @@ import org.jax.pdxintegrator.model.PdxModel;
 import org.jax.pdxintegrator.model.patient.Consent;
 import org.jax.pdxintegrator.model.patient.Gender;
 import org.jax.pdxintegrator.model.patient.PdxPatient;
+import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
 
 import java.io.OutputStream;
+import java.security.ProtectionDomain;
 import java.util.List;
 
 /**
@@ -28,27 +30,36 @@ public class PdxModel2Rdf {
 
     // RDF properties needed throughout the model
 
-    Property hasPatientIdProperty=null;
-    Property hasDiagnosisProperty=null;
+    private Property hasPatientIdProperty=null;
+    private Property hasSubmitterTumorIdProperty=null;
+    private Property hasDiagnosisProperty=null;
+    private Property hasTumorProperty=null;
+    private Property hasTissueOfOriginProperty=null;
+    private Property hasTumorCategoryProperty=null;
+    private Property hasTumorHistologyProperty=null;
+    private Property hasTumorGradeProperty=null;
+    private Property hasStageProperty=null;
     /** This property specifies the NCIT diagnosis of a patient's diagnosis. */
-    Property cancerDiagnosis=null;
+    private Property cancerDiagnosis=null;
     /** This property specifies the gender. ToDO decide on whether to use NCIT for this. */
-    Property genderProperty=null;
+    private Property genderProperty=null;
     /** This property specifies the age range. ToDo -- decide whether to use bins for this etc. */
-    Property ageProperty=null;
+    private Property ageProperty=null;
     /** This property specifies the consent given by the patient. TODO enough? */
-    Property consentProperty=null;
+    private Property consentProperty=null;
     /** This property specifies the population group of the patient. */
-    Property ethnicityProperty=null;
+    private Property ethnicityProperty=null;
 
-    Resource maleSex=null;
-    Resource femaleSex=null;
-    Resource noConsent=null;
-    Resource yesConsent=null;
-    Resource academicConsent=null;
+    private Resource maleSex=null;
+    private Resource femaleSex=null;
+    private Resource noConsent=null;
+    private Resource yesConsent=null;
+    private Resource academicConsent=null;
+    private Resource tumorSample=null;
 
     private static final String PDXNET_NAMESPACE = "http://pdxnetwork/pdxmodel#";
     private final static String NCIT_NAMESPACE = "http://purl.obolibrary.org/obo/NCIT#";
+    private final static String UBERON_NAMESPACE ="http://purl.obolibrary.org/obo/UBERON#";
 
 
     public PdxModel2Rdf(List<PdxModel> modelList) {
@@ -69,7 +80,8 @@ public class PdxModel2Rdf {
 
 
     private void outputModelRDF(PdxModel pdxmodel) {
-        outputPatientRDF(pdxmodel.getPatient());
+        outputPatientRDF(pdxmodel);
+        outputTumorRDF(pdxmodel.getClinicalTumor());
         // to do -- other areas of the PDX-MI
     }
 
@@ -78,26 +90,42 @@ public class PdxModel2Rdf {
     /**
      * Todo add a suffix depending on the total number of diagnosis this patient has. For now just _01.
      */
-    private void outputPatientRDF(PdxPatient patient) {
-        String diagnosis = patient.getDiagnosis().getIdWithPrefix() + "_01";
-        String diagnosisURI=String.format("%s%s",PDXNET_NAMESPACE,diagnosis);
+    private void outputPatientRDF(PdxModel pdxmodel) {
+        PdxPatient patient = pdxmodel.getPatient();
+        String diagnosis = patient.getDiagnosis().getId();
+        String diagnosisURI=String.format("%s%s",NCIT_NAMESPACE,diagnosis);
         String patientURI=String.format("%s%s",PDXNET_NAMESPACE,patient.getSubmitterPatientID());
-        Resource diagnosisResource = rdfModel.createResource(diagnosisURI)
-                .addProperty(cancerDiagnosis,patient.getDiagnosis().getIdWithPrefix());
+        this.tumorSample = rdfModel.createResource(String.format("%s%s",PDXNET_NAMESPACE,pdxmodel.getClinicalTumor().getSubmitterTumorID()));
+        Resource diagnosisResource = rdfModel.createResource(diagnosisURI);
         Resource sex = patient.getGender().equals(Gender.FEMALE) ? femaleSex : maleSex;
-        // todo -- check one of these is true
         Resource consent = patient.getConsent().equals(Consent.YES) ? yesConsent :
                 patient.getConsent().equals(Consent.NO) ? noConsent : academicConsent;
-        // todo -- check one of these is true
 
         Resource thisPatient
                 = rdfModel.createResource(patientURI)
                 .addProperty(hasPatientIdProperty,patient.getSubmitterPatientID())
-                .addProperty(hasDiagnosisProperty, diagnosisURI)
-                .addProperty(genderProperty,maleSex)
+                .addProperty(hasDiagnosisProperty, diagnosisResource)
+                .addProperty(hasTumorProperty,tumorSample)
+                .addProperty(genderProperty,sex)
                 .addProperty(ageProperty,patient.getAge().getAgeString())
                 .addProperty(consentProperty,consent)
                 .addProperty(ethnicityProperty,patient.getEthnicityRace().getEthnicityString());
+    }
+
+
+    private void outputTumorRDF(PdxClinicalTumor clintumor) {
+        String tumorURI=String.format("%s%s",PDXNET_NAMESPACE,clintumor.getSubmitterTumorID());
+        Resource category = rdfModel.createResource(String.format("%s%s",NCIT_NAMESPACE,clintumor.getCategory().getId()));
+        Resource tissue = rdfModel.createResource(UBERON_NAMESPACE +clintumor.getTissueOfOrigin().getId());
+        Resource histology = rdfModel.createResource(NCIT_NAMESPACE+clintumor.getTissueHistology().getId());
+        Resource stage = rdfModel.createResource(NCIT_NAMESPACE + clintumor.getStage().getId());
+        Resource grade = rdfModel.createResource(NCIT_NAMESPACE + clintumor.getTumorGrade().getId());
+        this.tumorSample.addProperty(hasSubmitterTumorIdProperty,clintumor.getSubmitterTumorID())
+                .addProperty(hasTissueOfOriginProperty,tissue)
+                .addProperty(hasTumorHistologyProperty,histology)
+                .addProperty(hasStageProperty,stage)
+                .addProperty(hasTumorGradeProperty,grade)
+                .addProperty(hasTumorCategoryProperty,category);
     }
 
 
@@ -116,13 +144,21 @@ public class PdxModel2Rdf {
     private void specifyPrefixes() {
         this.hasPatientIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "patient_id");
         this.hasDiagnosisProperty = rdfModel.createProperty( PDXNET_NAMESPACE + "hasDiagnosis" );
+        this.hasSubmitterTumorIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "hasSubmitterTumorId");
+        this.hasTumorProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumor");
         this.cancerDiagnosis = rdfModel.createProperty( PDXNET_NAMESPACE + "cancerDiagnosis" );
         this.genderProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"gender");
         this.ageProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "age_group");
         this.consentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"consent");
         this.ethnicityProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"ethnicity");
-        rdfModel.setNsPrefix( "pdxnet", PDXNET_NAMESPACE);
-        rdfModel.setNsPrefix( "ncit", NCIT_NAMESPACE);
+        this.hasTissueOfOriginProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tissueOfOrigin");
+        this.hasTumorCategoryProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorCategory");
+        this.hasTumorHistologyProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorHistology");
+        this.hasTumorGradeProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorGrade");
+        this.hasStageProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"stage");
+        rdfModel.setNsPrefix( "PDXNET", PDXNET_NAMESPACE);
+        rdfModel.setNsPrefix( "NCIT", NCIT_NAMESPACE);
+        rdfModel.setNsPrefix("UBERON",UBERON_NAMESPACE);
 
     }
 
