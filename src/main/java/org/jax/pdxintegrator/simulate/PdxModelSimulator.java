@@ -9,7 +9,13 @@ import com.github.phenomics.ontolib.ontology.data.TermId;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jax.pdxintegrator.model.PdxModel;
+import org.jax.pdxintegrator.model.modelcreation.MouseTreatmentForEngraftment;
+import org.jax.pdxintegrator.model.modelcreation.PdxModelCreation;
+import org.jax.pdxintegrator.model.modelcreation.TumorPrepMethod;
 import org.jax.pdxintegrator.model.patient.*;
+import org.jax.pdxintegrator.model.qualityassurance.ModelCharacterization;
+import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
+import org.jax.pdxintegrator.model.qualityassurance.ResponseToStandardOfCare;
 import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
 import org.jax.pdxintegrator.ncit.neoplasm.NcitTerm;
 import org.jax.pdxintegrator.uberon.UberonTerm;
@@ -68,8 +74,10 @@ public class PdxModelSimulator {
 
         PdxPatient patient  = buildPatient();
         PdxClinicalTumor clinicalTumor = buildClinicalTumor(patient);
+        PdxModelCreation modelCreation = buildModelCreation(patient);
+        PdxQualityAssurance qualityAssurance = buildQualityAssuranceModule(patient);
         // same for other categories
-        buildModel(patient,clinicalTumor);
+        buildModel(patient,clinicalTumor,modelCreation,qualityAssurance);
     }
 
 
@@ -77,11 +85,30 @@ public class PdxModelSimulator {
         return pdxmodel;
     }
 
-    private void buildModel(PdxPatient patient, PdxClinicalTumor clinicalTumor ) {
-        this.pdxmodel = new PdxModel(patient,clinicalTumor);
+    private void buildModel(PdxPatient patient,
+                            PdxClinicalTumor clinicalTumor,
+                            PdxModelCreation modelCreation,
+                            PdxQualityAssurance quality) {
+        this.pdxmodel = new PdxModel(patient,clinicalTumor,modelCreation,quality);
     }
 
 
+
+    private PdxModelCreation buildModelCreation(PdxPatient patient) {
+        String pdxID=String.format("PDX-%s",patient.getSubmitterPatientID());
+        TumorPrepMethod tumorprepmethod=getRandomTumorPrepMethod();
+        MouseTreatmentForEngraftment mouseRx = getRandomMouseTreatmentForEngraftment();
+        double engraftment = getRandomEngraftmentPercent();
+        int engraftmentDays=getRandomEngraftmentTime();
+        return new PdxModelCreation.Builder(pdxID).
+                mouseStrain("NOD.Cg-Prkdc<scid> Il2rg<tm1Wj>l/SzJ").
+                mouseSource("JAX").
+                tumorPreparationMethod(tumorprepmethod).
+                mouseTreatmentForEngraftment(mouseRx).
+                engraftmentRate(engraftment).
+                engraftmentTimeInDays(engraftmentDays).
+                humanizationType("CD34+hematopoietic stem cell-engrafted").build();
+    }
 
 
     private PdxClinicalTumor buildClinicalTumor(PdxPatient patient ) {
@@ -98,6 +125,18 @@ public class PdxModelSimulator {
                 grade(grade).
                 stage(stage).
                 build();
+    }
+
+    private PdxQualityAssurance buildQualityAssuranceModule(PdxPatient patient) {
+        ModelCharacterization characterization = getRandomModelCharacterization();
+        ResponseToStandardOfCare response = getRandomResponseToStandardOfCare();
+        boolean tumorNotMouseNotEbv  = getRandomBoolean();
+        boolean animalHealthStatusSufficient= getRandomBoolean();
+        boolean passageQaPerformed= getRandomBoolean();
+        PdxQualityAssurance.Builder builder = new PdxQualityAssurance.Builder(characterization,tumorNotMouseNotEbv,passageQaPerformed).
+                response(response).
+                animalHealthStatusOk(animalHealthStatusSufficient);
+        return builder.build();
     }
 
 
@@ -119,6 +158,10 @@ public class PdxModelSimulator {
      * @return termid of UBERON anatomy term corresponding to the cancer diagnosis in ncitTerm
      */
     private TermId getUberonId(TermId ncitTerm) {
+        if (uberonTerms==null || uberonTerms.isEmpty()) {
+            logger.error("Uberon terms not initialized...terminating simulations");
+            System.exit(1);
+        }
         int randomIndex=random.nextInt(this.uberonTerms.size());
         UberonTerm term = uberonTerms.get(randomIndex);
         return term.getTermId();
@@ -135,6 +178,17 @@ public class PdxModelSimulator {
         int randomindex = random.nextInt(this.stageTerms.size());
         NcitTerm stage = stageTerms.get(randomindex);
         return stage.getTermId();
+    }
+
+    private double getRandomEngraftmentPercent() {
+        return 100*new Random().nextDouble();
+    }
+
+    private int getRandomEngraftmentTime() {
+        int leftLimit = 3;
+        int rightLimit = 30;
+        int generatedInteger = leftLimit + (int) (new Random().nextFloat() * (rightLimit - leftLimit));
+        return generatedInteger;
     }
 
 
@@ -182,6 +236,34 @@ public class PdxModelSimulator {
         return values[random.nextInt(values.length)];
     }
 
+    private TumorPrepMethod  getRandomTumorPrepMethod() {
+        TumorPrepMethod[] vals = TumorPrepMethod.values();
+        int randomindex = random.nextInt(vals.length);
+        TumorPrepMethod stage = vals[randomindex];
+        return stage;
+    }
 
+    private MouseTreatmentForEngraftment getRandomMouseTreatmentForEngraftment() {
+        MouseTreatmentForEngraftment[] vals = MouseTreatmentForEngraftment.values();
+        int randomindex = random.nextInt(vals.length);
+        return vals[randomindex];
+    }
+
+    private  ModelCharacterization getRandomModelCharacterization() {
+        ModelCharacterization[] vals = ModelCharacterization.values();
+        int randomindex = random.nextInt(vals.length);
+        return vals[randomindex];
+    }
+
+    private  ResponseToStandardOfCare getRandomResponseToStandardOfCare() {
+        ResponseToStandardOfCare[] vals = ResponseToStandardOfCare.values();
+        int randomindex = random.nextInt(vals.length);
+        return vals[randomindex];
+    }
+
+    private boolean getRandomBoolean() {
+        double d = new Random().nextDouble();
+        return d>0.5D;
+    }
 
 }

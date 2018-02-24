@@ -16,6 +16,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 import org.semanticweb.owlapi.search.EntitySearcher;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -67,12 +68,15 @@ public class NcitOwlApiParser {
         OBOFormatParser oboparser = new OBOFormatParser();
         logger.trace("Beginning parse of ncit.obo (this may take a few moments)...");
         try {
-            OBODoc doc =oboparser.parse(NcitOboPath);
-            OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-            OWLDataFactory datafactory = manager.getOWLDataFactory();
-            OWLObjectProperty hasId = datafactory.getOWLObjectProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#id"));
-            OWLAPIObo2Owl obo2owl = new OWLAPIObo2Owl(manager);
-            OWLOntology ontology = obo2owl.convert(doc);
+            //OBODoc doc =oboparser.parse(NcitOboPath);
+            final OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+            final OWLOntology ontology = manager.loadOntologyFromOntologyDocument(new File(NcitOboPath));
+
+
+//            OWLDataFactory datafactory = manager.getOWLDataFactory();
+//            OWLObjectProperty hasId = datafactory.getOWLObjectProperty(IRI.create("http://www.geneontology.org/formats/oboInOwl#id"));
+//            OWLAPIObo2Owl obo2owl = new OWLAPIObo2Owl(manager);
+//            OWLOntology ontology = obo2owl.convert(doc);
             StructuralReasonerFactory factory = new StructuralReasonerFactory();
             OWLReasoner reasoner = factory.createReasoner(ontology);
             OWLClass neoplasm = manager.getOWLDataFactory().getOWLClass(IRI.create("http://purl.obolibrary.org/obo/NCIT_C3262"));
@@ -112,21 +116,19 @@ public class NcitOwlApiParser {
             // now the stage subontology
             NodeSet<OWLClass> stageTerms = reasoner.getSubClasses(stageClass);
             for (Node<OWLClass> node : stageTerms) {
-                node.entities().forEach( ne -> {
+                node.entities().forEach(ne -> {
                     IRI iri = ne.getIRI();
-                    Set<OWLAnnotation> annotationAxioms = getAllAnnotationAxioms(ne,ontology);
+                    Set<OWLAnnotation> annotationAxioms = getAllAnnotationAxioms(ne, ontology);
                     for (OWLAnnotation annot : annotationAxioms) {
                         //System.out.println("\t"+annot.toString());
                         if (annot.getProperty().isLabel()) {
                             String label = annot.getValue().toString();
-                            addTerm(stageTermList,iri.getShortForm(),label);
+                            addTerm(stageTermList, iri.getShortForm(), label);
                             break;
                         }
                     }
                 });
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (OWLOntologyCreationException oce) {
             oce.printStackTrace();
         }

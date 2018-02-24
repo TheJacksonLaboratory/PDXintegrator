@@ -12,6 +12,10 @@ Welcome to PDXIntegrator's documentation!
     Setting up PDXIntegrator <setup>
     Simulated cases and queries <simulation>
     National Cancer Institute Thesaurus <ncit>
+    Clinical/patient module <clinical>
+    Model creation module <modelcreation>
+    Quality assurance module <quality>
+
 
 PDXIntegrator
 ~~~~~~~~~~~~~

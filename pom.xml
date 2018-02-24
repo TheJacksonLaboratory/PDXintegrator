@@ -5,7 +5,7 @@
 
     <groupId>org.jax</groupId>
     <artifactId>pdxintegrator</artifactId>
-    <version>0.0.4</version>
+    <version>0.1.1</version>
     <packaging>jar</packaging>
 
     <name>PdxIntegrator</name>
@@ -16,7 +16,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jdk.version>1.8</jdk.version>
         <htsjdk.version>2.10.1</htsjdk.version>
-        <ontolib.version>0.1.1</ontolib.version>
+        <ontolib.version>0.1.4</ontolib.version>
         <jena.version>3.6.0</jena.version>
     </properties>
 
