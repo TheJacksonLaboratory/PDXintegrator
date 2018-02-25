@@ -44,6 +44,37 @@ built the program. ::
     map
     	java -jar PdxIntegrator.jar map [-d directory]: todo.
 
+
+
+Running the drugbank command
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Users will need to download the XML file from Drugbank: https://www.drugbank.ca
+Go to the download tab. There is mandatory registration but the files are free under a CC-BY No commercial license.
+Download the datafile. THe filename is ``full database.xml``. The space seems to make problems under linux, so remove the
+space of the file name. ::
+
+    $ mv full\ database.xml fulldatabase.xml
+
+Then run the following command to extract the information we will need from the XML file (which is about 950 MB unpacked). ::
+
+    $ java -jar target/PdxIntegrator.jar drugbank --drugbank fulldatabase.xml
+
+Adjust the path to ``fulldatabase.xml`` as necessary. This will generate a new file in the data directory called
+drugbank.tab. The contents of this file look like this. ::
+
+    Denileukin diftitox     173146-27-5     DB00004 ANTINEOPLASTIC AND IMMUNOMODULATING AGENTS
+    Etanercept      185243-69-0     DB00005 ANTINEOPLASTIC AND IMMUNOMODULATING AGENTS
+    Bivalirudin     128270-60-0     DB00006 BLOOD AND BLOOD FORMING ORGANS
+    Leuprolide      53714-56-0      DB00007 ANTINEOPLASTIC AND IMMUNOMODULATING AGENTS
+    Peginterferon alfa-2a   198153-51-4     DB00008 ANTINEOPLASTIC AND IMMUNOMODULATING AGENTS
+    Alteplase       105857-23-6     DB00009 BLOOD AND BLOOD FORMING ORGANS
+    Sermorelin      86168-78-7      DB00010 SYSTEMIC HORMONAL PREPARATIONS, EXCL. SEX HORMONES AND INSULINS
+    Interferon alfa-n1      74899-72-2      DB00011 ANTINEOPLASTIC AND IMMUNOMODULATING AGENTS
+
+For the purposes of this demonstration program, we will use the antineoplastic agents. ToDO--if we choose to stick with
+DrugBank, we can exploit the hierarchy and will need to emit some RDF to represent the hierarchy that is recorded in the
+XML file (for now, we will treat these medications as literals for demo purposes).
+
 Running the simulation command
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Currently, we are building out a complete RDF model for the PDX Minimal Information standard

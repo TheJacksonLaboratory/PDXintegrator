@@ -1,4 +1,4 @@
-package org.jax.pdxintegrator.io;
+package org.jax.pdxintegrator.exception;
 
 public class FileDownloadException extends Exception {
     private static final long serialVersionUID = 1L;

@@ -2,7 +2,7 @@ package org.jax.pdxintegrator.command;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jax.pdxintegrator.io.FileDownloadException;
+import org.jax.pdxintegrator.exception.FileDownloadException;
 import org.jax.pdxintegrator.io.FileDownloader;
 
 

@@ -10,11 +10,14 @@ Welcome to PDXIntegrator's documentation!
    :caption: Contents:
 
     Setting up PDXIntegrator <setup>
-    Simulated cases and queries <simulation>
+    Drugbank data <drugbank>
     National Cancer Institute Thesaurus <ncit>
     Clinical/patient module <clinical>
+    Clinical/tumor module <tumor>
     Model creation module <modelcreation>
     Quality assurance module <quality>
+    Model study module <modelstudy>
+    Simulated cases and queries <simulation>
 
 
 PDXIntegrator

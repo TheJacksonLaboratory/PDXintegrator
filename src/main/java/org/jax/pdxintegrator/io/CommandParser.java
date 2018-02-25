@@ -34,6 +34,8 @@ public class CommandParser {
 
     private String rdfFilename=null;
 
+    private String drugBankPath=null;
+
     private Command command=null;
 
     private final static String DEFAULT_NCIT_PATH="data/ncit.obo";
@@ -41,6 +43,8 @@ public class CommandParser {
     private final static String DEFAULT_UBERON_PATH="data/basic.obo";
 
     private final static String DEFAULT_RDF_FILENAME="simulatedCases.rdf";
+
+    private final static String DEFAULT_DRUGBANK_OUTPUT_FILE="data/drugbank.tab";
 
     public String getHpoPath() {
         return hpoPath;
@@ -89,6 +93,9 @@ public class CommandParser {
             if (commandLine.hasOption("o")) {
                 hpoPath=commandLine.getOptionValue("o");
             }
+            if (commandLine.hasOption("drugbank")) {
+                drugBankPath=commandLine.getOptionValue("drugbank");
+            }
             if (commandLine.hasOption("a")) {
                 annotationPath=commandLine.getOptionValue("a");
             }
@@ -122,7 +129,12 @@ public class CommandParser {
                 this.command = new QueryCommand(rdfFilename);
             }else if (mycommand.equals("simulate")) {
                 this.command = new SimulateCommand(rdfFilename, ncitPath,uberonPath);
-            } else {
+            } else if (mycommand.equals("drugbank")) {
+                if (drugBankPath==null) {
+                    printUsage("[ERROR] --drugbank option required for drugbank command");
+                }
+                this.command = new DrugBankCommand(drugBankPath,DEFAULT_DRUGBANK_OUTPUT_FILE);
+            }else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));
             }
         }
@@ -148,6 +160,7 @@ public class CommandParser {
     private static Options constructOptions() {
         final Options gnuOptions = new Options();
         gnuOptions.addOption("o", "hpo", true, "HPO OBO file path")
+                .addOption(null, "drugbank", true, "path of drugbank XML file")
                 .addOption("d", "download", true, "path of directory to download files")
                 .addOption("n","ncit",true, "path to ncit.obo")
                 .addOption("r","rdf",true, "RDF filename (simulated cases)")
