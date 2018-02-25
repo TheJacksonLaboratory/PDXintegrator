@@ -19,7 +19,7 @@ import java.util.List;
 public class SimulateCommand extends Command{
     private static final Logger logger = LogManager.getLogger();
 
-    private static final int N_cases=2;
+    private static final int N_cases=2000;
 
     private List<PdxModel> simulatedModels=new ArrayList<>();
 

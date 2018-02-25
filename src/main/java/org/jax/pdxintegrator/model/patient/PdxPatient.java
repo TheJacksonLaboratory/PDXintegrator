@@ -5,6 +5,7 @@ import com.github.phenomics.ontolib.ontology.data.TermId;
 import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PdxPatient {
 
@@ -14,6 +15,8 @@ public class PdxPatient {
     private final TermId diagnosis;
     private final Consent consent;
     private final EthnicityRace ethnicityRace;
+
+    private final String treatment;
 
     public String getSubmitterPatientID() {
         return submitterPatientID;
@@ -35,17 +38,20 @@ public class PdxPatient {
         return consent;
     }
 
+    public String getCurrentTreatmentDrug(){ return treatment; }
+
     public EthnicityRace getEthnicityRace() {
         return ethnicityRace;
     }
 
-    private PdxPatient(String id, Gender g, Age a, TermId dx, Consent c, EthnicityRace er){
+    private PdxPatient(String id, Gender g, Age a, TermId dx, Consent c, EthnicityRace er, String rx){
         submitterPatientID=id;
         gender=g;
         age=a;
         diagnosis=dx;
         consent=c;
         ethnicityRace =er;
+        treatment=rx;
     }
 
 
@@ -105,7 +111,9 @@ public class PdxPatient {
         }
         // ToDO include other fields.
         public PdxPatient build() {
-            PdxPatient pat = new PdxPatient(submitterPatientID,gender,age,diagnosis,consent,ethnicityRace);
+            // TODO refactor design of drugs to a separate class.
+            String drugs=currentTreatmentDrugs.stream().collect(Collectors.joining(";"));
+            PdxPatient pat = new PdxPatient(submitterPatientID,gender,age,diagnosis,consent,ethnicityRace,drugs);
 //            if (currentTreatmentDrugs != null) {
 //                pat.setCurrentTreatmentDrugs(currentTreatmentDrugs);
 //            } //etc

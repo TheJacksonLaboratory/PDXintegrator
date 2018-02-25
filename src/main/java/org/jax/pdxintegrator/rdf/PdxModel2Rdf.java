@@ -61,6 +61,7 @@ public class PdxModel2Rdf {
     private Property pdxTumorResponseProperty=null;
     private Property animalHealthStatusSatisfactoryProperty=null;
     private Property passageQaPerformedProperty=null;
+    private Property currentTreatmentDrug=null;
     /** This property specifies the NCIT diagnosis of a patient's diagnosis. */
     private Property cancerDiagnosis=null;
     /** This property specifies the gender. ToDO decide on whether to use NCIT for this. */
@@ -152,6 +153,10 @@ public class PdxModel2Rdf {
                 .addProperty(ageProperty,patient.getAge().getAgeString())
                 .addProperty(consentProperty,consent)
                 .addProperty(ethnicityProperty,patient.getEthnicityRace().getEthnicityString());
+
+        this.thisPatient.addProperty(currentTreatmentDrug,
+                ResourceFactory.createTypedLiteral(patient.getCurrentTreatmentDrug(),
+                        XSDDatatype.XSDstring));
     }
 
 
@@ -301,6 +306,7 @@ public class PdxModel2Rdf {
         this.pdxTumorResponseProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"pdxTumorResponse");
         this.animalHealthStatusSatisfactoryProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"animalHealthStatusOk");
         this.passageQaPerformedProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"passageQAperformed");
+        this.currentTreatmentDrug = rdfModel.createProperty(PDXNET_NAMESPACE,"currentTreatmentDrug");
         rdfModel.setNsPrefix( "PDXNET", PDXNET_NAMESPACE);
         rdfModel.setNsPrefix( "NCIT", NCIT_NAMESPACE);
         rdfModel.setNsPrefix("UBERON",UBERON_NAMESPACE);

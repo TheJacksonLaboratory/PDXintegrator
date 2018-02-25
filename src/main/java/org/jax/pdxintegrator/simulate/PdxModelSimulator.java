@@ -8,6 +8,7 @@ import com.github.phenomics.ontolib.ontology.data.ImmutableTermId;
 import com.github.phenomics.ontolib.ontology.data.TermId;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jax.pdxintegrator.io.DrugBankEntry;
 import org.jax.pdxintegrator.model.PdxModel;
 import org.jax.pdxintegrator.model.modelcreation.MouseTreatmentForEngraftment;
 import org.jax.pdxintegrator.model.modelcreation.PdxModelCreation;
@@ -51,7 +52,7 @@ public class PdxModelSimulator {
 
     private final List<UberonTerm> uberonTerms;
 
-
+    private List<DrugBankEntry> drugbankentrylist;
 
     private PdxModel pdxmodel=null;
 
@@ -69,8 +70,10 @@ public class PdxModelSimulator {
         Objects.requireNonNull(neoplasms);
         Objects.requireNonNull(stageTerms);
         Objects.requireNonNull(uberons);
-        diagnosis=getRandomNCITTermId();
 
+        drugbankentrylist = DrugBankEntry.parseDrugBankTabFile();
+
+        diagnosis=getRandomNCITTermId();
 
         PdxPatient patient  = buildPatient();
         PdxClinicalTumor clinicalTumor = buildClinicalTumor(patient);
@@ -147,7 +150,7 @@ public class PdxModelSimulator {
                 age,
                 diagnosis,
                 consent,
-                ethnicityRace);
+                ethnicityRace).currentTreatmentDrug(getRandomCancerDrug());
         return builder.build();
     }
 
@@ -264,6 +267,20 @@ public class PdxModelSimulator {
     private boolean getRandomBoolean() {
         double d = new Random().nextDouble();
         return d>0.5D;
+    }
+
+    private String getRandomCancerDrug() {
+        int r = new Random().nextInt(10);
+        int i=0;
+        String current=null;
+        for (DrugBankEntry entry : drugbankentrylist) {
+            if (entry.getCategory().startsWith("ANTINEOPLASTIC")) {
+                current=String.format("%s[%s;%s]",entry.getName(),entry.getDbID(),entry.getCas());
+                i++;
+                if (i>=r) return current;
+            }
+        }
+        return current; // should never happen, but whatever
     }
 
 }
