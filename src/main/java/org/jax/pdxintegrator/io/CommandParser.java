@@ -203,6 +203,10 @@ public class CommandParser {
         writer.println("download");
         writer.println("\tjava -jar PdxIntegrator.jar download [-d directory]: Download NCI files to directory at -d (default=\"data\").");
         writer.println();
+        writer.println("drugbank");
+        writer.println("\tjava -jar PdxIntegrator.jar drugbank --drugbank <path>: process drugbank XML file.");
+        writer.println("\t<path>: path to fulldatabase.xml (produced by unzipping downloaded XML file and removing space from file name)");
+        writer.println();
         writer.println("simulate");
         writer.println("\tjava -jar PdxIntegrator.jar simulate [-d directory]: Requires NCI files in directory at -d (default=\"data\").");
         writer.println();

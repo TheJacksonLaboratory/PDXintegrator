@@ -29,6 +29,8 @@ public class QueryCommand extends Command{
         queryPatientIDs();
         separator();
         queryNcitDiagnoses();
+        separator();
+        queryByAge();
     }
 
 
@@ -77,6 +79,31 @@ public class QueryCommand extends Command{
                         "      ?x pdxnet:currentTreatmentDrug ?currentTreatmentDrug . \n" +
                         "      ?x pdxnet:gender pdxnet:female . \n" +
                         "      ?x pdxnet:hasDiagnosis ?diagnosis . \n" +
+                        "      } \n" +
+                        "LIMIT 5";
+        System.out.println(queryString);
+        Query query = QueryFactory.create(queryString);
+        QueryExecution qe = QueryExecutionFactory.create(query, model);
+        ResultSet results = qe.execSelect();
+        ResultSetFormatter.out(System.out, results, query);
+        qe.close();
+    }
+
+
+    private void queryByAge() {
+        String queryString =
+                "PREFIX pdxnet: <http://pdxnetwork/pdxmodel_> \n" +
+                        "PREFIX ncit: <http://purl.obolibrary.org/obo/NCIT_> \n" +
+                        "PREFIX uberon: <http://purl.obolibrary.org/obo/UBERON_> \n" +
+                        "SELECT ?patient_id ?currentTreatmentDrug ?diagnosis ?age_lowerrange ?age_upperrange\n" +
+                        "WHERE { \n"+
+                        "      ?x pdxnet:patient_id ?patient_id . \n" +
+                        "      ?x pdxnet:currentTreatmentDrug ?currentTreatmentDrug . \n" +
+                        "      ?x pdxnet:gender pdxnet:female . \n" +
+                        "      ?x pdxnet:hasDiagnosis ?diagnosis . \n" +
+                        "      ?x pdxnet:ageBinLowerRange ?age_lowerrange . \n" +
+                        "      ?x pdxnet:ageBinUpperRange ?age_upperrange . \n" +
+                        "      FILTER (?age_lowerrange > 55) .\n" +
                         "      } \n" +
                         "LIMIT 5";
         System.out.println(queryString);

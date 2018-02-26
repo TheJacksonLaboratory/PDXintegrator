@@ -12,6 +12,7 @@ Welcome to PDXIntegrator's documentation!
     Setting up PDXIntegrator <setup>
     Drugbank data <drugbank>
     National Cancer Institute Thesaurus <ncit>
+    Drugbank <drugbank>
     Clinical/patient module <clinical>
     Clinical/tumor module <tumor>
     Model creation module <modelcreation>

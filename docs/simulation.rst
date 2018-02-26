@@ -49,33 +49,90 @@ in the Turtle format. For instance,  ::
         PDXNET:tumorHistology       NCIT:C7326 .
 
 
+
+SPARQL Queries
+~~~~~~~~~~~~~~
 We will use the corresponding RDF/XML file to perform demonstration SQPARL queries. For this, we
 use the query command, which produces output like this. ::
 
-    DEMONSTRATION OF SPARQL QUERIES
-
-    PREFIX pdxnet: <http://pdxnetwork/pdxmodel#>
+    PREFIX pdxnet: <http://pdxnetwork/pdxmodel_>
+    PREFIX ncit: <http://purl.obolibrary.org/obo/NCIT_>
     SELECT ?patient_id ?consent ?diagnosis
     WHERE {
       ?x pdxnet:patient_id ?patient_id .
       ?x pdxnet:consent ?consent .
       ?x pdxnet:hasDiagnosis ?diagnosis .
       }
+    LIMIT 5
     Lock : main
     Lock : main
-    -----------------------------------------------------------------------------------------
-    | patient_id | consent                      | diagnosis                                 |
-    =========================================================================================
-    | "PAT-2"    | pdxnet:consent_ACADEMIC_ONLY | "http://pdxnetwork/pdxmodel#NCIT:9079_01" |
-    | "PAT-3"    | pdxnet:consent_ACADEMIC_ONLY | "http://pdxnetwork/pdxmodel#NCIT:160_01"  |
-    | "PAT-4"    | pdxnet:consent_ACADEMIC_ONLY | "http://pdxnetwork/pdxmodel#NCIT:8774_01" |
-    | "PAT-0"    | pdxnet:consent_YES           | "http://pdxnetwork/pdxmodel#NCIT:1577_01" |
-    | "PAT-1"    | pdxnet:consent_ACADEMIC_ONLY | "http://pdxnetwork/pdxmodel#NCIT:3020_01" |
-    -----------------------------------------------------------------------------------------
+    ----------------------------------------------------------
+    | patient_id | consent                      | diagnosis  |
+    ==========================================================
+    | "PAT-846"  | pdxnet:consent_NO            | ncit:C5235 |
+    | "PAT-1256" | pdxnet:consent_ACADEMIC_ONLY | ncit:C4887 |
+    | "PAT-127"  | pdxnet:consent_NO            | ncit:C5656 |
+    | "PAT-179"  | pdxnet:consent_YES           | ncit:C7811 |
+    | "PAT-1477" | pdxnet:consent_ACADEMIC_ONLY | ncit:C7965 |
+    ----------------------------------------------------------
+
+    ###########  Next Query  ###########  Next Query
+
+    PREFIX pdxnet: <http://pdxnetwork/pdxmodel_>
+    PREFIX ncit: <http://purl.obolibrary.org/obo/NCIT_>
+    PREFIX uberon: <http://purl.obolibrary.org/obo/UBERON_>
+    SELECT ?patient_id ?currentTreatmentDrug ?diagnosis
+    WHERE {
+      ?x pdxnet:patient_id ?patient_id .
+      ?x pdxnet:currentTreatmentDrug ?currentTreatmentDrug .
+      ?x pdxnet:gender pdxnet:female .
+      ?x pdxnet:hasDiagnosis ?diagnosis .
+      }
+    LIMIT 5
+    Lock : main
+    Lock : main
+    --------------------------------------------------------------------------
+    | patient_id | currentTreatmentDrug                         | diagnosis  |
+    ==========================================================================
+    | "PAT-846"  | "Goserelin[DB00014;65807-02-5]"              | ncit:C5235 |
+    | "PAT-1256" | "Sargramostim[DB00020;123774-72-1]"          | ncit:C4887 |
+    | "PAT-1477" | "Peginterferon alfa-2a[DB00008;198153-51-4]" | ncit:C7965 |
+    | "PAT-1770" | "Cetuximab[DB00002;205923-56-4]"             | ncit:C7061 |
+    | "PAT-1676" | "Cetuximab[DB00002;205923-56-4]"             | ncit:C8834 |
+    --------------------------------------------------------------------------
+
+    ###########  Next Query  ###########  Next Query
+
+    PREFIX pdxnet: <http://pdxnetwork/pdxmodel_>
+    PREFIX ncit: <http://purl.obolibrary.org/obo/NCIT_>
+    PREFIX uberon: <http://purl.obolibrary.org/obo/UBERON_>
+    SELECT ?patient_id ?currentTreatmentDrug ?diagnosis ?age_lowerrange ?age_upperrange
+    WHERE {
+      ?x pdxnet:patient_id ?patient_id .
+      ?x pdxnet:currentTreatmentDrug ?currentTreatmentDrug .
+      ?x pdxnet:gender pdxnet:female .
+      ?x pdxnet:hasDiagnosis ?diagnosis .
+      ?x pdxnet:ageBinLowerRange ?age_lowerrange .
+      ?x pdxnet:ageBinUpperRange ?age_upperrange .
+      FILTER (?age_lowerrange > 55) .
+      }
+    LIMIT 5
+    Lock : main
+    Lock : main
+    -----------------------------------------------------------------------------------------------------------
+    | patient_id | currentTreatmentDrug                       | diagnosis   | age_lowerrange | age_upperrange |
+    ===========================================================================================================
+    | "PAT-1256" | "Sargramostim[DB00020;123774-72-1]"        | ncit:C4887  | 75             | 79             |
+    | "PAT-1770" | "Cetuximab[DB00002;205923-56-4]"           | ncit:C7061  | 105            | 109            |
+    | "PAT-75"   | "Denileukin diftitox[DB00004;173146-27-5]" | ncit:C5631  | 75             | 79             |
+    | "PAT-1765" | "Pegfilgrastim[DB00019;208265-92-3]"       | ncit:C7964  | 80             | 84             |
+    | "PAT-851"  | "Leuprolide[DB00007;53714-56-0]"           | ncit:C27754 | 65             | 69             |
+    -----------------------------------------------------------------------------------------------------------
+
 
 Development plans
 ~~~~~~~~~~~~~~~~~
-Currently, there are prototype versions of the first two modules.
+Currently, there are prototype versions of all modules but one.
 We will go through the entire PDX-MI ontology specification in this
 document :
 https://docs.google.com/document/d/1M81y8wbT5gegUe35RZwS92bvHLYJrVPhaFnnkECgbto/edit

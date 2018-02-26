@@ -62,12 +62,12 @@ public class PdxModel2Rdf {
     private Property animalHealthStatusSatisfactoryProperty=null;
     private Property passageQaPerformedProperty=null;
     private Property currentTreatmentDrug=null;
+    private Property ageBinLowerRange=null;
+    private Property ageBinUpperRange=null;
     /** This property specifies the NCIT diagnosis of a patient's diagnosis. */
     private Property cancerDiagnosis=null;
     /** This property specifies the gender. ToDO decide on whether to use NCIT for this. */
     private Property genderProperty=null;
-    /** This property specifies the age range. ToDo -- decide whether to use bins for this etc. */
-    private Property ageProperty=null;
     /** This property specifies the consent given by the patient. TODO enough? */
     private Property consentProperty=null;
     /** This property specifies the population group of the patient. */
@@ -150,9 +150,15 @@ public class PdxModel2Rdf {
                 .addProperty(hasDiagnosisProperty, diagnosisResource)
                 .addProperty(hasTumorProperty,tumorSample)
                 .addProperty(genderProperty,sex)
-                .addProperty(ageProperty,patient.getAge().getAgeString())
                 .addProperty(consentProperty,consent)
                 .addProperty(ethnicityProperty,patient.getEthnicityRace().getEthnicityString());
+
+        this.thisPatient.addProperty(ageBinLowerRange,
+                ResourceFactory.createTypedLiteral(String.valueOf(patient.getAge().getLower()),
+                        XSDDatatype.XSDinteger));
+        this.thisPatient.addProperty(ageBinUpperRange,
+                ResourceFactory.createTypedLiteral(String.valueOf(patient.getAge().getUpper()),
+                        XSDDatatype.XSDinteger));
 
         this.thisPatient.addProperty(currentTreatmentDrug,
                 ResourceFactory.createTypedLiteral(patient.getCurrentTreatmentDrug(),
@@ -284,7 +290,6 @@ public class PdxModel2Rdf {
         this.hasTumorProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumor");
         this.cancerDiagnosis = rdfModel.createProperty( PDXNET_NAMESPACE + "cancerDiagnosis" );
         this.genderProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"gender");
-        this.ageProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "age_group");
         this.consentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"consent");
         this.ethnicityProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"ethnicity");
         this.hasTissueOfOriginProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tissueOfOrigin");
@@ -307,6 +312,8 @@ public class PdxModel2Rdf {
         this.animalHealthStatusSatisfactoryProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"animalHealthStatusOk");
         this.passageQaPerformedProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"passageQAperformed");
         this.currentTreatmentDrug = rdfModel.createProperty(PDXNET_NAMESPACE,"currentTreatmentDrug");
+        this.ageBinLowerRange = rdfModel.createProperty(PDXNET_NAMESPACE,"ageBinLowerRange");
+        this.ageBinUpperRange = rdfModel.createProperty(PDXNET_NAMESPACE,"ageBinUpperRange");
         rdfModel.setNsPrefix( "PDXNET", PDXNET_NAMESPACE);
         rdfModel.setNsPrefix( "NCIT", NCIT_NAMESPACE);
         rdfModel.setNsPrefix("UBERON",UBERON_NAMESPACE);
