@@ -19,7 +19,7 @@ import java.util.List;
 public class SimulateCommand extends Command{
     private static final Logger logger = LogManager.getLogger();
 
-    private static final int N_cases=2000;
+    private  int N_cases=2000;
 
     private List<PdxModel> simulatedModels=new ArrayList<>();
 
@@ -42,6 +42,11 @@ public class SimulateCommand extends Command{
         outfilename=fname;
         ncitOboPath=ncit;
         uberonPath=uberon;
+    }
+
+    public SimulateCommand(String fname, String ncit,String uberon, int n_cases) {
+        this(fname,ncit,uberon);
+        this.N_cases=n_cases;
     }
 
 

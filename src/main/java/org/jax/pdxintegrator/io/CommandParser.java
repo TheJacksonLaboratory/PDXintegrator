@@ -36,6 +36,8 @@ public class CommandParser {
 
     private String drugBankPath=null;
 
+    private String n_cases=null;
+
     private Command command=null;
 
     private final static String DEFAULT_NCIT_PATH="data/ncit.obo";
@@ -104,6 +106,9 @@ public class CommandParser {
             } else {
                 ncitPath=DEFAULT_NCIT_PATH;
             }
+            if (commandLine.hasOption("n_cases")) {
+                this.n_cases=commandLine.getOptionValue("n_cases");
+            }
             if (commandLine.hasOption("r")) {
                 rdfFilename=commandLine.getOptionValue("r");
             } else {
@@ -128,7 +133,16 @@ public class CommandParser {
             } else if (mycommand.equals("query")) {
                 this.command = new QueryCommand(rdfFilename);
             }else if (mycommand.equals("simulate")) {
-                this.command = new SimulateCommand(rdfFilename, ncitPath,uberonPath);
+                if (n_cases!=null) {
+                    try {
+                        Integer n=Integer.parseInt(n_cases);
+                        this.command=new SimulateCommand(rdfFilename, ncitPath,uberonPath,n);
+                    } catch (NumberFormatException nfe) {
+                        printUsage("[ERROR] Could not parse number of cases argument: " + n_cases);
+                    }
+                } else {
+                    this.command = new SimulateCommand(rdfFilename, ncitPath, uberonPath);
+                }
             } else if (mycommand.equals("drugbank")) {
                 if (drugBankPath==null) {
                     printUsage("[ERROR] --drugbank option required for drugbank command");
@@ -165,6 +179,7 @@ public class CommandParser {
                 .addOption("n","ncit",true, "path to ncit.obo")
                 .addOption("r","rdf",true, "RDF filename (simulated cases)")
                 .addOption("u","uberon",true, "path to uberon (basic.obo)")
+                .addOption(null,"n_cases",true, "number of cases to simulate")
                 .addOption("c", "config", true, "path of configuration file");
         return gnuOptions;
     }

@@ -1,6 +1,8 @@
 package org.jax.pdxintegrator.rdf;
 
 
+import com.github.phenomics.ontolib.ontology.data.ImmutableTermId;
+import com.github.phenomics.ontolib.ontology.data.TermId;
 import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.datatypes.xsd.impl.XSDBaseNumericType;
@@ -35,6 +37,9 @@ public class PdxModel2Rdf {
 
     /** "Root" of the entire RDF graph. */
     private Model rdfModel = ModelFactory.createDefaultModel();
+
+    public final TermId male = ImmutableTermId.constructWithPrefix("NCIT:C20197");
+    public final TermId female = ImmutableTermId.constructWithPrefix("NCIT:C16576");
 
     // RDF properties needed throughout the model
 
@@ -255,8 +260,8 @@ public class PdxModel2Rdf {
 
 
     private void createEntities() {
-        this.maleSex=rdfModel.createResource(PDXNET_NAMESPACE + "male");
-        this.femaleSex = rdfModel.createResource( PDXNET_NAMESPACE + "female" );
+        this.maleSex=rdfModel.createResource(NCIT_NAMESPACE + male.getId());
+        this.femaleSex = rdfModel.createResource( NCIT_NAMESPACE + female.getId() );
         this.noConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_NO");
         this.yesConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_YES");
         this.academicConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_ACADEMIC_ONLY");
