@@ -61,7 +61,7 @@ Here, we have implemented binned age groups as follows. ::
 
 
 In the simulation code, we simulate using 5 year bins, but any ranges could be used in real code. For now, the age is
-understood to be in years, and if there is a need to be more precise we would need to change the model. TODO it may be better
+understood to be in years, and if there is a need to be more precise we would need to change the model. **TODO** it may be better
 to include the word "year" in the predicate name?
 
 Note that there is a mistake in the PDX-MI, which uses a six year age range instead of a five year range: 30–35 (binned in 5-year age groups)
@@ -102,7 +102,7 @@ There are several contenders, including `ChEMBL <https://www.ebi.ac.uk/chembl/>`
 I think that `DrugBank <https://www.drugbank.ca/>`_ is the best option because it is comprehensive, it combines detailed drug data with comprehensive drug target information,
 it has an open source (`Creative Common’s Attribution-NonCommercial 4.0 International License <https://creativecommons.org/licenses/by-nc/4.0/legalcode>`_)
 license, and it is easy to use. A newer resource  `DrugCentral <http://drugcentral.org>`_ can also be used to map between many resources.
-TODO this is an issue that will require thought and consensus building. Please communicate ideas/comments to Peter.
+**TODO** this is an issue that will require thought and consensus building. Please communicate ideas/comments to Peter.
 Currently, the PDXNet simulation is showing data from DrugBank as a literal (String). ::
 
     PDXNET:PAT-248 PDXNET:currentTreatmentDrug  "Leuprolide[DB00007;53714-56-0]" .
