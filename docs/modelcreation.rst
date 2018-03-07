@@ -28,38 +28,38 @@ The following table shows the recommendations from the  `PDX-MI manuscript <http
 | Engraftment time               | D   |8 weeks                               | literal                                        |
 +--------------------------------+-----+--------------------------------------+------------------------------------------------+
 
-1. **Submitter PDX ID**
+1. **Submitter PDX ID**.
 This field is analogous to PatientID. We display as CenterID:PDXID and keep an internal ID that will not be shown
 externally to act as a primary key. For instance, PDX 123 from JAX would be shown on the PDXNet website as JAX:PDX-123
 
 2. **Mouse Strain**.
 We will allow strains to be denoted according to the MGI guidelines. 
 
-3. **Mouse Source**
+3. **Mouse Source**.
 Institution providing the strain. An enumeration.
 
-4. **Strain    immune    system    humanised?**
+4. **Strain Immune System Humanised?**
 No.  PDX Net will not have PDX models with humanized mice.
 
-5. **Type of humanisation**
+5. **Type of Humanisation**.
 N/A for PDXNet
 
-6. **Tumor    preparation**
+6. **Tumor Preparation**.
 tumor    solid,    cell    suspension,    asite
 Enumeration (**TODO** Need input: list of all the methods and whether any vocabulary exists?)
 
-7. **Injection type and site**
+7. **Injection Type and Site**.
 subcutaneous;    right    flank
 **TODO** is this two fields?
 Enumeration (**TODO** Need input: list of all the methods and whether any vocabulary exists?)
 
-8. **Mouse treatment for engraftment**
+8. **Mouse Treatment for Engraftment**.
 estrogen    treatment
 Enumeration (**TODO** Need input: list of all the methods and whether any vocabulary exists?)
 
-9. **Engraftment rate**
+9. **Engraftment Rate**.
 80%. Would it be better to state “n of m” rather than a percentage? **TODO** Use percent or N of M?
 
-10. **Engraftment time**
+10. **Engraftment Time**.
 8 weeks
 Number of weeks/days **TODO** decide on units: days or weeks.
