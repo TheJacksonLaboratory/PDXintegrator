@@ -42,17 +42,20 @@ For now, we are eusingg PDXNet entities, but we should use the NCIT terms for th
 This would allow users to enter a more specific NCIT term such as Distant metastasis (C18206), which is a child of Metastasis (C19151)
 
 4. **Specimen tumor tissue**
-Uberon as above
+Uberon as above. Possibly use ICD-0?
 
 5. **Tissue histology**
 This is the pathologist's diagnosis and may often represent a refinement of the clinical diagnosis given in the Patient/Clinical module.
+Should probably use the same terminology as diagnosis, but represent the pathologist's findings
 
 6. **Tumor Grade; classification**
 For now we are using PDXNet codes, but we will switch to the NCIT subhierarchy, although I think they may need some TLC.
 We will work with NCIT to revise these terms as a part of Monarch’s ongoing collaboration with NCIT.
+Possibly us AJCC. Should this be seperated into pT,pN,PM?
 
 7. **Disease Stage; classification**
 T3N2M1;    TNM    or    Non    applicable    (example    blood    cancer)
+Should follow Tumor Grade; classification standard
 
 8. **Specific  markers (diagnostic linked)**
 Most of the assays such as IHC are covered by the NCIT under the subhierarchy “Laboratory Procedure”. That NCIT subhierachy also includes items for Receptor status (e.g., HER2/Neu positive), and these will be linked to external representations of genes/proteins by the Monarch collaboration.
@@ -60,7 +63,8 @@ Most of the assays such as IHC are covered by the NCIT under the subhierarchy �
 
 9. **Is tumor from untreated patient?**
 yes/no  (enumeration)
-
+**TODO** define untreated
+JAX: PDX models are considered treatment naive if the patient did not receive chemotherapy, immunotherapy, hormone therapy or radiation therapy for this primary cancer within 5 years prior to sample collection and/or within 1 year for a different cancer.
 
 10. **Original tumor sample type**
 biopsy,    surgical    sample,        ascites    fluid,    blood,    etc
