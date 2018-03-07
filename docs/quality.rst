@@ -26,10 +26,10 @@ Table 2.4. Model creation Q/A module. Rec: Recommendation; E: essential; D:desir
 
 
 1. **Tumor Characterization Technology**
-Need to get a complete list.
+**TODO** Need to get a complete list.
 
 2. **Tumor confirmed not to be of mouse/EBV origin**
-Note -- I need input here -- should this be a YES/NO or should we record how this was determined, e.g.,
+**TODO** should this be a YES/NO or should we record how this was determined, e.g.,
 negative    for    murine    CD45
 
 3. **Response to Standard of Care**
@@ -43,15 +43,14 @@ using an enumeration (RDF entities):
 * Stable disease
 * Progressive disease
 
-
+See <http://tumor.informatics.jax.org/mtbwi/live/www/html/SOCHelp.html#protocol>
 
 4. **Animal health status**
-Would it be correct to say that PDXNet has a minimal mouse health checklist and that all animals that do not pass
+**TODO** Would it be correct to say that PDXNet has a minimal mouse health checklist and that all animals that do not pass
 this are not included in the data? Therefore, the central database will only be including results from mice that passed
 and it does not need to go overboard in recording this information?
 
-
 5. **Passage QA performed**
-Will PDXNet be including data from models that only partially pass the criteria or is it an absolute rule-out if QA is not perfect?
+Will PDXNet be including data from models that only partially pass the criteria or is it an absolute rule-out if QA is not perfect? Will this be a list of passage #s?
 
 
