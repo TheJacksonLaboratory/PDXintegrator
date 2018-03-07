@@ -56,7 +56,7 @@ estrogen    treatment
 Enumeration (**TODO** Need input: list of all the methods and whether any vocabulary exists?)
 
 9. **Engraftment rate**
-80%. Would be better to state “n of m” rather than a percentage? **TODO** Use percent or N of M?
+80%. Would it be better to state “n of m” rather than a percentage? **TODO** Use percent or N of M?
 
 10. **Engraftment time**
 8 weeks
