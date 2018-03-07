@@ -11,54 +11,53 @@ The following table shows the recommendations from the  `PDX-MI manuscript <http
 +--------------------------------+-----+--------------------------------------+------------------------------------------------+
 | Mouse strain                   | E   |NOD.Cg-Prkdc<scid> Il2rg<tm1Wj>l/SzJ  | create PDXNet classes?                         |
 +--------------------------------+-----+--------------------------------------+------------------------------------------------+
-|Strain immune system humanised? | E   |yes/no                                | PDXNET:YEs, PDXNET:No                          |
+| Mouse source                   | E   |The Jackson Laboratory                | create PDXNet classes?                         |
 +--------------------------------+-----+--------------------------------------+------------------------------------------------+
-|Type of humanisation            | E   |CD34+hematopoietic stem cell-engrafted| ?                                              |
+| Strain immune system humanised?| E   |yes/no                                |  PDXNET:No  (No humanized mice in PDXNet)      |                         
 +--------------------------------+-----+--------------------------------------+------------------------------------------------+
-|Tumor preparation               | E   |suspension                            | ?                                              |
+| Type of humanisation           | E   |CD34+hematopoietic stem cell-engrafted|  NONE                                          |    
 +--------------------------------+-----+--------------------------------------+------------------------------------------------+
-|Mouse treatment for engraftment | D   |estrogen    treatment                 | ?                                              |
+| Tumor preparation              | E   |suspension                            | ?                                              |
 +--------------------------------+-----+--------------------------------------+------------------------------------------------+
-|Engraftment rate                | D   |80%                                   | literal                                        |
+| Mouse treatment for engraftment| D   |estrogen    treatment                 | ?                                              |
 +--------------------------------+-----+--------------------------------------+------------------------------------------------+
-|Engraftment time                | D   |8 weeks                               | literal                                        |
+| Engraftment rate               | D   |80%                                   | literal                                        |
++--------------------------------+-----+--------------------------------------+------------------------------------------------+
+| Engraftment time               | D   |8 weeks                               | literal                                        |
 +--------------------------------+-----+--------------------------------------+------------------------------------------------+
 
 1. **Submitter PDX ID**
 This field is analogous to PatientID. We display as CenterID:PDXID and keep an internal ID that will not be shown
 externally to act as a primary key. For instance, PDX 123 from JAX would be shown on the PDXNet website as JAX:PDX-123
 
-2. **Mouse strain (and source)**.
-We will allow strains to be denoted according to the
-Jackson    Laboratory
-Strain nomenclature according to MGI guidelines. Source as enumeration (separate field!).
+2. **Mouse Strain**.
+We will allow strains to be denoted according to the MGI guidelines. 
 
+3. **Mouse Source**
+Institution providing the strain. An enumeration.
 
-3. **Strain    immune    system    humanised?**
-yes/no
-enumeration
+4. **Strain    immune    system    humanised?**
+No.  PDX Net will not have PDX models with humanized mice.
 
-4. **Type of humanisation**
-CD34+    hematopoietic    stem    cell-engrafted/    PBMC/    Thymus/
-Thymus-fetal    liver/    iPSC/other
-I need input from experts as to the proper vocabulary to describe humanized mouse strains.
+5. **Type of humanisation**
+N/A for PDXNet
 
-5. **Tumor    preparation**
+6. **Tumor    preparation**
 tumor    solid,    cell    suspension,    asite
-Enumeration (need input: list of all the methods and whether any vocabulary exists?)
+Enumeration (**TODO** Need input: list of all the methods and whether any vocabulary exists?)
 
-6. **Injection type and site**
+7. **Injection type and site**
 subcutaneous;    right    flank
-Enumeration (need input: list of all the methods and whether any vocabulary exists?)
+**TODO** is this two fields?
+Enumeration (**TODO** Need input: list of all the methods and whether any vocabulary exists?)
 
-7. **Mouse treatment for engraftment**
+8. **Mouse treatment for engraftment**
 estrogen    treatment
-Enumeration (need input: list of all the methods and whether any vocabulary exists?)
+Enumeration (**TODO** Need input: list of all the methods and whether any vocabulary exists?)
 
+9. **Engraftment rate**
+80%. Would be better to state “n of m” rather than a percentage? **TODO** Use percent or N of M?
 
-8. **Engraftment rate**
-80%. It would be better to state “n of m” rather than a percentage.
-
-9. **Engraftment time**
+10. **Engraftment time**
 8 weeks
-Number of weeks/days
+Number of weeks/days **TODO** decide on units: days or weeks.
