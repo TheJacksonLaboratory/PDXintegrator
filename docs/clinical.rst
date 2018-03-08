@@ -62,9 +62,11 @@ understood to be in years, and if there is a need to be more precise we would ne
 
 Note that there is a mistake in the PDX-MI, which uses a six year range instead of a five year range: 30–35 (binned in 5-year age groups)
 
-4. **Age at Collection**. Patient age when specimen was collecte in years. Will be binned for dispaly as above.
+4. **Age at Collection**. Patient age when specimen was collected in years. 
+Will be binned for dispaly as above.
 
-5. **Diagnosis**. Initial clinical diagnosis. Note this represents the initial diagnosis and may be less precise
+5. **Diagnosis**. Initial clinical diagnosis. 
+Note this represents the initial diagnosis and may be less precise
 than the histological diagnosis used in the second module. We will take the diagnosis codes from NCIT. The following
 shows an example triple for an individual with a
 diagnosis of `Central Nervous System Histiocytic Sarcoma (NCIT:C129807) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp&ns=ncit?dictionary=NCI_Thesaurus&code=C129807>`_. ::
@@ -73,7 +75,7 @@ diagnosis of `Central Nervous System Histiocytic Sarcoma (NCIT:C129807) <https:/
       PDXNET:PAT-1511 PDXNET:hasDiagnosis   NCIT:C129807 .
 
 
-6. **Consent to share data**.
+6. **Consent to share data**. Patient consent.
 Reporting on consent is essential. We are using the following codes.
 
 * PDXNET:consent_NO
@@ -94,7 +96,7 @@ Reporting on consent is essential. We are using the following codes.
 * `Race (NCIT:C17049) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C17049>`_ (with multiple subclasses specifying various populations)
 
 
-9. **Current treatment drug**
+9. **Current treatment drug** Patient treatment at time of specimen sample.
 We would like to have a resource to that represents classes, ingredients, brand names, dosage forms, etc., in a computable manner.
 There are several contenders, including `ChEMBL <https://www.ebi.ac.uk/chembl/>`_ and
 `RxNorm <https://www.nlm.nih.gov/research/umls/rxnorm/>`_ (a standardized drug nomenclature maintained by the National Library of Medicine), but
