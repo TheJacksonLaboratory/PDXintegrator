@@ -8,51 +8,47 @@ information about the patient from which the engrafted tumor originates,
 including age, sex, ethnicity, and disease diagnosis.
 
 
-
-
-+------------------------------+-----+--------------------------------+------------------------------------------------+
-| Field                        | Rec | Example                        |  PDXNet                                        |
-+==============================+=====+================================+================================================+
-| Submitter Patient ID         | E   | PAT-123                        | CenterID:PatientID                             |
-+------------------------------+-----+--------------------------------+------------------------------------------------+
-| Gender                       | E   | female                         | NCIT:C16576                                    |
-+------------------------------+-----+--------------------------------+------------------------------------------------+
-| Age                          | E   | 30-35                          | binned in 5 year age groups                    |
-+------------------------------+-----+--------------------------------+------------------------------------------------+
-| Diagnosis                    | E   | invasive breast cancer         | NCIT:C6257                                     |
-+------------------------------+-----+--------------------------------+------------------------------------------------+
-| Consent to share             | E   | invasive breast cancer         | PDXNET:consent_ACADEMIC_ONLY                   |
-+------------------------------+-----+--------------------------------+------------------------------------------------+
-| Ethnicity/Race               | E   | caucasian                      | currently string literal                       |
-+------------------------------+-----+--------------------------------+------------------------------------------------+
-| Current treatment drug       | D   | everolimus                     |  CHEMBL83                                      |
-+------------------------------+-----+--------------------------------+------------------------------------------------+
-| Current treatment protocol   | D   | afinitor;10 mg/day             |  requires discussion                           |
-+------------------------------+-----+--------------------------------+------------------------------------------------+
-| Prior treatment protocol     | D   | afinitor;10 mg/day             |  requires discussion                           |
-+------------------------------+-----+--------------------------------+------------------------------------------------+
-| Response to prior treatment  | D   | HIV-/HBV-/HCV+/HTLV-/EBV+      |  NCIT                                          |
-+------------------------------+-----+--------------------------------+------------------------------------------------+
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+| Field                   |Rec| Description                         | Example                   |  PDXNet                     |
++=========================+===+=====================================+===========================+=============================+
+|Submitter Patient ID     | D | Unique ID. Tumor id if not supplied | PAT-123                   | CenterID:PatientID          |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+|Sex                      | D | Patient Sex                         | female                    | NCIT:C16576                 |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+|Age at diagnosis         | D | Age at diagnosis                    | 30                        | binned in 5 year age groups |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+|Age at collection        | D | Age at specimen collection          | 30                        | binned in 5 year age groups |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+|Diagnosis                | E | Initial Clinical Diagnosis          | invasive breast cancer    | NCIT:C6257                  |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+|Consent to share         | E | Patient Consent to share data       |                           | PDXNET:consent_ACADEMIC_ONLY|
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+|Ethnicity                | D |                                     | caucasian                 | currently string literal    |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+|Race                     | D |                                     |                           | currently string literal    |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+|Current treatment drug   | D |                                     | everolimus                |  CHEMBL83                   |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+|Current trtmnt protocol  | D |                                     | afinitor;10 mg/day        |  requires discussion        |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+|Prior treatment protocol | D |                                     | afinitor;10 mg/day        |  requires discussion        |
++--------------=----------+---+-------------------------------------+---------------------------+-----------------------------+
+|Response to prior trtmnt | D |                                     | HIV-/HBV-/HCV+/HTLV-/EBV+ |  NCIT                       |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
 
 Table 1. Rec: Recommendation; E: essential; D:desirable.
 
 1. **Submitter Patient ID**. Display as  and keep an internal ID that will not be shown externally to act as a primary key.
-Patient 123 from JAX would be shown on the PDXNet website as JAX:PAT-123. **TODO** Decide upon some standard format
-of identifying the PDXNet centers.
+Patient 123 from JAX would be shown on the PDXNet website as JAX:PAT-123. Will use supplied PDXNet abbreviation. If no ID is supplied, the ID will be based on Tumor ID. Allows, when possible, for identifying multiple models from the same patient.
 
-2. **Gender**.
-I think that this should be "Sex" and not "Gender" (see `Sex and Gender distinction <https://en.wikipedia.org/wiki/Sex_and_gender_distinction>`_).
-My suggestion would be to amend this in the PDX-MI, realizing that it is common to blur the distinction between these two terms.
+2. **Sex**. Patient sex.
 We will use this field to record biological sex. We will use the NCIT terms:
 
 * Female (`Code NCIT:C16576 <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C16576>`_):  A person who belongs to the sex that normally produces ova. The term is used to indicate biological sex distinctions, or cultural gender role distinctions, or both.
 * Male (`Code NCIT:C20197 <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C20197>`_): A person who belongs to the sex that normally produces sperm. The term is used to indicate biological sex distinctions, cultural gender role distinctions, or both.
 
-3. **Age**.
-To reduce the possibility
-of patient identification, PDX-MI recommends grouping ages into 5-year groups,
-although more granular groupings may be used in cases such as pediatric tumors
-if approved by a contributor's Institutional Review Board.
+3. **Age at Diagnosis**.
+Suppliied in years. For display : to reduce the possibility of patient identification, PDX-MI recommends grouping ages into 5-year groups, although more granular groupings may be used in cases such as pediatric tumors if approved by a contributor's Institutional Review Board.
 Here, we have implemented binned age groups as follows. ::
 
     PDXNET:PAT-1511  PDXNET:ageBinLowerRange 55 ;
@@ -66,7 +62,9 @@ to include the word "year" in the predicate name?
 
 Note that there is a mistake in the PDX-MI, which uses a six year age range instead of a five year range: 30–35 (binned in 5-year age groups)
 
-4. **Diagnosis**. Example . Note that this often represents the initial diagnosis and may be less precise
+4. **Age at Collection** Patient age when specimen was collected. Supplied in years and then binned for dispaly as above.
+
+5. **Diagnosis**. Initial clinical diagnosis. Note this represents the initial diagnosis and may be less precise
 than the histological diagnosis used in the second module. We will take the diagnosis codes from NCIT. The following
 shows an example triple for an individual with a
 diagnosis of `Central Nervous System Histiocytic Sarcoma (NCIT:C129807) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp&ns=ncit?dictionary=NCI_Thesaurus&code=C129807>`_. ::
@@ -76,7 +74,7 @@ diagnosis of `Central Nervous System Histiocytic Sarcoma (NCIT:C129807) <https:/
 
 
 
-5. **Consent to share data**.
+6. **Consent to share data**.
 Reporting on consent is essential. We are using the following codes.
 
 * PDXNET:consent_NO
@@ -86,16 +84,18 @@ Reporting on consent is essential. We are using the following codes.
 **TODO** 1 define what we mean by these categories and add more categories as necessary.
 **TODO** 2. Define relation to NCIT term for `Consent (NCIT:C25460) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp&ns=ncit?dictionary=NCI_Thesaurus&code=C25460>`_.
 
+7. **Ethnicity**  Patient ethnicity.
+**TODO** we need to decide which reference terminology to use. One option is to adopt the NCIT terminology, which includes
 
+* `Ethnic Group (NCIT:C16564) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C16564>`_ (which includes concepts such as Hispanic etc.)
 
-6. **Ethnicity/Race**
+8. **Race** Patient race.
 **TODO** we need to decide which reference terminology to use. One option is to adopt the NCIT terminology, which includes
 
 * `Race (NCIT:C17049) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C17049>`_ (with multiple subclasses specifying various populations)
-* `Ethnic Group (NCIT:C16564) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C16564>`_ (which includes concepts such as Hispanic etc.)
 
 
-7. **Current treatment drug**
+9. **Current treatment drug**
 We would like to have a resource to that represents classes, ingredients, brand names, dosage forms, etc., in a computable manner.
 There are several contenders, including `ChEMBL <https://www.ebi.ac.uk/chembl/>`_ and
 `RxNorm <https://www.nlm.nih.gov/research/umls/rxnorm/>`_ (a standardized drug nomenclature maintained by the National Library of Medicine), but
@@ -118,12 +118,12 @@ Leuprolide corresponds to L02AE - Gonadotropin releasing hormone analogues), hav
 indicated for Advanced Prostate Cancer), interact with certain drugs (e.g., Allicin;	The therapeutic efficacy of Allicin
 can be decreased when used in combination with Leuprolide), etc.
 
-8. **Current treatment protocol (dose; details)**
+10. **Current treatment protocol (dose; details)**
 There is currently no ontology that I know of for representing dosages. There are many ways of representing dosages,
 e.g., 10 mg/day or 5 mg b.i.d. **TODO** discuss what methodology would work best for PDX centers.
 
 
-9. **Prior treatment protocol**
+11. **Prior treatment protocol**
 The medication data should be represented as above. The surgery data could be represented using MedDRA codes
 (a rich and highly specific standardised medical terminology to facilitate sharing of regulatory information internationally
 for medical products used by humans), but MedDRA does not have an open license and it may be difficult to reuse/redistribute,
@@ -136,7 +136,7 @@ as `Mastectomy (NICT:C15277) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport
 **TODO** -- decide if the NCIT codes are sufficient for our needs. I suggest that we examine the subhierarchy underneath
 the term `Cancer Diagnostic or Therapeutic Procedure (Code C79426) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp&ns=ncit?dictionary=NCI_Thesaurus&code=C79426>`_.
 
-10. **Response to prior treatment**
+12. **Response to prior treatment**
 progressive disease (RECIST1.1)
 These items can be represented in the NCIT, which has a subhierarchy
 for `Clinical Course of Disease (Code C35461) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp&ns=ncit?dictionary=NCI_Thesaurus&code=C35461>`_,
@@ -149,15 +149,13 @@ Currently, the PDXIntegrator uses the following five terms
 * stableDisease
 * progressiveDisease
 
-
-
 **TODO** Decide on whether we want to limit this category to a small number of terms (like the above), to allow
 any term from the NCIT Clinical Course of Disease subhierarchy, or choose some other scheme.
 Currently, I am using the PDXNET namespace for these terms in the RDF code,
 but we should use the NCIT namespace once we have decided where to take this.
 
 
-11. **Virology status**
+13. **Virology status**
 Probably the NCIT subhierarchy
 of `Viral infection (Code C3439) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp&ns=ncit?dictionary=NCI_Thesaurus&code=C3439>`_,
 (which includes these viruses and many more) would be best.
@@ -171,8 +169,3 @@ is the code for Hepatitis B Virus Positive (Code C141405). Note that we may eith
 (which is a clinical diagnosis) or for serology (as in this example, with the term coming from the Laboratory Finding subhierarchy of NCIT).
 It depends on how we want to model this.
 **TODO** Determine the terminology and the depth of detail we want to capture.
-
-
-
-
-
