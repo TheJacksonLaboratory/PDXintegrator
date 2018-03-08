@@ -36,10 +36,10 @@ including age, sex, ethnicity, and disease diagnosis.
 |Response to prior trtmnt | D |                                     | HIV-/HBV-/HCV+/HTLV-/EBV+ |  NCIT                       |
 +-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
 
-Table 1. Rec: Recommendation; E: essential; D:desirable.
+Table 1. Rec: Recommendation; E: essential; D:desirable. Desireable fields will be shown as 'Not Reported' if no data is provided.
 
-1. **Submitter Patient ID**. Display as  and keep an internal ID that will not be shown externally to act as a primary key.
-Patient 123 from JAX would be shown on the PDXNet website as JAX:PAT-123. Will use supplied PDXNet abbreviation. If no ID is supplied, the ID will be based on Tumor ID. Allows, when possible, for identifying multiple models from the same patient.
+1. **Submitter Patient ID**. Used when possible for identifying multiple models from the same patient.
+Patient 123 from JAX would be shown on the PDXNet website as JAX:PAT-123. Will use supplied PDXNet abbreviations to prefix any ID. If no ID is supplied, the ID will be based on Tumor ID. 
 
 2. **Sex**. Patient sex.
 We will use this field to record biological sex. We will use the NCIT terms:
@@ -47,8 +47,8 @@ We will use this field to record biological sex. We will use the NCIT terms:
 * Female (`Code NCIT:C16576 <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C16576>`_):  A person who belongs to the sex that normally produces ova. The term is used to indicate biological sex distinctions, or cultural gender role distinctions, or both.
 * Male (`Code NCIT:C20197 <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C20197>`_): A person who belongs to the sex that normally produces sperm. The term is used to indicate biological sex distinctions, cultural gender role distinctions, or both.
 
-3. **Age at Diagnosis**.
-Suppliied in years. For display : to reduce the possibility of patient identification, PDX-MI recommends grouping ages into 5-year groups, although more granular groupings may be used in cases such as pediatric tumors if approved by a contributor's Institutional Review Board.
+3. **Age at Diagnosis**. Patient age at time of initial clinical diagnosis in years.
+For display : to reduce the possibility of patient identification, PDX-MI recommends grouping ages into 5-year groups, although more granular groupings may be used in cases such as pediatric tumors if approved by a contributor's Institutional Review Board.
 Here, we have implemented binned age groups as follows. ::
 
     PDXNET:PAT-1511  PDXNET:ageBinLowerRange 55 ;
@@ -57,12 +57,12 @@ Here, we have implemented binned age groups as follows. ::
 
 
 In the simulation code, we simulate using 5 year bins, but any ranges could be used in real code. For now, the age is
-understood to be in years, and if there is a need to be more precise we would need to change the model. **TODO** it may be better
-to include the word "year" in the predicate name?
+understood to be in years, and if there is a need to be more precise we would need to change the model. 
+**TODO** it may be better to include the word "year" in the predicate name?
 
-Note that there is a mistake in the PDX-MI, which uses a six year age range instead of a five year range: 30–35 (binned in 5-year age groups)
+Note that there is a mistake in the PDX-MI, which uses a six year range instead of a five year range: 30–35 (binned in 5-year age groups)
 
-4. **Age at Collection** Patient age when specimen was collected. Supplied in years and then binned for dispaly as above.
+4. **Age at Collection**. Patient age when specimen was collecte in years. Will be binned for dispaly as above.
 
 5. **Diagnosis**. Initial clinical diagnosis. Note this represents the initial diagnosis and may be less precise
 than the histological diagnosis used in the second module. We will take the diagnosis codes from NCIT. The following
@@ -71,7 +71,6 @@ diagnosis of `Central Nervous System Histiocytic Sarcoma (NCIT:C129807) <https:/
 
 
       PDXNET:PAT-1511 PDXNET:hasDiagnosis   NCIT:C129807 .
-
 
 
 6. **Consent to share data**.
