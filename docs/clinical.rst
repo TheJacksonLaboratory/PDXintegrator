@@ -19,7 +19,9 @@ including age, sex, ethnicity, and disease diagnosis.
 +-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
 |Age at collection        | D | Age at specimen collection          | 30                        | binned in 5 year age groups |
 +-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
-|Diagnosis                | E | Initial Clinical Diagnosis          | invasive breast cancer    | NCIT:C6257                  |
+|Submitted Diagnosis      | E | Initial Clinical Diagnosis          | invasive breast cancer    | invasive breast cancer      |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+|Diagnosis                | E | Initial Clinical Diagnosis Term     | invasive breast cancer    | NCIT:C6257                  |
 +-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
 |Consent to share         | E | Patient Consent to share data       |                           | PDXNET:consent_ACADEMIC_ONLY|
 +-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
@@ -65,7 +67,9 @@ Note that there is a mistake in the PDX-MI, which uses a six year range instead 
 4. **Age at Collection**. Patient age when specimen was collected in years. 
 Will be binned for dispaly as above.
 
-5. **Diagnosis**. Initial clinical diagnosis. 
+5. **Submitted Diagnosis**. The initial clinical diagnosis provided as free text.
+
+6. **Diagnosis**. Initial clinical diagnosis. Submitted diagnosis mapped to NCIT term  
 Note this represents the initial diagnosis and may be less precise
 than the histological diagnosis used in the second module. We will take the diagnosis codes from NCIT. The following
 shows an example triple for an individual with a
@@ -75,7 +79,7 @@ diagnosis of `Central Nervous System Histiocytic Sarcoma (NCIT:C129807) <https:/
       PDXNET:PAT-1511 PDXNET:hasDiagnosis   NCIT:C129807 .
 
 
-6. **Consent to share data**. Patient consent.
+7. **Consent to share data**. Patient consent.
 Reporting on consent is essential. We are using the following codes.
 
 * PDXNET:consent_NO
@@ -85,18 +89,18 @@ Reporting on consent is essential. We are using the following codes.
 **TODO** 1 define what we mean by these categories and add more categories as necessary.
 **TODO** 2. Define relation to NCIT term for `Consent (NCIT:C25460) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp&ns=ncit?dictionary=NCI_Thesaurus&code=C25460>`_.
 
-7. **Ethnicity**  Patient ethnicity.
+8. **Ethnicity**  Patient ethnicity.
 **TODO** we need to decide which reference terminology to use. One option is to adopt the NCIT terminology, which includes
 
 * `Ethnic Group (NCIT:C16564) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C16564>`_ (which includes concepts such as Hispanic etc.)
 
-8. **Race** Patient race.
+9. **Race** Patient race.
 **TODO** we need to decide which reference terminology to use. One option is to adopt the NCIT terminology, which includes
 
 * `Race (NCIT:C17049) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI_Thesaurus&ns=ncit&code=C17049>`_ (with multiple subclasses specifying various populations)
 
 
-9. **Current treatment drug** Patient treatment at time of specimen sample.
+10. **Current treatment drug** Patient treatment at time of specimen sample.
 We would like to have a resource to that represents classes, ingredients, brand names, dosage forms, etc., in a computable manner.
 There are several contenders, including `ChEMBL <https://www.ebi.ac.uk/chembl/>`_ and
 `RxNorm <https://www.nlm.nih.gov/research/umls/rxnorm/>`_ (a standardized drug nomenclature maintained by the National Library of Medicine), but
@@ -119,12 +123,12 @@ Leuprolide corresponds to L02AE - Gonadotropin releasing hormone analogues), hav
 indicated for Advanced Prostate Cancer), interact with certain drugs (e.g., Allicin;	The therapeutic efficacy of Allicin
 can be decreased when used in combination with Leuprolide), etc.
 
-10. **Current treatment protocol (dose; details)**
+11. **Current treatment protocol (dose; details)**
 There is currently no ontology that I know of for representing dosages. There are many ways of representing dosages,
 e.g., 10 mg/day or 5 mg b.i.d. **TODO** discuss what methodology would work best for PDX centers.
 
 
-11. **Prior treatment protocol**
+12. **Prior treatment protocol**
 The medication data should be represented as above. The surgery data could be represented using MedDRA codes
 (a rich and highly specific standardised medical terminology to facilitate sharing of regulatory information internationally
 for medical products used by humans), but MedDRA does not have an open license and it may be difficult to reuse/redistribute,
@@ -137,7 +141,7 @@ as `Mastectomy (NICT:C15277) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport
 **TODO** -- decide if the NCIT codes are sufficient for our needs. I suggest that we examine the subhierarchy underneath
 the term `Cancer Diagnostic or Therapeutic Procedure (Code C79426) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp&ns=ncit?dictionary=NCI_Thesaurus&code=C79426>`_.
 
-12. **Response to prior treatment**
+13. **Response to prior treatment**
 progressive disease (RECIST1.1)
 These items can be represented in the NCIT, which has a subhierarchy
 for `Clinical Course of Disease (Code C35461) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp&ns=ncit?dictionary=NCI_Thesaurus&code=C35461>`_,
@@ -156,7 +160,7 @@ Currently, I am using the PDXNET namespace for these terms in the RDF code,
 but we should use the NCIT namespace once we have decided where to take this.
 
 
-13. **Virology status**
+14. **Virology status**
 Probably the NCIT subhierarchy
 of `Viral infection (Code C3439) <https://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp&ns=ncit?dictionary=NCI_Thesaurus&code=C3439>`_,
 (which includes these viruses and many more) would be best.
