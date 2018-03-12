@@ -48,6 +48,7 @@ public class PdxModel2Rdf {
 
     // RDF properties needed throughout the model
 
+   
     private Property hasPatientIdProperty=null;
     private Property hasSubmitterTumorIdProperty=null;
     private Property hasDiagnosisProperty=null;
@@ -133,11 +134,16 @@ public class PdxModel2Rdf {
 
 
     private void outputModelRDF(PdxModel pdxmodel) {
+        // Clinincal/Patient Module
         outputPatientRDF(pdxmodel);
+        // Clinical/Tumor Module
         outputTumorRDF(pdxmodel.getClinicalTumor());
+        // Model Creation Module
         outputModelCreationRdf(pdxmodel);
+        // Quality Assurance Module
         outputQualityAssuranceRdf(pdxmodel);
         // to do -- other areas of the PDX-MI
+        // Model Study Module
     }
 
 
@@ -349,6 +355,7 @@ public class PdxModel2Rdf {
         
         // PDX model generated from patient tumor
         this.hasPdxModelProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasPdxModel");
+        this.hasPdxModelProperty.addProperty(RDF.type, OWL.Class);
         
         // Mouse strain for PDX model
         this.hasStrainProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasStrain");
@@ -371,20 +378,28 @@ public class PdxModel2Rdf {
         
         // Percent of successful engraftments 
         this.engraftmentPercentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"engraftmentPercent");
+        
         // Days for successful engraftment
         this.engraftTimeInDaysProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"engraftmentTimeInDays");
+        
         // Tumor Characterization
         this.hasTumorCharacterizationProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"pdxTumorCharacterization");
+        
         // Tumor is not EBV or mouse tissue
         this.tumorNotEbvNotMouseProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"notEbvNotMouse");
+        
         // PDX model response to treatment
         this.pdxTumorResponseProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"pdxTumorResponse");
+        
         // The pdx model's health status
         this.animalHealthStatusSatisfactoryProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"animalHealthStatusOk");
+        
         // Passage on which QA was performed
         this.passageQaPerformedProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"passageQAperformed");
+        
         // Patient current treatment drug
         this.currentTreatmentDrug = rdfModel.createProperty(PDXNET_NAMESPACE,"currentTreatmentDrug");
+       
         // Lower age range for Patient when sample was taken
         this.ageBinLowerRange = rdfModel.createProperty(PDXNET_NAMESPACE,"ageBinLowerRange");
         this.ageBinLowerRange.addProperty(RDFS.label,"Lower range of 5 year age bin");
