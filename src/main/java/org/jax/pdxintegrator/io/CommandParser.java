@@ -223,7 +223,9 @@ public class CommandParser {
         writer.println("\t<path>: path to fulldatabase.xml (produced by unzipping downloaded XML file and removing space from file name)");
         writer.println();
         writer.println("simulate");
-        writer.println("\tjava -jar PdxIntegrator.jar simulate [-d directory]: Requires NCI files in directory at -d (default=\"data\").");
+        writer.println("\tjava -jar PdxIntegrator.jar simulate [-d <directory>] [--n_cases <n>]: simulate PDXNet cases ");
+        writer.println("\t<directory>: directory (default=\"data\") with downloaded files");
+        writer.println("\t<n>: number of cases to simulate");
         writer.println();
         writer.println("map");
         writer.println("\tjava -jar PdxIntegrator.jar map [-d directory]: todo.");

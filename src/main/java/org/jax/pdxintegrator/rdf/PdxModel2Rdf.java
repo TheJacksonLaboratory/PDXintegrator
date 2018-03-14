@@ -3,12 +3,10 @@ package org.jax.pdxintegrator.rdf;
 
 import com.github.phenomics.ontolib.ontology.data.ImmutableTermId;
 import com.github.phenomics.ontolib.ontology.data.TermId;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
-import org.apache.jena.datatypes.xsd.impl.XSDBaseNumericType;
-import org.apache.jena.datatypes.xsd.impl.XSDDouble;
+import org.apache.jena.ontology.OntClass;
+import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.*;
-import org.jax.pdxintegrator.exception.PDXException;
 import org.jax.pdxintegrator.model.PdxModel;
 import org.jax.pdxintegrator.model.modelcreation.MouseTreatmentForEngraftment;
 import org.jax.pdxintegrator.model.modelcreation.PdxModelCreation;
@@ -22,7 +20,6 @@ import org.jax.pdxintegrator.model.qualityassurance.ResponseToStandardOfCare;
 import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
 
 import java.io.OutputStream;
-import java.security.ProtectionDomain;
 import java.util.List;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
@@ -39,7 +36,8 @@ public class PdxModel2Rdf {
 
 
     /** "Root" of the entire RDF graph. */
-    private Model rdfModel = ModelFactory.createDefaultModel();
+    //private Model rdfModel = ModelFactory.createDefaultModel();
+    private OntModel rdfModel;
     
     
 
@@ -111,16 +109,23 @@ public class PdxModel2Rdf {
     private final static String UBERON_NAMESPACE ="http://purl.obolibrary.org/obo/UBERON_";
 
 
+    /// these are the classes needed for the Seven Bridges model
+    private OntClass pdxPatient;
+    private OntClass pdxDiagnosis;
+    private OntClass pdxSex;
+
+
     public PdxModel2Rdf(List<PdxModel> modelList) {
         this.pdxmodels=modelList;
     }
 
 
     public void outputRDF(OutputStream out) {
+        initializeModelFramework();
         specifyPrefixes();
         createEntities();
         for (PdxModel pdxmod : pdxmodels) {
-            outputModelRDF(pdxmod);
+            outputPdxModel(pdxmod);
         }
         System.out.println( "# -- PATIENT -- #" );
         rdfModel.write(System.out,"Turtle");
@@ -131,9 +136,19 @@ public class PdxModel2Rdf {
         
         
     }
+    private void initializeModelFramework() {
+        this.rdfModel = ModelFactory.createOntologyModel(  );
+        this.pdxPatient = rdfModel.createClass();
+        pdxPatient.addProperty(RDFS.label, "PDX-MI model");
+        this.pdxDiagnosis = rdfModel.createClass();
+        pdxDiagnosis.addProperty(RDFS.label,"PDX-MI Diagnosis");
+        this.pdxSex = rdfModel.createClass();
+        pdxSex.addProperty(RDFS.label,"PDX-MI Sex");
+        // etc.
+    }
 
+    private void outputPdxModel(PdxModel pdxmodel) {
 
-    private void outputModelRDF(PdxModel pdxmodel) {
         // Clinincal/Patient Module
         outputPatientRDF(pdxmodel);
         // Clinical/Tumor Module
@@ -162,8 +177,11 @@ public class PdxModel2Rdf {
         Resource consent = patient.getConsent().equals(Consent.YES) ? yesConsent :
                 patient.getConsent().equals(Consent.NO) ? noConsent : academicConsent;
 
+        diagnosisResource.addProperty(RDF.type,this.pdxDiagnosis);
+
        this.thisPatient
                 = rdfModel.createResource(patientURI)
+                .addProperty(RDF.type,this.pdxPatient)
                 .addProperty(hasPatientIdProperty,patient.getSubmitterPatientID())
                 .addProperty(hasDiagnosisProperty, diagnosisResource)
                 .addProperty(hasTumorProperty,tumorSample)
@@ -278,6 +296,9 @@ public class PdxModel2Rdf {
     private void createEntities() {
         this.maleSex=rdfModel.createResource(NCIT_NAMESPACE + male.getId());
         this.femaleSex = rdfModel.createResource( NCIT_NAMESPACE + female.getId() );
+        this.maleSex.addProperty(RDF.type,this.pdxSex);
+        this.femaleSex.addProperty(RDF.type,this.pdxSex);
+
         this.noConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_NO");
         this.yesConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_YES");
         this.academicConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_ACADEMIC_ONLY");
@@ -304,6 +325,11 @@ public class PdxModel2Rdf {
 
 
 
+
+
+
+
+
     private void specifyPrefixes() {
         // unique idenfitifer for the patient
         this.hasPatientIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "patient_id");
@@ -312,6 +338,8 @@ public class PdxModel2Rdf {
         this.hasDiagnosisProperty = rdfModel.createProperty( PDXNET_NAMESPACE + "hasDiagnosis" );
         this.hasDiagnosisProperty.addProperty(RDFS.label, "Patient's initial clincal diagnosis");
         this.hasDiagnosisProperty.addProperty(RDF.type,OWL.ObjectProperty);
+        this.hasDiagnosisProperty.addProperty(RDFS.domain,this.pdxPatient);
+        this.hasDiagnosisProperty.addProperty(RDFS.range,this.pdxDiagnosis);
         
         // Unique tumor id
         this.hasSubmitterTumorIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "hasSubmitterTumorId");
@@ -329,6 +357,7 @@ public class PdxModel2Rdf {
         this.genderProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"sex");
         this.genderProperty.addProperty(RDFS.label, "Patient Sex");
         this.genderProperty.addProperty(RDF.type,OWL.ObjectProperty);
+        this.genderProperty.addProperty(RDFS.range,this.pdxSex);
         
         // Patient has provided consent to share data
         this.consentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"consent");
@@ -403,6 +432,7 @@ public class PdxModel2Rdf {
         // Lower age range for Patient when sample was taken
         this.ageBinLowerRange = rdfModel.createProperty(PDXNET_NAMESPACE,"ageBinLowerRange");
         this.ageBinLowerRange.addProperty(RDFS.label,"Lower range of 5 year age bin");
+        this.ageBinLowerRange.addProperty(RDFS.domain,pdxPatient);
         
         // Upper age range for Patient when sample was taken
         this.ageBinUpperRange = rdfModel.createProperty(PDXNET_NAMESPACE,"ageBinUpperRange");
