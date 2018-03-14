@@ -138,11 +138,14 @@ public class PdxModel2Rdf {
     }
     private void initializeModelFramework() {
         this.rdfModel = ModelFactory.createOntologyModel(  );
-        this.pdxPatient = rdfModel.createClass();
+        String pdxMiModelURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Patient");
+        this.pdxPatient = rdfModel.createClass(pdxMiModelURI);
         pdxPatient.addProperty(RDFS.label, "PDX-MI model");
-        this.pdxDiagnosis = rdfModel.createClass();
+        String pdxMiDiagnosisURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Diagnosis");
+        this.pdxDiagnosis = rdfModel.createClass(pdxMiDiagnosisURI);
         pdxDiagnosis.addProperty(RDFS.label,"PDX-MI Diagnosis");
-        this.pdxSex = rdfModel.createClass();
+        String pdxMiSexURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Sex");
+        this.pdxSex = rdfModel.createClass(pdxMiSexURI);
         pdxSex.addProperty(RDFS.label,"PDX-MI Sex");
         // etc.
     }
@@ -346,7 +349,7 @@ public class PdxModel2Rdf {
         
         // Tumor Sample Object
         this.hasTumorProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumor");
-        this.hasTumorProperty.addProperty(RDF.type,OWL.Class);
+        this.hasTumorProperty.addProperty(RDF.type,OWL.ObjectProperty);
         
         // Not sure what this is, it isn't used.
         //this.cancerDiagnosis = rdfModel.createProperty( PDXNET_NAMESPACE + "cancerDiagnosis" );
@@ -384,7 +387,7 @@ public class PdxModel2Rdf {
         
         // PDX model generated from patient tumor
         this.hasPdxModelProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasPdxModel");
-        this.hasPdxModelProperty.addProperty(RDF.type, OWL.Class);
+        this.hasPdxModelProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Mouse strain for PDX model
         this.hasStrainProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasStrain");
