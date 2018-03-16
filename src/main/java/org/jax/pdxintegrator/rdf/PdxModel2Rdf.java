@@ -113,8 +113,12 @@ public class PdxModel2Rdf {
     private OntClass pdxPatient;
     private OntClass pdxDiagnosis;
     private OntClass pdxSex;
+    private OntClass pdxModelStudy;
+    private OntClass pdxClinicalTumor;
+    private OntClass pdxQualityAssurance;
+    private OntClass pdxModelCreation;
 
-
+    
     public PdxModel2Rdf(List<PdxModel> modelList) {
         this.pdxmodels=modelList;
     }
@@ -138,16 +142,34 @@ public class PdxModel2Rdf {
     }
     private void initializeModelFramework() {
         this.rdfModel = ModelFactory.createOntologyModel(  );
+        
         String pdxMiPatientURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Patient");
         this.pdxPatient = rdfModel.createClass(pdxMiPatientURI);
         pdxPatient.addProperty(RDFS.label, "PDX-MI Patient");
+        
         String pdxMiDiagnosisURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Diagnosis");
         this.pdxDiagnosis = rdfModel.createClass(pdxMiDiagnosisURI);
         pdxDiagnosis.addProperty(RDFS.label,"PDX-MI Diagnosis");
+        
         String pdxMiSexURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Sex");
         this.pdxSex = rdfModel.createClass(pdxMiSexURI);
         pdxSex.addProperty(RDFS.label,"PDX-MI Sex");
-        // etc.
+        
+        String pdxMiModelStudyURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_ModelStudy");
+        this.pdxModelStudy = rdfModel.createClass(pdxMiModelStudyURI);
+        pdxModelStudy.addProperty(RDFS.label,"PDX-MI Model Study");
+        
+        String pdxMiClinicalTumorURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_ClinicalTumor");
+        this.pdxClinicalTumor = rdfModel.createClass(pdxMiClinicalTumorURI);
+        pdxClinicalTumor.addProperty(RDFS.label,"PDX-MI Clinical Tumor");
+        
+        String pdxMiQualityAssuranceURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_QualityAssurance");
+        this.pdxQualityAssurance = rdfModel.createClass(pdxMiQualityAssuranceURI);
+        pdxQualityAssurance.addProperty(RDFS.label,"PDX-MI Quality Assurance");
+        
+        String pdxMiModelCreationURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_ModelCreation");
+        this.pdxModelCreation = rdfModel.createClass(pdxMiModelCreationURI);
+        pdxModelCreation.addProperty(RDFS.label,"PDX-MI Model Creation");
     }
 
     private void outputPdxModel(PdxModel pdxmodel) {
@@ -220,7 +242,7 @@ public class PdxModel2Rdf {
                 .addProperty(hasTumorGradeProperty,grade)
                 .addProperty(hasTumorCategoryProperty,category);
         
-        
+        this.tumorSample.addProperty(RDF.type, this.pdxClinicalTumor);
     }
 
 
@@ -257,6 +279,8 @@ public class PdxModel2Rdf {
         this.thisPdxModel.addProperty(engraftTimeInDaysProperty,
                 ResourceFactory.createTypedLiteral(String.valueOf(mcreation.getEngraftmentTimeInDays()),
                         XSDDatatype.XSDinteger));
+        
+        this.thisPdxModel.addProperty(RDF.type, this.pdxModelCreation);
     }
 
 
