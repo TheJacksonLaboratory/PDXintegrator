@@ -117,6 +117,9 @@ public class PdxModel2Rdf {
     private OntClass pdxClinicalTumor;
     private OntClass pdxQualityAssurance;
     private OntClass pdxModelCreation;
+    
+    // this is a guess
+    private OntClass pdxTreatmentResponse;
 
     
     public PdxModel2Rdf(List<PdxModel> modelList) {
@@ -170,6 +173,11 @@ public class PdxModel2Rdf {
         String pdxMiModelCreationURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_ModelCreation");
         this.pdxModelCreation = rdfModel.createClass(pdxMiModelCreationURI);
         pdxModelCreation.addProperty(RDFS.label,"PDX-MI Model Creation");
+        
+        // extending the guess
+        String pdxMiTreatmentResponseURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_TreatmentResponse");
+        this.pdxTreatmentResponse = rdfModel.createClass(pdxMiTreatmentResponseURI);
+        pdxTreatmentResponse.addProperty(RDFS.label,"PDX-MI Treatment Responose");
     }
 
     private void outputPdxModel(PdxModel pdxmodel) {
@@ -326,25 +334,39 @@ public class PdxModel2Rdf {
         this.maleSex.addProperty(RDF.type,this.pdxSex);
         this.femaleSex.addProperty(RDF.type,this.pdxSex);
 
+        // type patient consent?
         this.noConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_NO");
         this.yesConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_YES");
         this.academicConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_ACADEMIC_ONLY");
+        
         this.TRUE_RESOURCE = rdfModel.createResource(PDXNET_NAMESPACE+"True");
         this.FALSE_RESOURCE = rdfModel.createResource(PDXNET_NAMESPACE+"False");
+        
         //tumor solid, cell suspension, asite
+        // type sample type?
         this.tumorPrepSolid = rdfModel.createResource(PDXNET_NAMESPACE+"Solid");
         this.tumorPrepSuspension = rdfModel.createResource(PDXNET_NAMESPACE+"Suspension");
         this.tumorPrepAscites = rdfModel.createResource(PDXNET_NAMESPACE+"Ascites");
+        
+        // type humanization ?
         this.mouseRxGCSF = rdfModel.createResource(PDXNET_NAMESPACE+"G-CSF");
         this.mouseRxEstrogen = rdfModel.createResource(PDXNET_NAMESPACE+"Estrogen");
 
-
+        // Are these all of a type "treatment response"?
         this.notAssessed= rdfModel.createResource(PDXNET_NAMESPACE+"Not_assessed");
         this.completeResponse= rdfModel.createResource(PDXNET_NAMESPACE+"Complete_response");
         this.partialResponse = rdfModel.createResource(PDXNET_NAMESPACE+"Partial_response");
         this.stableDisease = rdfModel.createResource(PDXNET_NAMESPACE+"Stable_disease");
         this.progressiveDisease = rdfModel.createResource(PDXNET_NAMESPACE+"Progressive_disease");
+        
+        // Guess con't
+        this.notAssessed.addProperty(RDF.type, this.pdxTreatmentResponse);
+        this.completeResponse.addProperty(RDF.type, this.pdxTreatmentResponse);
+        this.partialResponse.addProperty(RDF.type, this.pdxTreatmentResponse);
+        this.stableDisease.addProperty(RDF.type, this.pdxTreatmentResponse);
+        this.progressiveDisease.addProperty(RDF.type, this.pdxTreatmentResponse);
 
+        // type model characterization?
         this.IHC = rdfModel.createResource(PDXNET_NAMESPACE+"IHC");
         this.histology = rdfModel.createResource(PDXNET_NAMESPACE+"Histology");
 
