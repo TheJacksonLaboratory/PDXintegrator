@@ -336,6 +336,8 @@ public class PdxModel2Rdf {
     private void specifyPrefixes() {
         // unique idenfitifer for the patient
         this.hasPatientIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "patient_id");
+        this.hasPatientIdProperty.addProperty(RDFS.label, "Unique identifer for patient");
+        this.hasPatientIdProperty.addProperty(RDF.type,OWL.ObjectProperty);
         
         // Patient's Initial Clinical Diagnosis
         this.hasDiagnosisProperty = rdfModel.createProperty( PDXNET_NAMESPACE + "hasDiagnosis" );
@@ -346,6 +348,8 @@ public class PdxModel2Rdf {
         
         // Unique tumor id
         this.hasSubmitterTumorIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "hasSubmitterTumorId");
+        this.hasSubmitterTumorIdProperty.addProperty(RDFS.label, "Unique identifer for sampled tissue");
+        this.hasSubmitterTumorIdProperty.addProperty(RDF.type, OWL.ObjectProperty );
         
         // Tumor Sample Object
         this.hasTumorProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumor");
@@ -364,15 +368,23 @@ public class PdxModel2Rdf {
         
         // Patient has provided consent to share data
         this.consentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"consent");
+        this.consentProperty.addProperty(RDFS.label, "Patient consent to share data");
+        this.consentProperty.addProperty(RDF.type, OWL.ObjectProperty );
         
         // Ethnicity of patient
         this.ethnicityProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"ethnicity");
+        this.ethnicityProperty.addProperty(RDFS.label, "Patient ethnicity");
+        this.ethnicityProperty.addProperty(RDF.type, OWL.ObjectProperty );
         
         // Patient tumor tissue of origin
         this.hasTissueOfOriginProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tissueOfOrigin");
+        this.hasTissueOfOriginProperty.addProperty(RDFS.label, "Tumor's tissue of origin");
+        this.hasTissueOfOriginProperty.addProperty(RDF.type, OWL.ObjectProperty );
         
         // Tumor Category
         this.hasTumorCategoryProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorCategory");
+        this.hasTumorCategoryProperty.addProperty(RDFS.label, "Tumor category");
+        this.hasTumorCategoryProperty.addProperty(RDF.type, OWL.ObjectProperty );
         
         // Histology for tumor
         this.hasTumorHistologyProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorHistology");
@@ -381,22 +393,33 @@ public class PdxModel2Rdf {
         
         // Grade of tumor
         this.hasTumorGradeProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorGrade");
+        this.hasTumorGradeProperty.addProperty(RDFS.label,"Tumor grade");
+        this.hasTumorGradeProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Stage of tumor
         this.hasStageProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"stage");
+        this.hasStageProperty.addProperty(RDFS.label,"Tumor stage");
+        this.hasStageProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // PDX model generated from patient tumor
         this.hasPdxModelProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasPdxModel");
+        this.hasPdxModelProperty.addProperty(RDFS.label,"PDX model generated from patient tissue");
         this.hasPdxModelProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Mouse strain for PDX model
         this.hasStrainProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasStrain");
+        this.hasStrainProperty.addProperty(RDFS.label,"Mouse strain used for engraftment");
+        this.hasStrainProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Is the mouse strain humanized
         this.strainHumanizedProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"strainHumanized");
+        this.strainHumanizedProperty.addProperty(RDFS.label,"Was mouse strain humanized");
+        this.strainHumanizedProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Type of mouse humanization
         this.humanizationTypeProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"humanizationType");
+        this.humanizationTypeProperty.addProperty(RDFS.label,"Type of mouse humanization");
+        this.humanizationTypeProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Type of tumor preperation
         this.tumorPreparation = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorPreparation");
