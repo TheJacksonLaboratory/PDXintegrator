@@ -138,9 +138,9 @@ public class PdxModel2Rdf {
     }
     private void initializeModelFramework() {
         this.rdfModel = ModelFactory.createOntologyModel(  );
-        String pdxMiModelURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Patient");
-        this.pdxPatient = rdfModel.createClass(pdxMiModelURI);
-        pdxPatient.addProperty(RDFS.label, "PDX-MI model");
+        String pdxMiPatientURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Patient");
+        this.pdxPatient = rdfModel.createClass(pdxMiPatientURI);
+        pdxPatient.addProperty(RDFS.label, "PDX-MI Patient");
         String pdxMiDiagnosisURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Diagnosis");
         this.pdxDiagnosis = rdfModel.createClass(pdxMiDiagnosisURI);
         pdxDiagnosis.addProperty(RDFS.label,"PDX-MI Diagnosis");
@@ -404,6 +404,7 @@ public class PdxModel2Rdf {
         // Instituion providing mouse
         this.mouseSourceProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"mouseSource");
         this.mouseSourceProperty.addProperty(RDFS.label,"Institution providing mouse");
+        this.mouseSourceProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Treatement of mouse prior to engraftment
         this.mouseTreatmentForEngraftment = rdfModel.createProperty(PDXNET_NAMESPACE,"mouseTreatmentForEngraftment");
