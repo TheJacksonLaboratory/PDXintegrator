@@ -469,6 +469,8 @@ public class PdxModel2Rdf {
         
         // Type of tumor preperation
         this.tumorPreparation = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorPreparation");
+        this.tumorPreparation.addProperty(RDFS.label,"Type of tumor preparation for engraftment");
+        this.tumorPreparation.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Instituion providing mouse
         this.mouseSourceProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"mouseSource");
@@ -477,39 +479,60 @@ public class PdxModel2Rdf {
         
         // Treatement of mouse prior to engraftment
         this.mouseTreatmentForEngraftment = rdfModel.createProperty(PDXNET_NAMESPACE,"mouseTreatmentForEngraftment");
+        this.mouseTreatmentForEngraftment.addProperty(RDFS.label,"Mouse treatment for engraftment");
+        this.mouseTreatmentForEngraftment.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Percent of successful engraftments 
         this.engraftmentPercentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"engraftmentPercent");
+        this.engraftmentPercentProperty.addProperty(RDFS.label,"Engraftment percent");
+        this.engraftmentPercentProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Days for successful engraftment
         this.engraftTimeInDaysProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"engraftmentTimeInDays");
+        this.engraftTimeInDaysProperty.addProperty(RDFS.label,"Engraftment time in days");
+        this.engraftTimeInDaysProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Tumor Characterization
         this.hasTumorCharacterizationProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"pdxTumorCharacterization");
+        this.hasTumorCharacterizationProperty.addProperty(RDFS.label,"Tumor Characterization");
+        this.hasTumorCharacterizationProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Tumor is not EBV or mouse tissue
         this.tumorNotEbvNotMouseProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"notEbvNotMouse");
+        this.tumorNotEbvNotMouseProperty.addProperty(RDFS.label,"Mouse is not EBV positive, tumor tissue is not mouse origin");
+        this.tumorNotEbvNotMouseProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // PDX model response to treatment
         this.pdxTumorResponseProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"pdxTumorResponse");
+        this.pdxTumorResponseProperty.addProperty(RDFS.label,"Tumor Response");
+        this.pdxTumorResponseProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // The pdx model's health status
         this.animalHealthStatusSatisfactoryProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"animalHealthStatusOk");
+        this.animalHealthStatusSatisfactoryProperty.addProperty(RDFS.label,"Animal health status is ok");
+        this.animalHealthStatusSatisfactoryProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Passage on which QA was performed
         this.passageQaPerformedProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"passageQAperformed");
+        this.passageQaPerformedProperty.addProperty(RDFS.label,"Passage QA performed");
+        this.passageQaPerformedProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Patient current treatment drug
         this.currentTreatmentDrug = rdfModel.createProperty(PDXNET_NAMESPACE,"currentTreatmentDrug");
+        this.currentTreatmentDrug.addProperty(RDFS.label,"Current patient treatment drug");
+        this.currentTreatmentDrug.addProperty(RDF.type, OWL.ObjectProperty);
        
         // Lower age range for Patient when sample was taken
         this.ageBinLowerRange = rdfModel.createProperty(PDXNET_NAMESPACE,"ageBinLowerRange");
         this.ageBinLowerRange.addProperty(RDFS.label,"Lower range of 5 year age bin");
         this.ageBinLowerRange.addProperty(RDFS.domain,pdxPatient);
+        this.ageBinLowerRange.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Upper age range for Patient when sample was taken
         this.ageBinUpperRange = rdfModel.createProperty(PDXNET_NAMESPACE,"ageBinUpperRange");
         this.ageBinUpperRange.addProperty(RDFS.label,"Upper range of 5 year age bin");
+        this.ageBinUpperRange.addProperty(RDFS.domain,pdxPatient);
+        this.ageBinUpperRange.addProperty(RDF.type, OWL.ObjectProperty);
         
         rdfModel.setNsPrefix( "PDXNET", PDXNET_NAMESPACE);
         rdfModel.setNsPrefix( "NCIT", NCIT_NAMESPACE);
