@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
+import org.jax.pdxintegrator.model.modelstudy.PdxModelStudy;
 
 /**
  * This class coordinates the transformation of one or more {@link org.jax.pdxintegrator.model.PdxModel} objects
@@ -81,6 +82,14 @@ public class PdxModel2Rdf {
     private Property consentProperty=null;
     /** This property specifies the population group of the patient. */
     private Property ethnicityProperty=null;
+    
+     private Property pdxStudyTreatmentProperty = null;
+     private Property pdxDoublingLagTimeProperty = null;
+     private Property pdxStudyHasMetastasisProperty = null;
+     private Property pdxStudyMetastasisLocationProperty = null;
+     private Property pdxStudyMetastasisPassageProperty = null;
+     private Property pdxStudyTumorOmicsProperty = null;
+    
 
     private Resource maleSex=null;
     private Resource femaleSex=null;
@@ -103,6 +112,8 @@ public class PdxModel2Rdf {
 
     private Resource thisPatient=null;
     private Resource thisPdxModel=null;
+    
+    private Resource thisModelStudy= null;
 
     private static final String PDXNET_NAMESPACE = "http://pdxnetwork/pdxmodel_";
     private final static String NCIT_NAMESPACE = "http://purl.obolibrary.org/obo/NCIT_";
@@ -118,8 +129,10 @@ public class PdxModel2Rdf {
     private OntClass pdxQualityAssurance;
     private OntClass pdxModelCreation;
     
-    // this is a guess
+    // these are a guess
     private OntClass pdxTreatmentResponse;
+    private OntClass pdxTumorSampleType;
+    private OntClass pdxModelCharacterization;
 
     
     public PdxModel2Rdf(List<PdxModel> modelList) {
@@ -177,7 +190,17 @@ public class PdxModel2Rdf {
         // extending the guess
         String pdxMiTreatmentResponseURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_TreatmentResponse");
         this.pdxTreatmentResponse = rdfModel.createClass(pdxMiTreatmentResponseURI);
-        pdxTreatmentResponse.addProperty(RDFS.label,"PDX-MI Treatment Responose");
+        pdxTreatmentResponse.addProperty(RDFS.label,"PDX-MI Treatment Response");
+        
+        String pdxMiTumorSampleTypeURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_TumorSampleType");
+        this.pdxTumorSampleType = rdfModel.createClass(pdxMiTumorSampleTypeURI);
+        pdxTumorSampleType.addProperty(RDFS.label,"PDX-MI Tumor Sample Type");
+        
+        String pdxMiModelCharacterizationURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_ModelCharacterization");
+        this.pdxModelCharacterization = rdfModel.createClass(pdxMiModelCharacterizationURI);
+        pdxModelCharacterization.addProperty(RDFS.label,"PDX-MI Model Characterization");
+        
+        
     }
 
     private void outputPdxModel(PdxModel pdxmodel) {
@@ -191,7 +214,7 @@ public class PdxModel2Rdf {
         // Quality Assurance Module
         outputQualityAssuranceRdf(pdxmodel);
         // to do -- other areas of the PDX-MI
-        // Model Study Module
+        //outputModelStudyRDF(pdxmodel);
     }
 
 
@@ -251,6 +274,36 @@ public class PdxModel2Rdf {
                 .addProperty(hasTumorCategoryProperty,category);
         
         this.tumorSample.addProperty(RDF.type, this.pdxClinicalTumor);
+    }
+    
+    private void outputModelStudyRDF(PdxModel model) {
+        PdxModelStudy modelStudy = model.getModelStudy();
+        // how is a model study identified?
+        this.thisModelStudy = rdfModel.createResource(PDXNET_NAMESPACE + model.getModelCreation().getSubmitterPdxId());
+        this.thisModelStudy.addProperty(hasPdxModelProperty,model.getModelCreation().getSubmitterPdxId());
+        Resource tissue = rdfModel.createResource(UBERON_NAMESPACE +modelStudy.getMetastasisLocation().getId());
+        // this is response to experimental treatment
+        ResponseToStandardOfCare response = modelStudy.getTreatmentResponse();
+        switch (response) {
+            case NOT_ASSESSED: this.thisModelStudy.addProperty(pdxTumorResponseProperty,notAssessed); break;
+            case STABLE_DISEASE: this.thisModelStudy.addProperty(pdxTumorResponseProperty,stableDisease); break;
+            case PARTIAL_RESPONSE:this.thisModelStudy.addProperty(pdxTumorResponseProperty,partialResponse); break;
+            case COMPLETE_RESPONSE:this.thisModelStudy.addProperty(pdxTumorResponseProperty,completeResponse); break;
+            case PROGRESSIVE_DISEASE:this.thisModelStudy.addProperty(pdxTumorResponseProperty,progressiveDisease); break;
+        }
+        
+        
+        
+        this.thisModelStudy.addProperty(pdxStudyTreatmentProperty,modelStudy.getTreatment())
+                .addProperty(pdxDoublingLagTimeProperty,ResourceFactory.createTypedLiteral(String.valueOf(modelStudy.getDoublingLagTime()),
+                        XSDDatatype.XSDinteger))
+                .addProperty(pdxStudyHasMetastasisProperty,modelStudy.isMetastasis()?TRUE_RESOURCE : FALSE_RESOURCE)
+                .addProperty(pdxStudyMetastasisLocationProperty,tissue)
+                .addProperty(pdxStudyMetastasisPassageProperty,ResourceFactory.createTypedLiteral(String.valueOf(modelStudy.getMetastasisPassage()),
+                        XSDDatatype.XSDinteger))
+                .addProperty(pdxStudyTumorOmicsProperty,modelStudy.getTumorOmics().toString());
+        
+        this.thisModelStudy.addProperty(RDF.type, this.pdxModelStudy);
     }
 
 
@@ -348,6 +401,10 @@ public class PdxModel2Rdf {
         this.tumorPrepSuspension = rdfModel.createResource(PDXNET_NAMESPACE+"Suspension");
         this.tumorPrepAscites = rdfModel.createResource(PDXNET_NAMESPACE+"Ascites");
         
+        this.tumorPrepSolid.addProperty(RDF.type, this.pdxTumorSampleType);
+        this.tumorPrepSuspension.addProperty(RDF.type, this.pdxTumorSampleType);
+        this.tumorPrepAscites.addProperty(RDF.type, this.pdxTumorSampleType);
+        
         // type humanization ?
         this.mouseRxGCSF = rdfModel.createResource(PDXNET_NAMESPACE+"G-CSF");
         this.mouseRxEstrogen = rdfModel.createResource(PDXNET_NAMESPACE+"Estrogen");
@@ -369,14 +426,10 @@ public class PdxModel2Rdf {
         // type model characterization?
         this.IHC = rdfModel.createResource(PDXNET_NAMESPACE+"IHC");
         this.histology = rdfModel.createResource(PDXNET_NAMESPACE+"Histology");
+        this.IHC.addProperty(RDF.type, this.pdxModelCharacterization);
+        this.histology.addProperty(RDF.type, this.pdxModelCharacterization);
 
     }
-
-
-
-
-
-
 
 
     private void specifyPrefixes() {
@@ -534,6 +587,32 @@ public class PdxModel2Rdf {
         this.ageBinUpperRange.addProperty(RDFS.domain,pdxPatient);
         this.ageBinUpperRange.addProperty(RDF.type, OWL.ObjectProperty);
         
+        this.pdxStudyTreatmentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"studyTreatment");
+        this.pdxStudyTreatmentProperty.addProperty(RDFS.label,"Study treatment");
+        this.pdxStudyTreatmentProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.pdxDoublingLagTimeProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"doublingLagTime");
+        this.pdxDoublingLagTimeProperty.addProperty(RDFS.label,"Doubling lag time");
+        this.pdxDoublingLagTimeProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.pdxStudyHasMetastasisProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"modelHasMetastasis");
+        this.pdxStudyHasMetastasisProperty.addProperty(RDFS.label,"Study model has metastasis");
+        this.pdxStudyHasMetastasisProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.pdxStudyMetastasisLocationProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"modelMetastasisLocation");
+        this.pdxStudyMetastasisLocationProperty.addProperty(RDFS.label,"Model metastasis location");
+        this.pdxStudyMetastasisLocationProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.pdxStudyMetastasisPassageProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"modelMetastasisPassage");
+        this.pdxStudyMetastasisPassageProperty.addProperty(RDFS.label,"Model metastasis passage");
+        this.pdxStudyMetastasisPassageProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.pdxStudyTumorOmicsProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorOmics");
+        this.pdxStudyTumorOmicsProperty.addProperty(RDFS.label,"Study tumor omics");
+        this.pdxStudyTumorOmicsProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        
+     
         rdfModel.setNsPrefix( "PDXNET", PDXNET_NAMESPACE);
         rdfModel.setNsPrefix( "NCIT", NCIT_NAMESPACE);
         rdfModel.setNsPrefix("UBERON",UBERON_NAMESPACE);
