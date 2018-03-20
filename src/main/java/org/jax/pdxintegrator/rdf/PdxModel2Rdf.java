@@ -133,6 +133,18 @@ public class PdxModel2Rdf {
     private OntClass pdxTreatmentResponse;
     private OntClass pdxTumorSampleType;
     private OntClass pdxModelCharacterization;
+    
+    // per adams email 
+    private OntClass pdxPatientConsent;
+    // animal health status
+    // treatment for engraftment
+    // notEbv
+    // passage qa performed
+    // model stage
+    // strain humanized
+    // tissue of origin
+    // tumor category
+    // tumor grade
 
     
     public PdxModel2Rdf(List<PdxModel> modelList) {
@@ -199,6 +211,10 @@ public class PdxModel2Rdf {
         String pdxMiModelCharacterizationURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_ModelCharacterization");
         this.pdxModelCharacterization = rdfModel.createClass(pdxMiModelCharacterizationURI);
         pdxModelCharacterization.addProperty(RDFS.label,"PDX-MI Model Characterization");
+        
+        String pdxMiPatientConsentURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_PatientConsent");
+        this.pdxPatientConsent = rdfModel.createClass(pdxMiPatientConsentURI);
+        pdxPatientConsent.addProperty(RDFS.label,"PDX-MI Patient Consent");
         
         
     }
@@ -389,8 +405,11 @@ public class PdxModel2Rdf {
 
         // type patient consent?
         this.noConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_NO");
+        this.noConsent.addProperty(RDF.type,this.pdxPatientConsent);
         this.yesConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_YES");
+        this.yesConsent.addProperty(RDF.type,this.pdxPatientConsent);
         this.academicConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_ACADEMIC_ONLY");
+        this.academicConsent.addProperty(RDF.type,this.pdxPatientConsent);
         
         this.TRUE_RESOURCE = rdfModel.createResource(PDXNET_NAMESPACE+"True");
         this.FALSE_RESOURCE = rdfModel.createResource(PDXNET_NAMESPACE+"False");
@@ -436,7 +455,7 @@ public class PdxModel2Rdf {
         // unique idenfitifer for the patient
         this.hasPatientIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "patient_id");
         this.hasPatientIdProperty.addProperty(RDFS.label, "Unique identifer for patient");
-        this.hasPatientIdProperty.addProperty(RDF.type,OWL.ObjectProperty);
+        this.hasPatientIdProperty.addProperty(RDF.type,OWL.DatatypeProperty);
         
         // Patient's Initial Clinical Diagnosis
         this.hasDiagnosisProperty = rdfModel.createProperty( PDXNET_NAMESPACE + "hasDiagnosis" );
@@ -448,7 +467,7 @@ public class PdxModel2Rdf {
         // Unique tumor id
         this.hasSubmitterTumorIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "hasSubmitterTumorId");
         this.hasSubmitterTumorIdProperty.addProperty(RDFS.label, "Unique identifer for sampled tissue");
-        this.hasSubmitterTumorIdProperty.addProperty(RDF.type, OWL.ObjectProperty );
+        this.hasSubmitterTumorIdProperty.addProperty(RDF.type, OWL.DatatypeProperty );
         
         // Tumor Sample Object
         this.hasTumorProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumor");
@@ -473,7 +492,7 @@ public class PdxModel2Rdf {
         // Ethnicity of patient
         this.ethnicityProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"ethnicity");
         this.ethnicityProperty.addProperty(RDFS.label, "Patient ethnicity");
-        this.ethnicityProperty.addProperty(RDF.type, OWL.ObjectProperty );
+        this.ethnicityProperty.addProperty(RDF.type, OWL.DatatypeProperty );
         
         // Patient tumor tissue of origin
         this.hasTissueOfOriginProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tissueOfOrigin");
@@ -508,7 +527,7 @@ public class PdxModel2Rdf {
         // Mouse strain for PDX model
         this.hasStrainProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasStrain");
         this.hasStrainProperty.addProperty(RDFS.label,"Mouse strain used for engraftment");
-        this.hasStrainProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasStrainProperty.addProperty(RDF.type, OWL.DatatypeProperty);
         
         // Is the mouse strain humanized
         this.strainHumanizedProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"strainHumanized");
@@ -528,7 +547,7 @@ public class PdxModel2Rdf {
         // Instituion providing mouse
         this.mouseSourceProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"mouseSource");
         this.mouseSourceProperty.addProperty(RDFS.label,"Institution providing mouse");
-        this.mouseSourceProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.mouseSourceProperty.addProperty(RDF.type, OWL.DatatypeProperty);
         
         // Treatement of mouse prior to engraftment
         this.mouseTreatmentForEngraftment = rdfModel.createProperty(PDXNET_NAMESPACE,"mouseTreatmentForEngraftment");
@@ -538,12 +557,12 @@ public class PdxModel2Rdf {
         // Percent of successful engraftments 
         this.engraftmentPercentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"engraftmentPercent");
         this.engraftmentPercentProperty.addProperty(RDFS.label,"Engraftment percent");
-        this.engraftmentPercentProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.engraftmentPercentProperty.addProperty(RDF.type, OWL.DatatypeProperty);
         
         // Days for successful engraftment
         this.engraftTimeInDaysProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"engraftmentTimeInDays");
         this.engraftTimeInDaysProperty.addProperty(RDFS.label,"Engraftment time in days");
-        this.engraftTimeInDaysProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.engraftTimeInDaysProperty.addProperty(RDF.type, OWL.DatatypeProperty);
         
         // Tumor Characterization
         this.hasTumorCharacterizationProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"pdxTumorCharacterization");
@@ -579,13 +598,13 @@ public class PdxModel2Rdf {
         this.ageBinLowerRange = rdfModel.createProperty(PDXNET_NAMESPACE,"ageBinLowerRange");
         this.ageBinLowerRange.addProperty(RDFS.label,"Lower range of 5 year age bin");
         this.ageBinLowerRange.addProperty(RDFS.domain,pdxPatient);
-        this.ageBinLowerRange.addProperty(RDF.type, OWL.ObjectProperty);
+        this.ageBinLowerRange.addProperty(RDF.type, OWL.DatatypeProperty);
         
         // Upper age range for Patient when sample was taken
         this.ageBinUpperRange = rdfModel.createProperty(PDXNET_NAMESPACE,"ageBinUpperRange");
         this.ageBinUpperRange.addProperty(RDFS.label,"Upper range of 5 year age bin");
         this.ageBinUpperRange.addProperty(RDFS.domain,pdxPatient);
-        this.ageBinUpperRange.addProperty(RDF.type, OWL.ObjectProperty);
+        this.ageBinUpperRange.addProperty(RDF.type, OWL.DatatypeProperty);
         
         this.pdxStudyTreatmentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"studyTreatment");
         this.pdxStudyTreatmentProperty.addProperty(RDFS.label,"Study treatment");
