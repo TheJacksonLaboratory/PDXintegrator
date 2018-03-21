@@ -302,6 +302,7 @@ public class PdxModel2Rdf {
 
        this.thisPatient
                 = rdfModel.createResource(patientURI)
+                .addProperty(RDFS.label,patient.getSubmitterPatientID())
                 .addProperty(RDF.type,this.pdxPatient)
                 .addProperty(hasPatientIdProperty,patient.getSubmitterPatientID())
                 .addProperty(hasDiagnosisProperty, diagnosisResource)
@@ -320,6 +321,8 @@ public class PdxModel2Rdf {
         this.thisPatient.addProperty(currentTreatmentDrug,
                 ResourceFactory.createTypedLiteral(patient.getCurrentTreatmentDrug(),
                         XSDDatatype.XSDstring));
+        
+        
     }
 
 
@@ -353,7 +356,7 @@ public class PdxModel2Rdf {
                 .addProperty(hasTumorCategoryProperty,category);
         
         this.tumorSample.addProperty(RDF.type, this.pdxClinicalTumor);
-        this.tumorSample.addProperty(RDFS.label,"Sample from tumor");
+        this.tumorSample.addProperty(RDFS.label,clintumor.getSubmitterTumorID());
     }
     
     private void outputModelStudyRDF(PdxModel model) {
@@ -425,7 +428,7 @@ public class PdxModel2Rdf {
                         XSDDatatype.XSDinteger));
         
         this.thisPdxModel.addProperty(RDF.type, this.pdxModelCreation);
-        this.thisPdxModel.addProperty(RDFS.label,"Model Creation");
+        this.thisPdxModel.addProperty(RDFS.label,"PDX Model "+mcreation.getSubmitterPdxId());
     }
 
 
