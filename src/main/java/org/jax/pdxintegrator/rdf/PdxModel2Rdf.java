@@ -515,9 +515,14 @@ public class PdxModel2Rdf {
         this.tumorPrepSuspension.addProperty(RDF.type, this.pdxTumorSampleType);
         this.tumorPrepAscites.addProperty(RDF.type, this.pdxTumorSampleType);
         
-        // type humanization ?
+        // treatment for engfatement
         this.mouseRxGCSF = rdfModel.createResource(PDXNET_NAMESPACE+"G-CSF");
+        this.mouseRxGCSF.addProperty(RDFS.label,"G-CSF treatment for engraftment");
+        this.mouseRxGCSF.addProperty(RDF.type, this.pdxTreatmentForEngraftment);
+                
         this.mouseRxEstrogen = rdfModel.createResource(PDXNET_NAMESPACE+"Estrogen");
+        this.mouseRxEstrogen.addProperty(RDFS.label,"Estrogen treatment for engraftment");
+        this.mouseRxEstrogen.addProperty(RDF.type, this.pdxTreatmentForEngraftment);
 
         // Are these all of a type "treatment response"?
         this.notAssessed= rdfModel.createResource(PDXNET_NAMESPACE+"Not_assessed");
