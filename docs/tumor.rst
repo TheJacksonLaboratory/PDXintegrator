@@ -6,36 +6,37 @@ The following table shows the recommendations from the  `PDX-MI manuscript <http
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
 | Field                        | Rec | Description            | Example                  |  PDXNet                 |
 +==============================+=====+========================+==========================+=========================+
-| Submitter Tumor ID           | E   | Tissue ID              | TUM-123                  | Analogous to Patient ID |
+| Submitter Tumor ID           | E   | Tissue ID              | TUM-123                  | Unique ID               |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
 | Primary Tumor Tissue         | E   | Tumor Origin           | breast                   | UBERON code             |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
-| Primary, Met, Recurrence     | E   | Type of Tumor Tissue   | breast                   | enumeration             |
+| Primary, Met, Recurrence     | E   | Disease Progression    | Recurrence               | enumeration             |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
 | Specimen Tumor Tissue        | E   | Sampled Tissue         | breast                   | UBERON code             |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
 | Tissue Histology             | D   | Histologic Diagnosis   |invasive ductal carcinoma | NCIT code               |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
-| Tumor Grade; Classification  | D   | Tumor Grade            |grade    3;    Elston     | PDXNet codes            |
+| Tumor Grade                  | D   | Tumor Grade            |grade    3                | AJCC?                   |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
-| Disease Stage; Classification| D   | Tumor Stage            |ER+,    PR+,    HER2+;    | ???                     |
+| Disease Stage; T N M         | D   | Tumor Stage            |                          | AJCC?                   |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
-| Diagnostic Markers           | D   |                        | yes/no                   | enumeration             |
+| Diagnostic Markers           | D   | Clinical BioMarkers    | ER+,    PR+,    HER2+;   | enumeration             |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
 | Treatment Naive Patient      | D   |                        | yes/no                   | enumeration             |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
-| Tumor Sample Type            | D   |                        | biopsy                   | enumeration             |
+| Tumor Sample Type            | D   | Collection Procedure   | biopsy                   | enumeration             |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
 | From an existing PDX model?  | D   |                        | yes/no                   | see below               |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
 
 
 1. **Submitter Tumor ID**
-Display as CenterID:TumorID and keep an internal ID that will not be shown externally to act as a primary key.
+Display as CenterID:TumorID to act as a primary key. If not provided, patient ID can be used.
 Tumor 123 from JAX would be shown on the PDXNet website as JAX:TUM-123
 
 
-2. **Primary tumor tissue of origin**
+2. **Primary tumor tissue**
+The tissue of the primary tumor
 We can infer this from the NCIT code if desired. For now, the simulation shows a random UBERON code for an anatomical entity.
 We will use the uberon cross-species anatomy ontology [8] that is developed by Monarch Initiative (M. Haendel, C. Mungall).
 
@@ -44,24 +45,26 @@ For now, we are using PDXNet entities, but we should use the NCIT terms for thes
 This would allow users to enter a more specific NCIT term such as Distant metastasis (C18206), which is a child of Metastasis (C19151)
 
 4. **Specimen tumor tissue**
-Uberon as above. Possibly use ICD-0?
+Tissue from which the specimen was collected. Same as Primary tissue is tumor is not metastatic.
+Uberon as above.
 **TODO** Decide on tissue ontology.
 
 5. **Tissue histology**
 This is the pathologist's diagnosis and may often represent a refinement of the clinical diagnosis given in the Patient/Clinical module. Should probably use the same terminology as diagnosis, but represent the pathologist's findings
 
-6. **Tumor Grade; classification**
+6. **Tumor Grade**
 For now we are using PDXNet codes, but we will switch to the NCIT subhierarchy, although I think they may need some TLC.
 We will work with NCIT to revise these terms as a part of Monarch’s ongoing collaboration with NCIT.
-Possibly us AJCC. Should this be seperated into pT,pN,PM?
 **TODO** Define this field and determine ontology to use.
 
 7. **Disease Stage; classification**
 T3N2M1;    TNM    or    Non    applicable    (example    blood    cancer)
 Should follow Tumor Grade; classification standard
+Possibly us AJCC. Should this be seperated into pT,pN,PM?
 **TODO** Define this field and determine ontology to use.
 
 8. **Specific  markers (diagnostic linked)**
+Clinically relevant bio markers
 Most of the assays such as IHC are covered by the NCIT under the subhierarchy “Laboratory Procedure”. That NCIT subhierachy also includes items for Receptor status (e.g., HER2/Neu positive), and these will be linked to external representations of genes/proteins by the Monarch collaboration.
 
 
