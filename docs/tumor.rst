@@ -8,7 +8,7 @@ The following table shows the recommendations from the  `PDX-MI manuscript <http
 +==============================+=====+========================+==========================+=========================+
 | Submitter Tumor ID           | E   | Tissue ID              | TUM-123                  | Unique ID               |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
-| Primary Tumor Tissue         | E   | Tumor Origin           | breast                   | UBERON code             |
+| Primary Tumor Tissue         | E   | Primary Tumor Tissue   | breast                   | UBERON code             |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
 | Primary, Met, Recurrence     | E   | Disease Progression    | Recurrence               | enumeration             |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
@@ -20,7 +20,7 @@ The following table shows the recommendations from the  `PDX-MI manuscript <http
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
 | Disease Stage; T N M         | D   | Tumor Stage            |                          | AJCC?                   |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
-| Diagnostic Markers           | D   | Clinical BioMarkers    | ER+,    PR+,    HER2+;   | enumeration             |
+| Diagnostic Markers           | D   | Clinical BioMarkers    | ER+,    PR+,    HER2+;   |            |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
 | Treatment Naive Patient      | D   |                        | yes/no                   | enumeration             |
 +------------------------------+-----+------------------------+--------------------------+-------------------------+
