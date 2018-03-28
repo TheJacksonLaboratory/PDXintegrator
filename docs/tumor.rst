@@ -84,5 +84,4 @@ NCIT has a subhierarchy of terms for biopsy and biopsy locations, that will be l
 The PDX-MI manuscript shows the example ``Yes, PDX#123, lost cisplatin resistance``. In PDXNet, we will use
 Yes/no and reference to a PDX model that is identified by CenterID:ModelID (same as Submitter    PDX    ID below).
 We may need to create our own mini-terminology to describe the reasons for using a subline
-**TODO**
-  This could be  "Subline Of"=(modelID) and "Subline reason"= 
+**TODO** This could be  "Subline Of"=(modelID) and "Subline reason"= 
