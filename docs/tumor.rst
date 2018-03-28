@@ -16,9 +16,9 @@ The following table shows the recommendations from the  `PDX-MI manuscript <http
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
 | Tissue Histology          | D   | Histologic Diagnosis |invasive ductal carcinoma| NCIT code               |
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
-| Tumor Grade               | D   | Tumor Grade          |grade    3               | AJCC?                   |
+| Tumor Grade               | D   | Tumor Grade          |grade    3               | AJCC Grade              |
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
-| Disease Stage; T N M      | D   | Tumor Stage          |                         | AJCC?                   |
+| Disease Stage; T N M      | D   | Tumor Stage          |                         | AJCC TNM Stages         |
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
 | Diagnostic Markers        | D   | Clinical BioMarkers  | ER+,    PR+,    HER2+;  |                         |
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
@@ -36,20 +36,22 @@ Tumor 123 from JAX would be shown on the PDXNet website as JAX:TUM-123
 
 
 2. **Primary tumor tissue**
-The tissue of the primary tumor
-We can infer this from the NCIT code if desired. For now, the simulation shows a random UBERON code for an anatomical entity.
+The tissue of the primary tumor.
+For now, the simulation shows a random UBERON code for an anatomical entity.
 We will use the uberon cross-species anatomy ontology [8] that is developed by Monarch Initiative (M. Haendel, C. Mungall).
 
 3. **Primary, metastasis,recurrence**
+Is the specimen tissue from the primary tumor, a metastasis or a recurrance
 For now, we are using PDXNet entities, but we should use the NCIT terms for these items.
 This would allow users to enter a more specific NCIT term such as Distant metastasis (C18206), which is a child of Metastasis (C19151)
 
 4. **Specimen tumor tissue**
 Tissue from which the specimen was collected. Same as Primary tissue if the tumor is not metastatic.
 Uberon as above.
+**TODO** For melanoma do we want to capture specimen site?
 
 5. **Tissue histology**
-This is the pathologist's diagnosis and may often represent a refinement of the clinical diagnosis given in the Patient/Clinical module. Should use the same terminology as diagnosis, but represent the pathologist's findings
+This is the pathologist's diagnosis and may often represent a refinement of the clinical diagnosis given in the Patient/Clinical module. Should use the same terminology as diagnosis, but represent the pathologist's findings.
 
 6. **Tumor Grade**
 For now we are using PDXNet codes, but we will switch to the NCIT subhierarchy, although I think they may need some TLC.
@@ -83,3 +85,4 @@ The PDX-MI manuscript shows the example ``Yes, PDX#123, lost cisplatin resistanc
 Yes/no and reference to a PDX model that is identified by CenterID:ModelID (same as Submitter    PDX    ID below).
 We may need to create our own mini-terminology to describe the reasons for using a subline
 **TODO**
+  This could be  "Subline Of"=(modelID) and "Subline reason"= 
