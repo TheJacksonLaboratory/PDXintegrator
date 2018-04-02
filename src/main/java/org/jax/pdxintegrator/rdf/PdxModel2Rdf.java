@@ -358,7 +358,7 @@ public class PdxModel2Rdf {
         // how is a model study identified? it should have a name or ID
         // this naming convention won't work for multiple studies for the same model
        // this.thisModelStudy = rdfModel.createResource(String.format("%s%s",PDXNET_NAMESPACE,"Study "+model.getModelCreation().getSubmitterPdxId()));
-        this.thisModelStudy = rdfModel.createResource(PDXNET_NAMESPACE+"Study "+model.getModelCreation().getSubmitterPdxId());
+        this.thisModelStudy = rdfModel.createResource(PDXNET_NAMESPACE+"Study_"+model.getModelCreation().getSubmitterPdxId());
      
                 
         this.thisModelStudy.addProperty(hasPdxModelProperty,this.thisPdxModelCreation);
