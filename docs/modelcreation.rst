@@ -19,7 +19,7 @@ The following table shows the recommendations from the  `PDX-MI manuscript <http
 +--------------------------------+-----+--------------------------------------+--------------------------------------+------------------------------------------------+
 | Type of humanisation           | E   |                                      |CD34+hematopoietic stem cell-engrafted|                                                |
 +--------------------------------+-----+--------------------------------------+--------------------------------------+------------------------------------------------+
-| Tumor preparation              | D   |                                      |suspension                            | ?                                              |
+| Engraftment Procedure          | D   |                                      |suspension                            | ?                                              |
 +--------------------------------+-----+--------------------------------------+--------------------------------------+------------------------------------------------+
 | Engraftment Method             | D   |                                      |                                      | ?                                              |
 +--------------------------------+-----+--------------------------------------+--------------------------------------+------------------------------------------------+
@@ -52,8 +52,7 @@ Yes or No
 6. **Type of Humanisation**.
 Description of humanisation method.
 
-7. **Tumor Preparation**.
-tumor    solid,    cell    suspension,    asite
+7. **Engraftmet Procedure**.
 Enumeration (**TODO** Need input: list of all the methods and whether any vocabulary exists?)
 
 8. **Engraftment Method**.
