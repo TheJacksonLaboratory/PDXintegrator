@@ -66,13 +66,12 @@ Use AJCC. This will be seperated into pT,pN,PM and stage
 
 8. **Specific  markers (diagnostic linked)**
 Clinically relevant bio markers.
-Pairs of Marker:Status where status can be "positive", "negative", a percent value (or a variant?)
+Pairs of Marker:Status where status can be "positive", "negative", a percent value, or a variant and optional platform
 Most of the assays such as IHC are covered by the NCIT under the subhierarchy “Laboratory Procedure”. That NCIT subhierachy also includes items for Receptor status (e.g., HER2/Neu positive), and these will be linked to external representations of genes/proteins by the Monarch collaboration.
 
-9. **Is tumor from untreated patient?**
+9. **Treatment naive patient?**
 yes/no  (enumeration)
-**TODO** Define untreated.
-**JAX:** "PDX models are considered treatment naive if the patient did not receive chemotherapy, immunotherapy, hormone therapy or radiation therapy for this primary cancer within 5 years prior to sample collection and/or within 1 year for a different cancer."
+Yes means patient has never had neoadjuvant treatment. per TCGA
 
 10. **Original tumor sample type**
 The process used to collect the sample.
