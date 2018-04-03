@@ -18,7 +18,7 @@ The following table shows the recommendations from the  `PDX-MI manuscript <http
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
 | Tumor Grade               | D   | Tumor Grade          |grade    3               | AJCC Grade              |
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
-| Disease Stage; T N M      | D   | Tumor Stage          |                         | AJCC TNM Stages         |
+| Stage; T N M              | D   | Tumor Stage          |                         | AJCC TNM Stages         |
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
 | Diagnostic Markers        | D   | Clinical BioMarkers  | ER+,    PR+,    HER2+;  |                         |
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
@@ -26,7 +26,9 @@ The following table shows the recommendations from the  `PDX-MI manuscript <http
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
 | Tumor Sample Type         | D   | Collection Procedure | biopsy                  | enumeration             |
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
-| From an existing PDX model| D   |                      | yes/no                  | see below               |
+| Subline of                |     | Subline of model     | PDX-123                 | Model Identifier        |
++---------------------------+-----+----------------------+-------------------------+-------------------------+
+| Subline reason            |     | Why a subline        | Lost Cisplatin Resist.  | String                  |
 +---------------------------+-----+----------------------+-------------------------+-------------------------+
 
 
@@ -48,7 +50,7 @@ This would allow users to enter a more specific NCIT term such as Distant metast
 4. **Specimen tumor tissue**
 Tissue from which the specimen was collected. Same as Primary tissue if the tumor is not metastatic.
 Uberon as above.
-**TODO** For melanoma do we want to capture specimen site?
+**TODO** For melanoma do we want to capture specimen location?
 
 5. **Tissue histology**
 This is the pathologist's diagnosis and may often represent a refinement of the clinical diagnosis given in the Patient/Clinical module. Should use the same terminology as diagnosis, but represent the pathologist's findings.
@@ -56,13 +58,11 @@ This is the pathologist's diagnosis and may often represent a refinement of the 
 6. **Tumor Grade**
 For now we are using PDXNet codes, but we will switch to the NCIT subhierarchy, although I think they may need some TLC.
 We will work with NCIT to revise these terms as a part of Monarch’s ongoing collaboration with NCIT.
-**TODO** Define this field and determine ontology to use.
 
 7. **Disease Stage; classification**
 T3N2M1;    TNM    or    Non    applicable    (example    blood    cancer)
 Should follow Tumor Grade; classification standard
-Use AJCC. This should be seperated into pT,pN,PM and stage
-**TODO** Define this field and determine ontology to use.
+Use AJCC. This will be seperated into pT,pN,PM and stage
 
 8. **Specific  markers (diagnostic linked)**
 Clinically relevant bio markers.
@@ -79,9 +79,9 @@ The process used to collect the sample.
 biopsy, surgical sample, punch 
 NCIT has a subhierarchy of terms for biopsy and biopsy locations, that will be linked to uberon etc by the Monarch collaboration. Some terms appear to be missing, e.g., “ascites fluid”, but will be added to NCIT as needed for PDXNet.
 
+11. **Subline of**
+If this model is created as a subline of an existing model indicate which model it is a subline of.
 
-11. **Tumor from an existing PDX model? ID?  Why sub-line?**
-The PDX-MI manuscript shows the example ``Yes, PDX#123, lost cisplatin resistance``. In PDXNet, we will use
-Yes/no and reference to a PDX model that is identified by CenterID:ModelID (same as Submitter    PDX    ID below).
+12. **Subline reason**
 We may need to create our own mini-terminology to describe the reasons for using a subline
-**TODO** This could be  "Subline Of"=(modelID) and "Subline reason"= 
+
