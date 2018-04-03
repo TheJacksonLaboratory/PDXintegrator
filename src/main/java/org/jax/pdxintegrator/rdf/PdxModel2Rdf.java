@@ -139,7 +139,6 @@ public class PdxModel2Rdf {
     private OntClass pdxPatientConsent;
     private OntClass pdxTreatmentForEngraftment;
     private OntClass pdxPassageQaPerformed;
-    private OntClass pdxModelStage;
     private OntClass pdxTissueOfOrigin;
     private OntClass pdxTumorCategory;
     private OntClass pdxTumorGrade;
@@ -224,10 +223,6 @@ public class PdxModel2Rdf {
         this.pdxPassageQaPerformed = rdfModel.createClass(pdxMiPassageQaPerformedURI);
         this.pdxPassageQaPerformed.addProperty(RDFS.label, "Passage QA performed");
 
-        String pdxMiModelStageURI = String.format("%s%s", PDXNET_NAMESPACE, "ModelStage");
-        this.pdxModelStage = rdfModel.createClass(pdxMiModelStageURI);
-        this.pdxModelStage.addProperty(RDFS.label, "Model stage");       
-
         String pdxMiTissueOfOriginURI = String.format("%s%s", PDXNET_NAMESPACE, "TissueOfOrigin");
         this.pdxTissueOfOrigin = rdfModel.createClass(pdxMiTissueOfOriginURI);
         this.pdxTissueOfOrigin.addProperty(RDFS.label, "Tissue of origin");
@@ -245,8 +240,8 @@ public class PdxModel2Rdf {
         this.pdxTumorStage.addProperty(RDFS.label, "Tumor stage");
         
         String pdxMiTumorHistologyURI = String.format("%s%s", PDXNET_NAMESPACE, "TumorHistology");
-        this.pdxTumorHistology = rdfModel.createClass(pdxMiTumorStageURI);
-        this.pdxTumorHistology.addProperty(RDFS.label, "Tumor stage");
+        this.pdxTumorHistology = rdfModel.createClass(pdxMiTumorHistologyURI);
+        this.pdxTumorHistology.addProperty(RDFS.label, "Tumor histology");
         
         
         String pdxMiBooleanURI = String.format("%s%s", PDXNET_NAMESPACE, "Boolean");
@@ -332,7 +327,7 @@ public class PdxModel2Rdf {
         histology.addProperty(RDFS.label,"Tumor histology");
         
         Resource stage = rdfModel.createResource(NCIT_NAMESPACE + clintumor.getStage().getId());
-        stage.addProperty(RDF.type, this.pdxModelStage);
+        stage.addProperty(RDF.type, this.pdxTumorStage);
         stage.addProperty(RDFS.label,"Tumor stage");
         
         Resource grade = rdfModel.createResource(NCIT_NAMESPACE + clintumor.getTumorGrade().getId());
@@ -635,6 +630,7 @@ public class PdxModel2Rdf {
         this.hasTumorHistologyProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorHistology");
         this.hasTumorHistologyProperty.addProperty(RDFS.label,"Pathologist's Histologic Diagnosis");
         this.hasTumorHistologyProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasTumorHistologyProperty.addProperty(RDFS.range,this.pdxDiagnosis);
         
         // Grade of tumor
         this.hasTumorGradeProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorGrade");
