@@ -51,6 +51,7 @@ this are not included in the data? Therefore, the central database will only be 
 and it does not need to go overboard in recording this information?
 
 5. **Passage QA performed**
+The passage or passages on which QA was performed. As models are repeately passaged QA status may change.
 Will PDXNet be including data from models that only partially pass the criteria or is it an absolute rule-out if QA is not perfect? Will this be a list of passage #s?
 
 
