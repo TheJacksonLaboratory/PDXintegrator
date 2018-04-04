@@ -10,13 +10,15 @@ biomedical research ( `Meehan et al., 2017 <https://www.ncbi.nlm.nih.gov/pubmed/
 +------------------------------+-----+--------------------------------+------------------------------------------------+
 | Field                        | Rec | Example                        |  PDXNet                                        |
 +==============================+=====+================================+================================================+
-| Treatment, passage           | D   |pertuzumab in  combination      |  ???????                                       |
+| Treatment                    | D   |pertuzumab in  combination      |  ???????                                       |
 |                              |     |with trastuzumab; CHEMBL2007641 |                                                |
 +------------------------------+-----+--------------------------------+------------------------------------------------+
 | Treatment    protocol        | D   |trastuzumab (30 mg/kg loading   |  ???????                                       |
 |                              |     |dose, 15 mg/kg weekly);         |                                                |
 +------------------------------+-----+--------------------------------+------------------------------------------------+
 | Treatment    Response        | D   |                                | Terms as in quality assurance module           |
++------------------------------+-----+--------------------------------+------------------------------------------------+
+| Passage                      | D   | Model Passage used in study    | P<N>                                           |
 +------------------------------+-----+--------------------------------+------------------------------------------------+
 | Tumor OMICs                  | D   |                                | SB team should define these specifications     |
 +------------------------------+-----+--------------------------------+------------------------------------------------+
@@ -25,10 +27,9 @@ biomedical research ( `Meehan et al., 2017 <https://www.ncbi.nlm.nih.gov/pubmed/
 Table 2.5. Model study module. Rec: Recommendation; E: essential; D:desirable.
 
 
-1. **Treatment, passage**
+1. **Treatment**
 Treatment with medications will be recorded as in the clinical module.
-Passages will be recorded using an enumeration P1, P2, ...
-**Question** -- what is the meaning of passage? The start of treatment?
+Passage 
 
 2. **Treatment protocol**
 If there is a standard dosage scheme across all centers such as loading and maintenance doses,
@@ -40,17 +41,19 @@ complete    response,    partial    response,    stable    disease,    progressi
 disease (Terms as in quality module). It is unclear what the distinction is between treatment response in this
 module and in the quality module.
 
+4 **Model Passage**
+Passage(s) of models used in study. Assumption is P0 modles have tissue directly from patient. P1 is engrafted with tissue from P0 etc. Passage was attached to the field Treatment which doesn't seem correct. Are some studies done that way?
 
-4. **Tumor    OMICS**:    TUMpdx-123;    subcutaneous;    90%    human;    exome    sequencing;
+5. **Tumor    OMICS**:    TUMpdx-123;    subcutaneous;    90%    human;    exome    sequencing;
 passage. Sample ID as above. Site as uberon or enumeration. Purity (need input as to how this is measured, but
 possibly a percentage is adequate). The technology (exome etc) will be represented as an enumeration initially,
 but it would be easy to map to other terminologies if desired. Passage will be an enumeration. The Seven Bridges
 team should weigh in on how they need to map OMICs data.
 
-5. **Development  of metastases in strain**
+6. **Development  of metastases in strain**
 We will code this as Yes/no; site as uberon; passage as enumeration
 
-6. **Lag time/doubling time of tumor**
+7. **Lag time/doubling time of tumor**
 We will code this as the number of hours.
 
 
