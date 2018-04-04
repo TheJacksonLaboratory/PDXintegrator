@@ -48,7 +48,9 @@ disease (Terms as in quality module). It is unclear what the distinction is betw
 module and in the quality module.
 
 4 **Model Passage**
-Passage(s) of models used in study. Assumption is P0 modles have tissue directly from patient. P1 is engrafted with tissue from P0 etc. Passage was attached to the field Treatment which doesn't seem correct. Are some studies done that way?
+Passage(s) of models used in study. Assumption is P0 modles have tissue directly from patient. 
+P1 is engrafted with tissue from P0 etc. 
+Passage was attached to the field Treatment which doesn't seem correct. Are some studies done that way?
 
 5. **Tumor    OMICS**:    TUMpdx-123;    subcutaneous;    90%    human;    exome    sequencing;
 passage. Sample ID as above. Site as uberon or enumeration. Purity (need input as to how this is measured, but
