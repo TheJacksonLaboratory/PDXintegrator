@@ -18,10 +18,13 @@ biomedical research ( `Meehan et al., 2017 <https://www.ncbi.nlm.nih.gov/pubmed/
 +------------------------------+-----+--------------------------------+------------------------------------------------+
 | Treatment    Response        | D   |                                | Terms as in quality assurance module           |
 +------------------------------+-----+--------------------------------+------------------------------------------------+
-| Passage                      | D   | Model Passage used in study    | P<N>                                           |
+| Passage                      | D   | P2                             | Enumeration                                    |
 +------------------------------+-----+--------------------------------+------------------------------------------------+
 | Tumor OMICs                  | D   |                                | SB team should define these specifications     |
 +------------------------------+-----+--------------------------------+------------------------------------------------+
+| Metastasis                   | D   | Yes or No                      |                                                | +------------------------------+-----+--------------------------------+------------------------------------------------+
+| Metastasized to              | D   | Liver                          | Uberon                                         | +------------------------------+-----+--------------------------------+------------------------------------------------+
+| Metastasis in passage        | D   | P3                             | Enumeration                                    | +------------------------------+-----+--------------------------------+------------------------------------------------+
 | Lag time/doubling time       | D   | 48h                            | separate elements                              |
 +------------------------------+-----+--------------------------------+------------------------------------------------+
 Table 2.5. Model study module. Rec: Recommendation; E: essential; D:desirable.
@@ -50,10 +53,10 @@ possibly a percentage is adequate). The technology (exome etc) will be represent
 but it would be easy to map to other terminologies if desired. Passage will be an enumeration. The Seven Bridges
 team should weigh in on how they need to map OMICs data.
 
-6. **Development  of metastases in strain**
+6,7,8 **Development  of metastases in strain**
 We will code this as Yes/no; site as uberon; passage as enumeration
 
-7. **Lag time/doubling time of tumor**
+9. **Lag time/doubling time of tumor**
 We will code this as the number of hours.
 
 
