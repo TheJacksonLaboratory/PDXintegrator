@@ -32,6 +32,7 @@ biomedical research ( `Meehan et al., 2017 <https://www.ncbi.nlm.nih.gov/pubmed/
 +------------------------------+-----+--------------------------------+------------------------------------------------+
 Table 2.5. Model study module. Rec: Recommendation; E: essential; D:desirable.
 
+What about Study ID or Name (if not available could be model + passage + treatment)?
 
 1. **Treatment**
 Treatment with medications will be recorded as in the clinical module.
