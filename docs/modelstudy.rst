@@ -10,6 +10,8 @@ biomedical research ( `Meehan et al., 2017 <https://www.ncbi.nlm.nih.gov/pubmed/
 +------------------------------+-----+--------------------------------+------------------------------------------------+
 | Field                        | Rec | Example                        |  PDXNet                                        |
 +==============================+=====+================================+================================================+
+| Study name or identifier     |     |PDX-123P3 Pertuzmab/Trastuzumab |  Needs to be unique to attach files            |
++------------------------------+-----+--------------------------------+------------------------------------------------+
 | Treatment                    | D   |pertuzumab in  combination      |  List of 1 or more generic drugs               |
 |                              |     |with trastuzumab; CHEMBL2007641 |                                                |
 +------------------------------+-----+--------------------------------+------------------------------------------------+
@@ -30,30 +32,27 @@ biomedical research ( `Meehan et al., 2017 <https://www.ncbi.nlm.nih.gov/pubmed/
 +------------------------------+-----+--------------------------------+------------------------------------------------+
 Table 2.5. Model study module. Rec: Recommendation; E: essential; D:desirable.
 
-What about Study ID or Name (if not available could be model + passage + treatment)?
+1. **Study Name or identifier** (if not available could be model + passage + treatment)
+A way to uniquly identify the study. Human readable or unique ID
 
-1. **Treatment**
+2. **Treatment**
 List of treatment(s) as generic terms for medications. 
 
-2. **Treatment protocol**
+3. **Treatment protocol**
 For each treatment drug provide drug name, dosage, route and frequency.
 
-3. **Treatment response**
+4. **Treatment response**
 complete    response,    partial    response,    stable    disease,    progressive
 disease.
 
-4 **Model Passage**
+5 **Model Passage**
 Passage(s) of models used in study. Assumption is P0 modles have tissue directly from patient. 
 P1 is engrafted with tissue from P0 etc. 
 
  **Tumor    OMICS**:    This was removed. It will be populated based on types of files uploaded for Study/Model. 
  
-5,6,7 **Development  of metastases in strain**
+6,7,8 **Development  of metastases in strain**
 We will code this as Yes/no; site as uberon; passage as enumeration
 
-8. **Lag time/doubling time of tumor**
+9. **Lag time/doubling time of tumor**
 We will code this as the number of hours.
-
-
-
-
