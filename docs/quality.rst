@@ -18,7 +18,7 @@ In terms of RDF modeling, we will add these items as properties of the Pdx Sampl
 +---------------------------------+-----+--------------------------------------+------------------------------------------------+
 |Animal    health    status       | D   | SPF/SOPF                             | ?????                                          |
 +---------------------------------+-----+--------------------------------------+------------------------------------------------+
-|Passage QA performed             | D   |  P4                                  | Integer                                          |
+|Passage QA performed             | D   |  P4                                  | Integer                                        |
 +---------------------------------+-----+--------------------------------------+------------------------------------------------+
 Table 2.4. Model creation Q/A module. Rec: Recommendation; E: essential; D:desirable.
 
