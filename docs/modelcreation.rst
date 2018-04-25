@@ -15,6 +15,8 @@ The following table shows the recommendations from the  `PDX-MI manuscript <http
 +--------------------------------+-----+--------------------------------------+--------------------------------------+------------------------------------------------+
 | Mouse source                   | E   | Institution supplying strain         |The Jackson Laboratory                | create PDXNet classes?                         |
 +--------------------------------+-----+--------------------------------------+--------------------------------------+------------------------------------------------+
+| Mouse sex                      | D   | Sex of mouse used for engaftment     | Male                                 |                                                | 
++--------------------------------+-----+--------------------------------------+--------------------------------------+------------------------------------------------+
 | Mouse immune system humanised? | E   |                                      |yes/no                                |                                                |
 +--------------------------------+-----+--------------------------------------+--------------------------------------+------------------------------------------------+
 | Type of humanisation           | E   |                                      |CD34+hematopoietic stem cell-engrafted|                                                |
@@ -46,30 +48,32 @@ We will allow strains to be denoted according to the MGI guidelines.
 4. **Mouse Source**.
 Institution providing the strain. An enumeration.
 
-5. **Strain Immune System Humanised?**
+5 **Mouse Sex**.
+
+6. **Strain Immune System Humanised?**
 Yes or No
 
-6. **Type of Humanisation**.
+7. **Type of Humanisation**.
 Description of humanisation method.
 
-7. **Engraftmet Procedure**.
+8. **Engraftmet Procedure**.
 Enumeration (**TODO** Need input: list of all the methods and whether any vocabulary exists?)
 
-8. **Engraftment Method**.
+9. **Engraftment Method**.
 Enumeration (**TODO** Need input: list of all the methods and whether any vocabulary exists?)
 
-9. **Engraftment Site**.
+10. **Engraftment Site**.
 Subcutaenous, Mammary Fat Pad, Orthotopic, etc.
 Where the tissue is engrafted to the mouse.
 
-10. **Mouse Treatment for Engraftment**.
+11. **Mouse Treatment for Engraftment**.
 estrogen    treatment
 Enumeration (**TODO** Need input: list of all the methods and whether any vocabulary exists?)
 
-11. **Engraftment Rate**.
+12. **Engraftment Rate**.
 80%. Would it be better to state “n of m” rather than a percentage? **TODO** Use percent or N of M?
 
-12. **Engraftment Time**.
+13. **Engraftment Time**.
 8 weeks
 Number of weeks/days PDMR uses "Estimated days from implant to 500 mm3"
 Both Rate and Time would benefit from noting if tissue was cryopreserved. Should this be captured as a field? 
