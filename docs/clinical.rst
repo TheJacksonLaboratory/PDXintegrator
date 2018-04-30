@@ -31,11 +31,13 @@ including age, sex, ethnicity, and disease diagnosis.
 +-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
 |Current treatment drug   | D |                                     | everolimus                |  CHEMBL83                   |
 +-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
-|Current trtmnt protocol  | D |                                     | afinitor;10 mg/day        |  requires discussion        |
+|Current trtmnt protocol  | D |                                     | afinitor;10 mg/day        |                             |
 +-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
-|Prior treatment protocol | D |                                     | afinitor;10 mg/day        |  requires discussion        |
+|Prior treatment protocol | D |                                     | afinitor;10 mg/day        |                             |
 +-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
-|Response to prior trtmnt | D |                                     | HIV-/HBV-/HCV+/HTLV-/EBV+ |  NCIT                       |
+|Prior treatment response | D |                                     |                           |  RECIST                     |
++-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
+| Virology Status         | D |                                     | HIV-/HBV-/HCV+/HTLV-/EBV+ |  NCIT                       |
 +-------------------------+---+-------------------------------------+---------------------------+-----------------------------+
 
 Table 1. Rec: Recommendation; E: essential; D:desirable. Desireable fields will be shown as 'Not Reported' if no data is provided.
