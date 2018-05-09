@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.jena.vocabulary.OWL;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
+import org.jax.pdxintegrator.model.modelstudy.PdxModelStudy;
 
 /**
  * This class coordinates the transformation of one or more {@link org.jax.pdxintegrator.model.PdxModel} objects
@@ -81,6 +82,15 @@ public class PdxModel2Rdf {
     private Property consentProperty=null;
     /** This property specifies the population group of the patient. */
     private Property ethnicityProperty=null;
+    
+     private Property pdxStudyTreatmentProperty = null;
+     private Property pdxDoublingLagTimeProperty = null;
+     private Property pdxStudyHasMetastasisProperty = null;
+     private Property pdxStudyMetastasisLocationProperty = null;
+     private Property pdxStudyMetastasisPassageProperty = null;
+     private Property pdxStudyTumorOmicsProperty = null;
+     private Property fromPatientProperty = null;
+     private Property hasStudyProperty = null;
 
     private Resource maleSex=null;
     private Resource femaleSex=null;
@@ -89,7 +99,7 @@ public class PdxModel2Rdf {
     private Resource TRUE_RESOURCE=null;
     private Resource FALSE_RESOURCE=null;
     private Resource academicConsent=null;
-    private Resource tumorSample=null;
+  
     /** Tumor preparation types */
     private Resource tumorPrepSolid,tumorPrepSuspension,tumorPrepAscites;
     /** Mouse treatment types */
@@ -102,9 +112,11 @@ public class PdxModel2Rdf {
 
 
     private Resource thisPatient=null;
-    private Resource thisPdxModel=null;
+    private Resource thisPdxModelCreation=null;
+    private Resource thisTumorSample=null;
+    private Resource thisModelStudy= null;
 
-    private static final String PDXNET_NAMESPACE = "http://pdxnetwork/pdxmodel_";
+    private static final String PDXNET_NAMESPACE = "http://pdxnetwork.org/pdxmodel_";
     private final static String NCIT_NAMESPACE = "http://purl.obolibrary.org/obo/NCIT_";
     private final static String UBERON_NAMESPACE ="http://purl.obolibrary.org/obo/UBERON_";
 
@@ -113,8 +125,27 @@ public class PdxModel2Rdf {
     private OntClass pdxPatient;
     private OntClass pdxDiagnosis;
     private OntClass pdxSex;
-
-
+    private OntClass pdxModelStudy;
+    private OntClass pdxClinicalTumor;
+    private OntClass pdxQualityAssurance;
+    private OntClass pdxModelCreation;
+    
+    
+    private OntClass pdxTreatmentResponse;
+    private OntClass pdxTumorSampleType;
+    private OntClass pdxModelCharacterization;
+    
+   
+    private OntClass pdxPatientConsent;
+    private OntClass pdxTreatmentForEngraftment;
+    private OntClass pdxPassageQaPerformed;
+    private OntClass pdxTissueOfOrigin;
+    private OntClass pdxTumorCategory;
+    private OntClass pdxTumorGrade;
+    private OntClass pdxTumorStage;
+    private OntClass pdxTumorHistology;
+    private OntClass pdxBoolean;
+    
     public PdxModel2Rdf(List<PdxModel> modelList) {
         this.pdxmodels=modelList;
     }
@@ -138,16 +169,84 @@ public class PdxModel2Rdf {
     }
     private void initializeModelFramework() {
         this.rdfModel = ModelFactory.createOntologyModel(  );
-        String pdxMiModelURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Patient");
-        this.pdxPatient = rdfModel.createClass(pdxMiModelURI);
-        pdxPatient.addProperty(RDFS.label, "PDX-MI model");
-        String pdxMiDiagnosisURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Diagnosis");
+        
+        String pdxMiPatientURI=String.format("%s%s",PDXNET_NAMESPACE,"Patient");
+        this.pdxPatient = rdfModel.createClass(pdxMiPatientURI);
+        this.pdxPatient.addProperty(RDFS.label, "Patient");
+        
+        String pdxMiDiagnosisURI=String.format("%s%s",PDXNET_NAMESPACE,"Diagnosis");
         this.pdxDiagnosis = rdfModel.createClass(pdxMiDiagnosisURI);
-        pdxDiagnosis.addProperty(RDFS.label,"PDX-MI Diagnosis");
-        String pdxMiSexURI=String.format("%s%s",PDXNET_NAMESPACE,"PDX_MI_Sex");
+        this.pdxDiagnosis.addProperty(RDFS.label,"Diagnosis");
+        
+        String pdxMiSexURI=String.format("%s%s",PDXNET_NAMESPACE,"Sex");
         this.pdxSex = rdfModel.createClass(pdxMiSexURI);
-        pdxSex.addProperty(RDFS.label,"PDX-MI Sex");
-        // etc.
+        this.pdxSex.addProperty(RDFS.label,"Sex");
+        
+        String pdxMiModelStudyURI=String.format("%s%s",PDXNET_NAMESPACE,"ModelStudy");
+        this.pdxModelStudy = rdfModel.createClass(pdxMiModelStudyURI);
+        this.pdxModelStudy.addProperty(RDFS.label,"Model Study");
+        
+        String pdxMiClinicalTumorURI=String.format("%s%s",PDXNET_NAMESPACE,"ClinicalTumor");
+        this.pdxClinicalTumor = rdfModel.createClass(pdxMiClinicalTumorURI);
+        this.pdxClinicalTumor.addProperty(RDFS.label,"Clinical Tumor");
+        
+        String pdxMiQualityAssuranceURI=String.format("%s%s",PDXNET_NAMESPACE,"QualityAssurance");
+        this.pdxQualityAssurance = rdfModel.createClass(pdxMiQualityAssuranceURI);
+        this.pdxQualityAssurance.addProperty(RDFS.label,"Quality Assurance");
+        
+        String pdxMiModelCreationURI=String.format("%s%s",PDXNET_NAMESPACE,"ModelCreation");
+        this.pdxModelCreation = rdfModel.createClass(pdxMiModelCreationURI);
+        this.pdxModelCreation.addProperty(RDFS.label,"Model Creation");
+        
+       
+        String pdxMiTreatmentResponseURI=String.format("%s%s",PDXNET_NAMESPACE,"TreatmentResponse");
+        this.pdxTreatmentResponse = rdfModel.createClass(pdxMiTreatmentResponseURI);
+        this.pdxTreatmentResponse.addProperty(RDFS.label,"Treatment Response");
+        
+        String pdxMiTumorSampleTypeURI=String.format("%s%s",PDXNET_NAMESPACE,"TumorSampleType");
+        this.pdxTumorSampleType = rdfModel.createClass(pdxMiTumorSampleTypeURI);
+        this.pdxTumorSampleType.addProperty(RDFS.label,"Tumor Sample Type");
+        
+        String pdxMiModelCharacterizationURI=String.format("%s%s",PDXNET_NAMESPACE,"ModelCharacterization");
+        this.pdxModelCharacterization = rdfModel.createClass(pdxMiModelCharacterizationURI);
+        this.pdxModelCharacterization.addProperty(RDFS.label,"Model Characterization");
+        
+        String pdxMiPatientConsentURI=String.format("%s%s",PDXNET_NAMESPACE,"PatientConsent");
+        this.pdxPatientConsent = rdfModel.createClass(pdxMiPatientConsentURI);
+        this.pdxPatientConsent.addProperty(RDFS.label,"Patient Consent");
+    
+        String pdxMiTreatmentForEngraftmentURI = String.format("%s%s", PDXNET_NAMESPACE, "TreatmentForEngraftment");
+        this.pdxTreatmentForEngraftment = rdfModel.createClass(pdxMiTreatmentForEngraftmentURI);
+        this.pdxTreatmentForEngraftment.addProperty(RDFS.label, "Mouse treatment for engraftment");
+
+        String pdxMiPassageQaPerformedURI = String.format("%s%s", PDXNET_NAMESPACE, "PassageQaPerformed");
+        this.pdxPassageQaPerformed = rdfModel.createClass(pdxMiPassageQaPerformedURI);
+        this.pdxPassageQaPerformed.addProperty(RDFS.label, "Passage QA performed");
+
+        String pdxMiTissueOfOriginURI = String.format("%s%s", PDXNET_NAMESPACE, "TissueOfOrigin");
+        this.pdxTissueOfOrigin = rdfModel.createClass(pdxMiTissueOfOriginURI);
+        this.pdxTissueOfOrigin.addProperty(RDFS.label, "Tissue of origin");
+
+        String pdxMiTumorCategoryURI = String.format("%s%s", PDXNET_NAMESPACE, "TumorCategory");
+        this.pdxTumorCategory = rdfModel.createClass(pdxMiTumorCategoryURI);
+        this.pdxTumorCategory.addProperty(RDFS.label, "Tumor category");
+
+        String pdxMiTumorGradeURI = String.format("%s%s", PDXNET_NAMESPACE, "TumorGrade");
+        this.pdxTumorGrade = rdfModel.createClass(pdxMiTumorGradeURI);
+        this.pdxTumorGrade.addProperty(RDFS.label, "Tumor grade");
+        
+        String pdxMiTumorStageURI = String.format("%s%s", PDXNET_NAMESPACE, "TumorStage");
+        this.pdxTumorStage = rdfModel.createClass(pdxMiTumorStageURI);
+        this.pdxTumorStage.addProperty(RDFS.label, "Tumor stage");
+        
+        String pdxMiTumorHistologyURI = String.format("%s%s", PDXNET_NAMESPACE, "TumorHistology");
+        this.pdxTumorHistology = rdfModel.createClass(pdxMiTumorHistologyURI);
+        this.pdxTumorHistology.addProperty(RDFS.label, "Tumor histology");
+        
+        
+        String pdxMiBooleanURI = String.format("%s%s", PDXNET_NAMESPACE, "Boolean");
+        this.pdxBoolean = rdfModel.createClass(pdxMiBooleanURI);
+        this.pdxBoolean.addProperty(RDFS.label, "Boolean");
     }
 
     private void outputPdxModel(PdxModel pdxmodel) {
@@ -161,7 +260,7 @@ public class PdxModel2Rdf {
         // Quality Assurance Module
         outputQualityAssuranceRdf(pdxmodel);
         // to do -- other areas of the PDX-MI
-        // Model Study Module
+        outputModelStudyRDF(pdxmodel);
     }
 
 
@@ -174,20 +273,25 @@ public class PdxModel2Rdf {
         String diagnosis = patient.getDiagnosis().getId();
         String diagnosisURI=String.format("%s%s",NCIT_NAMESPACE,diagnosis);
         String patientURI=String.format("%s%s",PDXNET_NAMESPACE,patient.getSubmitterPatientID());
-        this.tumorSample = rdfModel.createResource(String.format("%s%s",PDXNET_NAMESPACE,pdxmodel.getClinicalTumor().getSubmitterTumorID()));
+        this.thisTumorSample = rdfModel.createResource(String.format("%s%s",PDXNET_NAMESPACE,pdxmodel.getClinicalTumor().getSubmitterTumorID()));
+        
+        
         Resource diagnosisResource = rdfModel.createResource(diagnosisURI);
         Resource sex = patient.getGender().equals(Gender.FEMALE) ? femaleSex : maleSex;
         Resource consent = patient.getConsent().equals(Consent.YES) ? yesConsent :
                 patient.getConsent().equals(Consent.NO) ? noConsent : academicConsent;
+        
+        consent.addProperty(RDF.type, this.pdxPatientConsent);
 
         diagnosisResource.addProperty(RDF.type,this.pdxDiagnosis);
 
        this.thisPatient
                 = rdfModel.createResource(patientURI)
+                .addProperty(RDFS.label,patient.getSubmitterPatientID())
                 .addProperty(RDF.type,this.pdxPatient)
                 .addProperty(hasPatientIdProperty,patient.getSubmitterPatientID())
                 .addProperty(hasDiagnosisProperty, diagnosisResource)
-                .addProperty(hasTumorProperty,tumorSample)
+                .addProperty(hasTumorProperty,thisTumorSample)
                 .addProperty(genderProperty,sex)
                 .addProperty(consentProperty,consent)
                 .addProperty(ethnicityProperty,patient.getEthnicityRace().getEthnicityString());
@@ -202,61 +306,127 @@ public class PdxModel2Rdf {
         this.thisPatient.addProperty(currentTreatmentDrug,
                 ResourceFactory.createTypedLiteral(patient.getCurrentTreatmentDrug(),
                         XSDDatatype.XSDstring));
+        
+        
     }
 
 
     private void outputTumorRDF(PdxClinicalTumor clintumor) {
-        String tumorURI=String.format("%s%s",PDXNET_NAMESPACE,clintumor.getSubmitterTumorID());
+        //String tumorURI=String.format("%s%s",PDXNET_NAMESPACE,clintumor.getSubmitterTumorID());
+        
         Resource category = rdfModel.createResource(String.format("%s%s",NCIT_NAMESPACE,clintumor.getCategory().getId()));
+        category.addProperty(RDF.type, this.pdxTumorCategory);
+    //    category.addProperty(RDFS.label,"Tumor category");
+        
         Resource tissue = rdfModel.createResource(UBERON_NAMESPACE +clintumor.getTissueOfOrigin().getId());
+        tissue.addProperty(RDF.type, this.pdxTissueOfOrigin);
+     //   tissue.addProperty(RDFS.label, "Tumor tissue of origin");
+                
         Resource histology = rdfModel.createResource(NCIT_NAMESPACE+clintumor.getTissueHistology().getId());
+        histology.addProperty(RDF.type,this.pdxTumorHistology);
+    //    histology.addProperty(RDFS.label,"Tumor histology");
         
         Resource stage = rdfModel.createResource(NCIT_NAMESPACE + clintumor.getStage().getId());
-        Resource grade = rdfModel.createResource(NCIT_NAMESPACE + clintumor.getTumorGrade().getId());
-        this.tumorSample.addProperty(hasSubmitterTumorIdProperty,clintumor.getSubmitterTumorID())
+        stage.addProperty(RDF.type, this.pdxTumorStage);
+   //     stage.addProperty(RDFS.label,"Tumor stage");
+        
+       Resource grade = rdfModel.createResource(NCIT_NAMESPACE + clintumor.getTumorGrade().getId());
+        grade.addProperty(RDF.type, this.pdxTumorGrade);
+   //     grade.addProperty(RDFS.label, "Tumor grade");
+        
+        this.thisTumorSample.addProperty(hasSubmitterTumorIdProperty,clintumor.getSubmitterTumorID())
                 .addProperty(hasTissueOfOriginProperty,tissue)
                 .addProperty(hasTumorHistologyProperty,histology)
                 .addProperty(hasStageProperty,stage)
                 .addProperty(hasTumorGradeProperty,grade)
                 .addProperty(hasTumorCategoryProperty,category);
         
+        this.thisTumorSample.addProperty(RDF.type, this.pdxClinicalTumor);
+        this.thisTumorSample.addProperty(RDFS.label,clintumor.getSubmitterTumorID());
         
+        // bi directional
+        this.thisTumorSample.addProperty(fromPatientProperty,this.thisPatient);
+    }
+    
+    private void outputModelStudyRDF(PdxModel model) {
+        PdxModelStudy modelStudy = model.getModelStudy();
+        // how is a model study identified? it should have a name or ID
+        // this naming convention won't work for multiple studies for the same model
+       // this.thisModelStudy = rdfModel.createResource(String.format("%s%s",PDXNET_NAMESPACE,"Study "+model.getModelCreation().getSubmitterPdxId()));
+        this.thisModelStudy = rdfModel.createResource(PDXNET_NAMESPACE+"Study_"+model.getModelCreation().getSubmitterPdxId());
+     
+                
+        this.thisModelStudy.addProperty(hasPdxModelProperty,this.thisPdxModelCreation);
+        
+        Resource tissue = rdfModel.createResource(UBERON_NAMESPACE +modelStudy.getMetastasisLocation().getId());
+        
+        // this is response to experimental treatment
+        ResponseToStandardOfCare response = modelStudy.getTreatmentResponse();
+        switch (response) {
+            case NOT_ASSESSED: this.thisModelStudy.addProperty(pdxTumorResponseProperty,notAssessed); break;
+            case STABLE_DISEASE: this.thisModelStudy.addProperty(pdxTumorResponseProperty,stableDisease); break;
+            case PARTIAL_RESPONSE:this.thisModelStudy.addProperty(pdxTumorResponseProperty,partialResponse); break;
+            case COMPLETE_RESPONSE:this.thisModelStudy.addProperty(pdxTumorResponseProperty,completeResponse); break;
+            case PROGRESSIVE_DISEASE:this.thisModelStudy.addProperty(pdxTumorResponseProperty,progressiveDisease); break;
+        }
+        
+        
+        
+        this.thisModelStudy.addProperty(pdxStudyTreatmentProperty,modelStudy.getTreatment())
+                .addProperty(pdxDoublingLagTimeProperty,ResourceFactory.createTypedLiteral(String.valueOf(modelStudy.getDoublingLagTime()),
+                        XSDDatatype.XSDinteger))
+                .addProperty(pdxStudyHasMetastasisProperty,modelStudy.isMetastasis()?TRUE_RESOURCE : FALSE_RESOURCE)
+                .addProperty(pdxStudyMetastasisLocationProperty,tissue)
+                .addProperty(pdxStudyMetastasisPassageProperty,ResourceFactory.createTypedLiteral(String.valueOf(modelStudy.getMetastasisPassage()),
+                        XSDDatatype.XSDinteger));
+        
+        this.thisModelStudy.addProperty(RDF.type, this.pdxModelStudy);
+        this.thisModelStudy.addProperty(RDFS.label,"Model study for "+model.getModelCreation().getSubmitterPdxId());
+        
+        this.thisPdxModelCreation.addProperty(hasStudyProperty, this.thisModelStudy);
     }
 
 
 
     private void outputModelCreationRdf(PdxModel model ) {
         PdxModelCreation mcreation = model.getModelCreation();
-        this.thisPdxModel = rdfModel.createResource(PDXNET_NAMESPACE + mcreation.getSubmitterPdxId());
-        this.thisPatient.addProperty(hasPdxModelProperty,this.thisPdxModel);
-        this.thisPdxModel.addProperty(hasStrainProperty,mcreation.getMouseStrain());
-        this.thisPdxModel.addProperty(mouseSourceProperty,mcreation.getMouseSource());
+        this.thisPdxModelCreation = rdfModel.createResource(PDXNET_NAMESPACE + mcreation.getSubmitterPdxId());
+        
+        this.thisTumorSample.addProperty(hasPdxModelProperty,this.thisPdxModelCreation);
+        this.thisPdxModelCreation.addProperty(hasTumorProperty,thisTumorSample);
+        this.thisPdxModelCreation.addProperty(hasStrainProperty,mcreation.getMouseStrain());
+        this.thisPdxModelCreation.addProperty(mouseSourceProperty,mcreation.getMouseSource());
         if (mcreation.isStrainImmuneSystemHumanized()) {
-            this.thisPdxModel.addProperty(strainHumanizedProperty,TRUE_RESOURCE);
-            this.thisPdxModel.addProperty(humanizationTypeProperty,mcreation.getHumanizationType());
+            this.thisPdxModelCreation.addProperty(strainHumanizedProperty,TRUE_RESOURCE);
+            this.thisPdxModelCreation.addProperty(humanizationTypeProperty,mcreation.getHumanizationType());
         } else {
-            this.thisPdxModel.addProperty(strainHumanizedProperty,FALSE_RESOURCE);
+            this.thisPdxModelCreation.addProperty(strainHumanizedProperty,FALSE_RESOURCE);
         }
         TumorPrepMethod prep = mcreation.getTumorPreparation();
         switch (prep) {
-            case SOLID:this.thisPdxModel.addProperty(tumorPreparation,tumorPrepSolid);
+            case SOLID:this.thisPdxModelCreation.addProperty(tumorPreparation,tumorPrepSolid);
             break;
-            case ASCITES:this.thisPdxModel.addProperty(tumorPreparation,tumorPrepAscites);
+            case ASCITES:this.thisPdxModelCreation.addProperty(tumorPreparation,tumorPrepAscites);
             break;
-            case SUSPENSION:this.thisPdxModel.addProperty(tumorPreparation,tumorPrepSuspension);
+            case SUSPENSION:this.thisPdxModelCreation.addProperty(tumorPreparation,tumorPrepSuspension);
             break;
         }
         MouseTreatmentForEngraftment rx = mcreation.getMouseTreatmentForEngraftment();
         switch (rx) {
-            case GCSF: this.thisPdxModel.addProperty(mouseTreatmentForEngraftment,mouseRxGCSF); break;
-            case ESTROGEN: this.thisPdxModel.addProperty(mouseTreatmentForEngraftment,mouseRxEstrogen); break;
+            case GCSF: this.thisPdxModelCreation.addProperty(mouseTreatmentForEngraftment,mouseRxGCSF); break;
+            case ESTROGEN: this.thisPdxModelCreation.addProperty(mouseTreatmentForEngraftment,mouseRxEstrogen); break;
         }
-        this.thisPdxModel.addProperty(engraftmentPercentProperty,
+        this.thisPdxModelCreation.addProperty(engraftmentPercentProperty,
                 ResourceFactory.createTypedLiteral(String.valueOf(mcreation.getEngraftmentRate()),
                 XSDDatatype.XSDdecimal));
-        this.thisPdxModel.addProperty(engraftTimeInDaysProperty,
+        this.thisPdxModelCreation.addProperty(engraftTimeInDaysProperty,
                 ResourceFactory.createTypedLiteral(String.valueOf(mcreation.getEngraftmentTimeInDays()),
                         XSDDatatype.XSDinteger));
+        
+        this.thisPdxModelCreation.addProperty(RDF.type, this.pdxModelCreation);
+        this.thisPdxModelCreation.addProperty(RDFS.label,"PDX Model "+mcreation.getSubmitterPdxId());
+        
+        
     }
 
 
@@ -264,31 +434,34 @@ public class PdxModel2Rdf {
         PdxQualityAssurance quality = model.getQualityAssurance();
         ResponseToStandardOfCare response = quality.getResponse();
         switch (response) {
-            case NOT_ASSESSED: this.thisPdxModel.addProperty(pdxTumorResponseProperty,notAssessed); break;
-            case STABLE_DISEASE: this.thisPdxModel.addProperty(pdxTumorResponseProperty,stableDisease); break;
-            case PARTIAL_RESPONSE:this.thisPdxModel.addProperty(pdxTumorResponseProperty,partialResponse); break;
-            case COMPLETE_RESPONSE:this.thisPdxModel.addProperty(pdxTumorResponseProperty,completeResponse); break;
-            case PROGRESSIVE_DISEASE:this.thisPdxModel.addProperty(pdxTumorResponseProperty,progressiveDisease); break;
+            case NOT_ASSESSED: this.thisPdxModelCreation.addProperty(pdxTumorResponseProperty,notAssessed); break;
+            case STABLE_DISEASE: this.thisPdxModelCreation.addProperty(pdxTumorResponseProperty,stableDisease); break;
+            case PARTIAL_RESPONSE:this.thisPdxModelCreation.addProperty(pdxTumorResponseProperty,partialResponse); break;
+            case COMPLETE_RESPONSE:this.thisPdxModelCreation.addProperty(pdxTumorResponseProperty,completeResponse); break;
+            case PROGRESSIVE_DISEASE:this.thisPdxModelCreation.addProperty(pdxTumorResponseProperty,progressiveDisease); break;
         }
         ModelCharacterization characterization = quality.getTumorCharacterizationTechnology();
         switch (characterization) {
-            case IHC: this.thisPdxModel.addProperty(hasTumorCharacterizationProperty,IHC);
-            case HISTOLOGY:this.thisPdxModel.addProperty(hasTumorCharacterizationProperty,histology);
+            case IHC: this.thisPdxModelCreation.addProperty(hasTumorCharacterizationProperty,IHC);
+            case HISTOLOGY:this.thisPdxModelCreation.addProperty(hasTumorCharacterizationProperty,histology);
         }
+        
+        // do these FALSE and TRUE resources need to be typed seperately?
+        // so this adds the qa values directly to the model should these fields be part of the ModelCreation Module?
         if (quality.isAnimalHealthStatusSufficient()) {
-            this.thisPdxModel.addProperty(animalHealthStatusSatisfactoryProperty,TRUE_RESOURCE);
+            this.thisPdxModelCreation.addProperty(animalHealthStatusSatisfactoryProperty,TRUE_RESOURCE);
         } else {
-            this.thisPdxModel.addProperty(animalHealthStatusSatisfactoryProperty,FALSE_RESOURCE);
+            this.thisPdxModelCreation.addProperty(animalHealthStatusSatisfactoryProperty,FALSE_RESOURCE);
         }
         if (quality.isPassageQaPerformed()) {
-            this.thisPdxModel.addProperty(passageQaPerformedProperty,TRUE_RESOURCE);
+            this.thisPdxModelCreation.addProperty(passageQaPerformedProperty,TRUE_RESOURCE);
         } else {
-            this.thisPdxModel.addProperty(passageQaPerformedProperty,FALSE_RESOURCE);
+            this.thisPdxModelCreation.addProperty(passageQaPerformedProperty,FALSE_RESOURCE);
         }
         if (quality.isTumorNotMouseNotEbv()) {
-            this.thisPdxModel.addProperty(tumorNotEbvNotMouseProperty,TRUE_RESOURCE);
+            this.thisPdxModelCreation.addProperty(tumorNotEbvNotMouseProperty,TRUE_RESOURCE);
         } else {
-            this.thisPdxModel.addProperty(tumorNotEbvNotMouseProperty,FALSE_RESOURCE);
+            this.thisPdxModelCreation.addProperty(tumorNotEbvNotMouseProperty,FALSE_RESOURCE);
         }
 
     }
@@ -300,42 +473,93 @@ public class PdxModel2Rdf {
         this.maleSex=rdfModel.createResource(NCIT_NAMESPACE + male.getId());
         this.femaleSex = rdfModel.createResource( NCIT_NAMESPACE + female.getId() );
         this.maleSex.addProperty(RDF.type,this.pdxSex);
+     //   this.maleSex.addProperty(RDFS.label,"Male");
+        
         this.femaleSex.addProperty(RDF.type,this.pdxSex);
-
+     //   this.femaleSex.addProperty(RDFS.label,"Female");
+        
+       
         this.noConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_NO");
+        this.noConsent.addProperty(RDFS.label,"No patient consent provided");
+        this.noConsent.addProperty(RDF.type,this.pdxPatientConsent);
+        
         this.yesConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_YES");
+        this.yesConsent.addProperty(RDFS.label,"Patient consent provided");
+        this.yesConsent.addProperty(RDF.type,this.pdxPatientConsent);
+        
         this.academicConsent = rdfModel.createResource(PDXNET_NAMESPACE+"consent_ACADEMIC_ONLY");
+        this.academicConsent.addProperty(RDFS.label,"Academic consent only");
+        this.academicConsent.addProperty(RDF.type,this.pdxPatientConsent);
+        
         this.TRUE_RESOURCE = rdfModel.createResource(PDXNET_NAMESPACE+"True");
+        this.TRUE_RESOURCE.addProperty(RDFS.label,"True");
+        this.TRUE_RESOURCE.addProperty(RDF.type, this.pdxBoolean);
+                
         this.FALSE_RESOURCE = rdfModel.createResource(PDXNET_NAMESPACE+"False");
-        //tumor solid, cell suspension, asite
+        this.FALSE_RESOURCE.addProperty(RDFS.label,"False");
+        this.FALSE_RESOURCE.addProperty(RDF.type, this.pdxBoolean);
+        
+       
         this.tumorPrepSolid = rdfModel.createResource(PDXNET_NAMESPACE+"Solid");
         this.tumorPrepSuspension = rdfModel.createResource(PDXNET_NAMESPACE+"Suspension");
         this.tumorPrepAscites = rdfModel.createResource(PDXNET_NAMESPACE+"Ascites");
+        
+        this.tumorPrepSolid.addProperty(RDFS.label, "Tumor preperation solid");
+        this.tumorPrepSuspension.addProperty(RDFS.label, "Tumor preperation suspension");
+        this.tumorPrepAscites.addProperty(RDFS.label, "Tumor preperation ascites");
+        
+        
+        this.tumorPrepSolid.addProperty(RDF.type, this.pdxTumorSampleType);
+        this.tumorPrepSuspension.addProperty(RDF.type, this.pdxTumorSampleType);
+        this.tumorPrepAscites.addProperty(RDF.type, this.pdxTumorSampleType);
+        
+        // treatment for engfatement
         this.mouseRxGCSF = rdfModel.createResource(PDXNET_NAMESPACE+"G-CSF");
+        this.mouseRxGCSF.addProperty(RDFS.label,"G-CSF treatment for engraftment");
+        this.mouseRxGCSF.addProperty(RDF.type, this.pdxTreatmentForEngraftment);
+                
         this.mouseRxEstrogen = rdfModel.createResource(PDXNET_NAMESPACE+"Estrogen");
+        this.mouseRxEstrogen.addProperty(RDFS.label,"Estrogen treatment for engraftment");
+        this.mouseRxEstrogen.addProperty(RDF.type, this.pdxTreatmentForEngraftment);
 
-
+      
         this.notAssessed= rdfModel.createResource(PDXNET_NAMESPACE+"Not_assessed");
         this.completeResponse= rdfModel.createResource(PDXNET_NAMESPACE+"Complete_response");
         this.partialResponse = rdfModel.createResource(PDXNET_NAMESPACE+"Partial_response");
         this.stableDisease = rdfModel.createResource(PDXNET_NAMESPACE+"Stable_disease");
         this.progressiveDisease = rdfModel.createResource(PDXNET_NAMESPACE+"Progressive_disease");
+        
+        
+        this.notAssessed.addProperty(RDFS.label, "Not assessed");
+        this.completeResponse.addProperty(RDFS.label, "Complete response");
+        this.partialResponse.addProperty(RDFS.label, "Partial response");
+        this.stableDisease.addProperty(RDFS.label, "Stable disease");
+        this.progressiveDisease.addProperty(RDFS.label, "Progressive disease");
+        
+        
+        this.notAssessed.addProperty(RDF.type, this.pdxTreatmentResponse);
+        this.completeResponse.addProperty(RDF.type, this.pdxTreatmentResponse);
+        this.partialResponse.addProperty(RDF.type, this.pdxTreatmentResponse);
+        this.stableDisease.addProperty(RDF.type, this.pdxTreatmentResponse);
+        this.progressiveDisease.addProperty(RDF.type, this.pdxTreatmentResponse);
 
+        
         this.IHC = rdfModel.createResource(PDXNET_NAMESPACE+"IHC");
         this.histology = rdfModel.createResource(PDXNET_NAMESPACE+"Histology");
+        this.IHC.addProperty(RDF.type, this.pdxModelCharacterization);
+        this.IHC.addProperty(RDFS.label,"IHC");
+        
+        this.histology.addProperty(RDF.type, this.pdxModelCharacterization);
+        this.histology.addProperty(RDFS.label, "Histology");
 
     }
 
 
-
-
-
-
-
-
     private void specifyPrefixes() {
         // unique idenfitifer for the patient
-        this.hasPatientIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "patient_id");
+        this.hasPatientIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "haPatientID");
+        this.hasPatientIdProperty.addProperty(RDFS.label, "Unique identifer for patient");
+        this.hasPatientIdProperty.addProperty(RDF.type,OWL.DatatypeProperty);
         
         // Patient's Initial Clinical Diagnosis
         this.hasDiagnosisProperty = rdfModel.createProperty( PDXNET_NAMESPACE + "hasDiagnosis" );
@@ -346,101 +570,183 @@ public class PdxModel2Rdf {
         
         // Unique tumor id
         this.hasSubmitterTumorIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "hasSubmitterTumorId");
+        this.hasSubmitterTumorIdProperty.addProperty(RDFS.label, "Unique identifer for sampled tissue");
+        this.hasSubmitterTumorIdProperty.addProperty(RDF.type, OWL.DatatypeProperty );
         
         // Tumor Sample Object
         this.hasTumorProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumor");
+        this.hasTumorProperty.addProperty(RDFS.label,"Patient tumor sample");
         this.hasTumorProperty.addProperty(RDF.type,OWL.ObjectProperty);
+        this.hasTumorProperty.addProperty(RDFS.range,this.pdxClinicalTumor);
+        
+        this.fromPatientProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasPatient");
+        this.fromPatientProperty.addProperty(RDFS.label,"Derived from patient");
+        this.fromPatientProperty.addProperty(RDF.type,OWL.ObjectProperty);
+        this.fromPatientProperty.addProperty(RDFS.range,this.pdxPatient);
+        
+        this.hasStudyProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasStudy");
+        this.hasStudyProperty.addProperty(RDFS.label,"Has model study");
+        this.hasStudyProperty.addProperty(RDF.type,OWL.ObjectProperty);
+        this.hasStudyProperty.addProperty(RDFS.range,this.pdxModelStudy);
+        
         
         // Not sure what this is, it isn't used.
         //this.cancerDiagnosis = rdfModel.createProperty( PDXNET_NAMESPACE + "cancerDiagnosis" );
         //this.cancerDiagnosis.addProperty(RDFS.label, "");
        // this.cancerDiagnosis.addProperty(RDF.type,OWL.ObjectProperty);
         
-        // Patient gender
-        this.genderProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"sex");
-        this.genderProperty.addProperty(RDFS.label, "Patient Sex");
+        // Patient sex
+        this.genderProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasSex");
+        this.genderProperty.addProperty(RDFS.label, "Has sex");
         this.genderProperty.addProperty(RDF.type,OWL.ObjectProperty);
         this.genderProperty.addProperty(RDFS.range,this.pdxSex);
         
         // Patient has provided consent to share data
-        this.consentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"consent");
+        this.consentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasConsent");
+        this.consentProperty.addProperty(RDFS.label, "Patient consent to share data");
+        this.consentProperty.addProperty(RDF.type, OWL.ObjectProperty );
         
         // Ethnicity of patient
-        this.ethnicityProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"ethnicity");
+        this.ethnicityProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasEthnicity");
+        this.ethnicityProperty.addProperty(RDFS.label, "Patient ethnicity");
+        this.ethnicityProperty.addProperty(RDF.type, OWL.DatatypeProperty );
         
         // Patient tumor tissue of origin
-        this.hasTissueOfOriginProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tissueOfOrigin");
+        this.hasTissueOfOriginProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTissueOfOrigin");
+        this.hasTissueOfOriginProperty.addProperty(RDFS.label, "Tumor's tissue of origin");
+        this.hasTissueOfOriginProperty.addProperty(RDF.type, OWL.ObjectProperty );
         
         // Tumor Category
-        this.hasTumorCategoryProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorCategory");
+        this.hasTumorCategoryProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumorCategory");
+        this.hasTumorCategoryProperty.addProperty(RDFS.label, "Tumor category");
+        this.hasTumorCategoryProperty.addProperty(RDF.type, OWL.ObjectProperty );
         
         // Histology for tumor
-        this.hasTumorHistologyProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorHistology");
+        this.hasTumorHistologyProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumorHistology");
         this.hasTumorHistologyProperty.addProperty(RDFS.label,"Pathologist's Histologic Diagnosis");
         this.hasTumorHistologyProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasTumorHistologyProperty.addProperty(RDFS.range,this.pdxDiagnosis);
         
         // Grade of tumor
-        this.hasTumorGradeProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorGrade");
+        this.hasTumorGradeProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumorGrade");
+        this.hasTumorGradeProperty.addProperty(RDFS.label,"Tumor grade");
+        this.hasTumorGradeProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Stage of tumor
-        this.hasStageProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"stage");
+        this.hasStageProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasStage");
+        this.hasStageProperty.addProperty(RDFS.label,"Tumor stage");
+        this.hasStageProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // PDX model generated from patient tumor
         this.hasPdxModelProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasPdxModel");
+        this.hasPdxModelProperty.addProperty(RDFS.label,"PDX model generated from patient tissue");
         this.hasPdxModelProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Mouse strain for PDX model
         this.hasStrainProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasStrain");
+        this.hasStrainProperty.addProperty(RDFS.label,"Mouse strain used for engraftment");
+        this.hasStrainProperty.addProperty(RDF.type, OWL.DatatypeProperty);
         
         // Is the mouse strain humanized
-        this.strainHumanizedProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"strainHumanized");
+        this.strainHumanizedProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasHumanization");
+        this.strainHumanizedProperty.addProperty(RDFS.label,"Was mouse strain humanized");
+        this.strainHumanizedProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Type of mouse humanization
-        this.humanizationTypeProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"humanizationType");
+        this.humanizationTypeProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasHumanizationType");
+        this.humanizationTypeProperty.addProperty(RDFS.label,"Type of mouse humanization");
+        this.humanizationTypeProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Type of tumor preperation
-        this.tumorPreparation = rdfModel.createProperty(PDXNET_NAMESPACE,"tumorPreparation");
+        this.tumorPreparation = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumorPreparation");
+        this.tumorPreparation.addProperty(RDFS.label,"Type of tumor preparation for engraftment");
+        this.tumorPreparation.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Instituion providing mouse
-        this.mouseSourceProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"mouseSource");
+        this.mouseSourceProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasSource");
         this.mouseSourceProperty.addProperty(RDFS.label,"Institution providing mouse");
+        this.mouseSourceProperty.addProperty(RDF.type, OWL.DatatypeProperty);
         
         // Treatement of mouse prior to engraftment
-        this.mouseTreatmentForEngraftment = rdfModel.createProperty(PDXNET_NAMESPACE,"mouseTreatmentForEngraftment");
+        this.mouseTreatmentForEngraftment = rdfModel.createProperty(PDXNET_NAMESPACE,"hasTreatmentForEngraftment");
+        this.mouseTreatmentForEngraftment.addProperty(RDFS.label,"Mouse treatment for engraftment");
+        this.mouseTreatmentForEngraftment.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Percent of successful engraftments 
-        this.engraftmentPercentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"engraftmentPercent");
+        this.engraftmentPercentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasEngraftmentPercent");
+        this.engraftmentPercentProperty.addProperty(RDFS.label,"Engraftment percent");
+        this.engraftmentPercentProperty.addProperty(RDF.type, OWL.DatatypeProperty);
         
         // Days for successful engraftment
-        this.engraftTimeInDaysProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"engraftmentTimeInDays");
+        this.engraftTimeInDaysProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasEngraftmentTimeInDays");
+        this.engraftTimeInDaysProperty.addProperty(RDFS.label,"Engraftment time in days");
+        this.engraftTimeInDaysProperty.addProperty(RDF.type, OWL.DatatypeProperty);
         
         // Tumor Characterization
-        this.hasTumorCharacterizationProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"pdxTumorCharacterization");
+        this.hasTumorCharacterizationProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumorCharacterization");
+        this.hasTumorCharacterizationProperty.addProperty(RDFS.label,"Tumor Characterization");
+        this.hasTumorCharacterizationProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Tumor is not EBV or mouse tissue
-        this.tumorNotEbvNotMouseProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"notEbvNotMouse");
+        this.tumorNotEbvNotMouseProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"hasNotEbvNotMouseStatus");
+        this.tumorNotEbvNotMouseProperty.addProperty(RDFS.label,"Mouse is not EBV positive, tumor tissue is not mouse origin");
+        this.tumorNotEbvNotMouseProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // PDX model response to treatment
-        this.pdxTumorResponseProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"pdxTumorResponse");
+        this.pdxTumorResponseProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"hasTumorResponse");
+        this.pdxTumorResponseProperty.addProperty(RDFS.label,"Tumor Response");
+        this.pdxTumorResponseProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // The pdx model's health status
-        this.animalHealthStatusSatisfactoryProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"animalHealthStatusOk");
+        this.animalHealthStatusSatisfactoryProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"hasOKAnimalHealthStatus");
+        this.animalHealthStatusSatisfactoryProperty.addProperty(RDFS.label,"Animal health status is ok");
+        this.animalHealthStatusSatisfactoryProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Passage on which QA was performed
-        this.passageQaPerformedProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"passageQAperformed");
+        this.passageQaPerformedProperty= rdfModel.createProperty(PDXNET_NAMESPACE,"hasPassageQAperformed");
+        this.passageQaPerformedProperty.addProperty(RDFS.label,"Passage QA performed");
+        this.passageQaPerformedProperty.addProperty(RDF.type, OWL.ObjectProperty);
         
         // Patient current treatment drug
-        this.currentTreatmentDrug = rdfModel.createProperty(PDXNET_NAMESPACE,"currentTreatmentDrug");
+        this.currentTreatmentDrug = rdfModel.createProperty(PDXNET_NAMESPACE,"hasCurrentTreatmentDrug");
+        this.currentTreatmentDrug.addProperty(RDFS.label,"Current patient treatment drug");
+        this.currentTreatmentDrug.addProperty(RDF.type, OWL.DatatypeProperty);
        
         // Lower age range for Patient when sample was taken
-        this.ageBinLowerRange = rdfModel.createProperty(PDXNET_NAMESPACE,"ageBinLowerRange");
+        this.ageBinLowerRange = rdfModel.createProperty(PDXNET_NAMESPACE,"hasAgeBinLowerRange");
         this.ageBinLowerRange.addProperty(RDFS.label,"Lower range of 5 year age bin");
         this.ageBinLowerRange.addProperty(RDFS.domain,pdxPatient);
+        this.ageBinLowerRange.addProperty(RDF.type, OWL.DatatypeProperty);
         
         // Upper age range for Patient when sample was taken
-        this.ageBinUpperRange = rdfModel.createProperty(PDXNET_NAMESPACE,"ageBinUpperRange");
+        this.ageBinUpperRange = rdfModel.createProperty(PDXNET_NAMESPACE,"hasAgeBinUpperRange");
         this.ageBinUpperRange.addProperty(RDFS.label,"Upper range of 5 year age bin");
+        this.ageBinUpperRange.addProperty(RDFS.domain,pdxPatient);
+        this.ageBinUpperRange.addProperty(RDF.type, OWL.DatatypeProperty);
         
+        this.pdxStudyTreatmentProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasStudyTreatment");
+        this.pdxStudyTreatmentProperty.addProperty(RDFS.label,"Study treatment");
+        this.pdxStudyTreatmentProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.pdxDoublingLagTimeProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasDoublingLagTime");
+        this.pdxDoublingLagTimeProperty.addProperty(RDFS.label,"Doubling lag time");
+        this.pdxDoublingLagTimeProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.pdxStudyHasMetastasisProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasMetastasis");
+        this.pdxStudyHasMetastasisProperty.addProperty(RDFS.label,"Study model has metastasis");
+        this.pdxStudyHasMetastasisProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.pdxStudyMetastasisLocationProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasMetastasisLocation");
+        this.pdxStudyMetastasisLocationProperty.addProperty(RDFS.label,"Model metastasis location");
+        this.pdxStudyMetastasisLocationProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.pdxStudyMetastasisPassageProperty = rdfModel.createProperty(PDXNET_NAMESPACE,"hasMetastasisPassage");
+        this.pdxStudyMetastasisPassageProperty.addProperty(RDFS.label,"Model metastasis passage");
+        this.pdxStudyMetastasisPassageProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        
+        
+     
         rdfModel.setNsPrefix( "PDXNET", PDXNET_NAMESPACE);
         rdfModel.setNsPrefix( "NCIT", NCIT_NAMESPACE);
         rdfModel.setNsPrefix("UBERON",UBERON_NAMESPACE);

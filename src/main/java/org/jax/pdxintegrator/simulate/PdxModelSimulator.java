@@ -13,6 +13,7 @@ import org.jax.pdxintegrator.model.PdxModel;
 import org.jax.pdxintegrator.model.modelcreation.MouseTreatmentForEngraftment;
 import org.jax.pdxintegrator.model.modelcreation.PdxModelCreation;
 import org.jax.pdxintegrator.model.modelcreation.TumorPrepMethod;
+import org.jax.pdxintegrator.model.modelstudy.PdxModelStudy;
 import org.jax.pdxintegrator.model.patient.*;
 import org.jax.pdxintegrator.model.qualityassurance.ModelCharacterization;
 import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
@@ -79,8 +80,9 @@ public class PdxModelSimulator {
         PdxClinicalTumor clinicalTumor = buildClinicalTumor(patient);
         PdxModelCreation modelCreation = buildModelCreation(patient);
         PdxQualityAssurance qualityAssurance = buildQualityAssuranceModule(patient);
+        PdxModelStudy modelStudy = buildModelStudy();
         // same for other categories
-        buildModel(patient,clinicalTumor,modelCreation,qualityAssurance);
+        buildModel(patient,clinicalTumor,modelCreation,qualityAssurance, modelStudy);
     }
 
 
@@ -91,8 +93,9 @@ public class PdxModelSimulator {
     private void buildModel(PdxPatient patient,
                             PdxClinicalTumor clinicalTumor,
                             PdxModelCreation modelCreation,
-                            PdxQualityAssurance quality) {
-        this.pdxmodel = new PdxModel(patient,clinicalTumor,modelCreation,quality);
+                            PdxQualityAssurance quality,
+                            PdxModelStudy study) {
+        this.pdxmodel = new PdxModel(patient,clinicalTumor,modelCreation,quality, study);
     }
 
 
@@ -139,6 +142,13 @@ public class PdxModelSimulator {
         PdxQualityAssurance.Builder builder = new PdxQualityAssurance.Builder(characterization,tumorNotMouseNotEbv,passageQaPerformed).
                 response(response).
                 animalHealthStatusOk(animalHealthStatusSufficient);
+        return builder.build();
+    }
+    
+    private PdxModelStudy buildModelStudy(){
+        PdxModelStudy.Builder builder = new PdxModelStudy.Builder().doublingLagTime(random.nextInt(100)).
+            metastasis(getRandomBoolean()).metastasisLocation(getUberonId(null)).
+            treatment("Treatment").treatmentResponse(this.getRandomResponseToStandardOfCare()).tumorOmics("TumorOmics");
         return builder.build();
     }
 
