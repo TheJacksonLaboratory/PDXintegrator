@@ -1,44 +1,37 @@
 package org.jax.pdxintegrator.model.modelstudy;
 
 import com.github.phenomics.ontolib.ontology.data.TermId;
-import org.jax.pdxintegrator.model.qualityassurance.ResponseToStandardOfCare;
+import java.util.ArrayList;
+import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
 
 public class PdxModelStudy {
 
-    private String treatment;  // a string is insufficent
-    private ResponseToStandardOfCare treatmentResponse;// this isn't to standard of care, rather the (experimental) study treatment 
+   
+    private String studyID;
     private boolean metastasis;
     private int metastasisPassage;
     private TermId metastasisLocation; // could be multiple locations
     private int doublingLagTime;  // days?
-    private Object tumorOmics; // we don't know what this will be
+    private ResponseToTreatment response;
+    private ArrayList<PdxStudyTreatment> treatments;
 
-    private PdxModelStudy(String treatment, ResponseToStandardOfCare treatmentResponse,
+    private PdxModelStudy(String studyID, ArrayList<PdxStudyTreatment> treatments,
             boolean metastasis, int metastasisPassage, TermId metastasisLocation,
-            int doublingLagTime, Object tumorOmics) {
-        this.treatment = treatment;
-        this.treatmentResponse = treatmentResponse;
+            int doublingLagTime, ResponseToTreatment response ) {
+        this.studyID = studyID;
+        this.treatments = treatments;
         this.metastasis = metastasis;
         this.metastasisPassage = metastasisPassage;
         this.metastasisLocation = metastasisLocation;
         this.doublingLagTime = doublingLagTime;
-        this.tumorOmics = tumorOmics;
+        this.response = response;
+       
 
     }
 
-    /**
-     * @return the treatment
-     */
-    public String getTreatment() {
-        return treatment;
-    }
+    
 
-    /**
-     * @return the treatmentResponse
-     */
-    public ResponseToStandardOfCare getTreatmentResponse() {
-        return treatmentResponse;
-    }
+    
 
     /**
      * @return the metastasis
@@ -69,31 +62,68 @@ public class PdxModelStudy {
     }
 
     /**
-     * @return the tumorOmics
+     * @return the treatments
      */
-    public Object getTumorOmics() {
-        return tumorOmics;
+    public ArrayList<PdxStudyTreatment> getTreatments() {
+        return treatments;
     }
+
+    /**
+     * @param treatments the treatments to set
+     */
+    public void setTreatments(ArrayList<PdxStudyTreatment> treatments) {
+        this.treatments = treatments;
+    }
+
+    /**
+     * @return the response
+     */
+    public ResponseToTreatment getResponse() {
+        return response;
+    }
+
+    /**
+     * @param response the response to set
+     */
+    public void setResponse(ResponseToTreatment response) {
+        this.response = response;
+    }
+
+    /**
+     * @return the studyID
+     */
+    public String getStudyID() {
+        return studyID;
+    }
+
+    /**
+     * @param studyID the studyID to set
+     */
+    public void setStudyID(String studyID) {
+        this.studyID = studyID;
+    }
+
+    
 
     public static class Builder {
 
-        private String treatment;  // a string is insufficent
-        private ResponseToStandardOfCare treatmentResponse;
+        private String studyID;
+        private ArrayList<PdxStudyTreatment> treatments;
         private boolean metastasis;
         private int metastasisPassage;
         private TermId metastasisLocation; // could be multiple locations
         private int doublingLagTime;  // days?
-        private Object tumorOmics; // we don't know what this will be
-
-        public Builder treatment(String treatment) {
-            this.treatment = treatment;
-            return this;
-        }
-
-        public Builder treatmentResponse(ResponseToStandardOfCare treatmentResponse) {
-            this.treatmentResponse = treatmentResponse;
-            return this;
-        }
+        private ResponseToTreatment response;
+      
+         public Builder(String studyID){
+           this.studyID = studyID;
+           
+       }
+        
+       public Builder treatments(ArrayList<PdxStudyTreatment> treatments){
+           this.treatments = treatments;
+           return this;
+       }
 
         public Builder metastasis(boolean metastasis) {
             this.metastasis = metastasis;
@@ -109,16 +139,18 @@ public class PdxModelStudy {
             this.doublingLagTime = doublingLagTime;
             return this;
         }
-
-        public Builder tumorOmics(Object tumorOmics) {
-            this.tumorOmics = tumorOmics;
+        
+        public Builder response(ResponseToTreatment response){
+            this.response = response;
             return this;
         }
 
+     
+
         public PdxModelStudy build() {
-            return new PdxModelStudy(treatment, treatmentResponse,
+            return new PdxModelStudy(studyID, treatments,
                     metastasis, metastasisPassage, metastasisLocation,
-                    doublingLagTime, tumorOmics);
+                    doublingLagTime, response);
         }
 
     }

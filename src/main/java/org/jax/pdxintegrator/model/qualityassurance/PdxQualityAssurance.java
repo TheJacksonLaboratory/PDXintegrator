@@ -9,11 +9,11 @@ public class PdxQualityAssurance {
 
 
     private final boolean tumorNotMouseNotEbv;
-    private final ResponseToStandardOfCare response;
+    private final ResponseToTreatment response;
     private final boolean animalHealthStatusSufficient;
     private final boolean passageQaPerformed;
 
-    private PdxQualityAssurance(ModelCharacterization characterization, boolean notMouseNotEbv, boolean passageQa, ResponseToStandardOfCare resp, boolean animalHeatlStatus){
+    private PdxQualityAssurance(ModelCharacterization characterization, boolean notMouseNotEbv, boolean passageQa, ResponseToTreatment resp, boolean animalHeatlStatus){
         this.tumorCharacterizationTechnology=characterization;
         this.tumorNotMouseNotEbv=notMouseNotEbv;
         this.response=resp;
@@ -29,7 +29,7 @@ public class PdxQualityAssurance {
         return tumorNotMouseNotEbv;
     }
 
-    public ResponseToStandardOfCare getResponse() {
+    public ResponseToTreatment getResponse() {
         return response;
     }
 
@@ -45,7 +45,7 @@ public class PdxQualityAssurance {
     public static class Builder {
         private ModelCharacterization tumorCharacterizationTechnology;
         private boolean tumorNotMouseNotEbv;
-        private ResponseToStandardOfCare response;
+        private ResponseToTreatment response;
         private boolean animalHealthStatusSufficient;
         private boolean passageQaPerformed;
 
@@ -55,7 +55,7 @@ public class PdxQualityAssurance {
             passageQaPerformed=passageQa;
         }
 
-        public Builder response(ResponseToStandardOfCare rep) {
+        public Builder response(ResponseToTreatment rep) {
             this.response=rep;
             return this;
         }

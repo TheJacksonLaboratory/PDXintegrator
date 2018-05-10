@@ -3,12 +3,12 @@ package org.jax.pdxintegrator.model.patient;
 /**
  * Note that we have Female (Code C16576)
  */
-public enum Gender {
+public enum Sex {
     FEMALE("female"), MALE("male");
 
     private final String name;
 
-    Gender(String n) {
+    Sex(String n) {
         name=n;
     }
 

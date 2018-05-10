@@ -10,20 +10,21 @@ import java.util.stream.Collectors;
 public class PdxPatient {
 
     private final String submitterPatientID;
-    private final Gender gender;
+    private final Sex sex;
     private final Age age;
     private final TermId diagnosis;
     private final Consent consent;
     private final EthnicityRace ethnicityRace;
+    private ArrayList<PdxPatientTreatment> patientTreatments;
+    private String virologyStatus;
 
-    private final String treatment;
-
+ 
     public String getSubmitterPatientID() {
         return submitterPatientID;
     }
 
-    public Gender getGender() {
-        return gender;
+    public Sex getSex() {
+        return sex;
     }
 
     public Age getAge() {
@@ -38,20 +39,49 @@ public class PdxPatient {
         return consent;
     }
 
-    public String getCurrentTreatmentDrug(){ return treatment; }
+  
 
     public EthnicityRace getEthnicityRace() {
         return ethnicityRace;
     }
 
-    private PdxPatient(String id, Gender g, Age a, TermId dx, Consent c, EthnicityRace er, String rx){
+    private PdxPatient(String id, Sex g, Age a, TermId dx, Consent c, EthnicityRace er, ArrayList<PdxPatientTreatment> rx, String vs){
         submitterPatientID=id;
-        gender=g;
+        sex=g;
         age=a;
         diagnosis=dx;
         consent=c;
         ethnicityRace =er;
-        treatment=rx;
+        patientTreatments=rx;
+        virologyStatus = vs;
+    }
+
+    /**
+     * @return the patientTreatments
+     */
+    public ArrayList<PdxPatientTreatment> getPatientTreatments() {
+        return patientTreatments;
+    }
+
+    /**
+     * @param patientTreatments the patientTreatments to set
+     */
+    public void setPatientTreatments(ArrayList<PdxPatientTreatment> patientTreatments) {
+        this.patientTreatments = patientTreatments;
+    }
+
+    /**
+     * @return the virologyStatus
+     */
+    public String getVirologyStatus() {
+        return virologyStatus;
+    }
+
+    /**
+     * @param virologyStatus the virologyStatus to set
+     */
+    public void setVirologyStatus(String virologyStatus) {
+        this.virologyStatus = virologyStatus;
     }
 
 
@@ -61,62 +91,40 @@ public class PdxPatient {
 
     public static class Builder {
         private final String submitterPatientID;
-        private final Gender gender;
+        private final Sex gender;
         private final Age age;
         private final TermId diagnosis;
         private final Consent consent;
         private final EthnicityRace ethnicityRace;
-
-        private List<String> currentTreatmentDrugs=new ArrayList<>();
-        private List<String> currentTreatmentProtocol=new ArrayList<>();
-        private List<String> priorTreatmentProtocol=new ArrayList<>();
-        private List<String> responseToPriorTreatment=new ArrayList<>();
-        private String virologyStatus=null;
+        private String virologyStatus;
+        private ArrayList<PdxPatientTreatment> patientTreatments;
 
 
-        public Builder(String id, Gender g, Age a, TermId dx, Consent c, EthnicityRace er){
+        public Builder(String id, Sex g, Age a, TermId dx, Consent c, EthnicityRace er,String vs){
             submitterPatientID=id;
             gender=g;
             age=a;
             diagnosis=dx;
             consent=c;
             ethnicityRace =er;
+            virologyStatus = vs;
         }
-        /** TODO encapsulate drug and protocol in a class to make sure the order is correct. */
-        public Builder currentTreatmentDrug(String drug) {
-            currentTreatmentDrugs.add(drug);
-            return this;
-        }
-        /** TODO encapsulate drug and protocol in a class to make sure the order is correct. */
-        public Builder currentTreatmentProtocol(String protocol) {
-            currentTreatmentProtocol.add(protocol);
-            return this;
-        }
-
-
-        public Builder priorTreatmentProtocol(String priorProtocol) {
-            priorTreatmentProtocol.add(priorProtocol);
-            return this;
-        }
-
-
-        public Builder responseToPriorTreatment(String response) {
-            responseToPriorTreatment.add(response);
-            return this;
-        }
-
+        
         public Builder virologyStatus(String status) {
             virologyStatus=status;
             return this;
         }
-        // ToDO include other fields.
+        
+        public Builder treatments(ArrayList<PdxPatientTreatment> treatments){
+            patientTreatments = treatments;
+            return this;
+        }
+        
+        
         public PdxPatient build() {
-            // TODO refactor design of drugs to a separate class.
-            String drugs=currentTreatmentDrugs.stream().collect(Collectors.joining(";"));
-            PdxPatient pat = new PdxPatient(submitterPatientID,gender,age,diagnosis,consent,ethnicityRace,drugs);
-//            if (currentTreatmentDrugs != null) {
-//                pat.setCurrentTreatmentDrugs(currentTreatmentDrugs);
-//            } //etc
+        
+            PdxPatient pat = new PdxPatient(submitterPatientID,gender,age,diagnosis,consent,ethnicityRace,patientTreatments,virologyStatus);
+  
             return pat;
         }
 
