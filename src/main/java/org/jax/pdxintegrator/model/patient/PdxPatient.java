@@ -11,10 +11,13 @@ public class PdxPatient {
 
     private final String submitterPatientID;
     private final Sex sex;
-    private final Age age;
-    private final TermId diagnosis;
+    private final Age ageAtDiagnosis;
+    private final Age ageAtCollection;
+    private final TermId diagnosisTerm;
+    private final String diagnosis;
     private final Consent consent;
-    private final EthnicityRace ethnicityRace;
+    private final String ethnicity;
+    private final String race;
     private ArrayList<PdxPatientTreatment> patientTreatments;
     private String virologyStatus;
 
@@ -27,11 +30,19 @@ public class PdxPatient {
         return sex;
     }
 
-    public Age getAge() {
-        return age;
+    public Age getAgeAtDiagnosis() {
+        return ageAtDiagnosis;
+    }
+    
+    public Age getAgeAtCollection() {
+        return ageAtCollection;
     }
 
-    public TermId getDiagnosis() {
+    public TermId getDiagnosisTerm() {
+        return diagnosisTerm;
+    }
+    
+    public String diagnosis() {
         return diagnosis;
     }
 
@@ -39,21 +50,26 @@ public class PdxPatient {
         return consent;
     }
 
-  
-
-    public EthnicityRace getEthnicityRace() {
-        return ethnicityRace;
+    public String getRace() {
+        return race;
     }
 
-    private PdxPatient(String id, Sex g, Age a, TermId dx, Consent c, EthnicityRace er, ArrayList<PdxPatientTreatment> rx, String vs){
-        submitterPatientID=id;
-        sex=g;
-        age=a;
-        diagnosis=dx;
-        consent=c;
-        ethnicityRace =er;
-        patientTreatments=rx;
-        virologyStatus = vs;
+    public String getEthnicity() {
+        return ethnicity;
+    }
+
+    private PdxPatient(String id, Sex s, Age ageAtDiagnosis, Age ageAtCollection, TermId dx, String diagnosis, Consent c, String race, String ethnicity, ArrayList<PdxPatientTreatment> rx, String vs){
+        this.submitterPatientID=id;
+        this.sex= s;
+        this.ageAtDiagnosis = ageAtDiagnosis;
+        this.ageAtCollection = ageAtCollection;
+        this.diagnosisTerm=dx;
+        this.diagnosis = diagnosis;
+        this.consent=c;
+        this.ethnicity=ethnicity;
+        this.race = race;
+        this.patientTreatments=rx;
+        this.virologyStatus = vs;
     }
 
     /**
@@ -90,24 +106,64 @@ public class PdxPatient {
 
 
     public static class Builder {
-        private final String submitterPatientID;
-        private final Sex gender;
-        private final Age age;
-        private final TermId diagnosis;
-        private final Consent consent;
-        private final EthnicityRace ethnicityRace;
-        private String virologyStatus;
+        private  String submitterPatientID;
+        private  Sex sex;
+        private  Age ageAtDiagnosis;
+        private  Age ageAtCollection;
+        private  TermId diagnosisTerm;
+        private  String diagnosis;
+        private  Consent consent;
+        private  String ethnicity;
+        private  String race;
         private ArrayList<PdxPatientTreatment> patientTreatments;
+        private String virologyStatus;
 
 
-        public Builder(String id, Sex g, Age a, TermId dx, Consent c, EthnicityRace er,String vs){
-            submitterPatientID=id;
-            gender=g;
-            age=a;
-            diagnosis=dx;
-            consent=c;
-            ethnicityRace =er;
-            virologyStatus = vs;
+        public Builder(String id){
+            this.submitterPatientID=id;
+           
+        }
+        
+        public Builder sex(Sex sex){
+            this.sex =sex;
+            return this;
+        } 
+        
+        public Builder ageAtDiagnosis(Age aaD){
+            this.ageAtDiagnosis = aaD;
+            return this;
+        }
+        
+        public Builder ageAtCollection(Age aaC){
+            this.ageAtCollection = aaC;
+            return this;
+        }
+        
+        public Builder diagnosisTerms(TermId diagnosis){
+            this.diagnosisTerm = diagnosis;
+            return this;
+        }
+        
+        
+        public Builder diagnosis(String diagnosis){
+            this.diagnosis  = diagnosis;
+            return this;
+        }
+        
+        
+        public Builder consent(Consent consent){
+            this.consent = consent;
+            return this;
+        }
+        
+        public Builder ethnicity(String ethnicity){
+            this.ethnicity = ethnicity;
+            return this;
+        }
+        
+        public Builder race(String race){
+            this.race = race;
+            return this;
         }
         
         public Builder virologyStatus(String status) {
@@ -123,7 +179,7 @@ public class PdxPatient {
         
         public PdxPatient build() {
         
-            PdxPatient pat = new PdxPatient(submitterPatientID,gender,age,diagnosis,consent,ethnicityRace,patientTreatments,virologyStatus);
+            PdxPatient pat = new PdxPatient(submitterPatientID, sex, ageAtDiagnosis, ageAtCollection, diagnosisTerm, diagnosis, consent, race,ethnicity, patientTreatments, virologyStatus);
   
             return pat;
         }

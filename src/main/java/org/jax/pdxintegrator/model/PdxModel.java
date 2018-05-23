@@ -1,6 +1,7 @@
 package org.jax.pdxintegrator.model;
 
 
+import java.util.ArrayList;
 import org.jax.pdxintegrator.model.modelcreation.PdxModelCreation;
 import org.jax.pdxintegrator.model.modelstudy.PdxModelStudy;
 import org.jax.pdxintegrator.model.patient.PdxPatient;
@@ -14,14 +15,14 @@ public class PdxModel {
 
 
     private final PdxPatient patient;
-    private final PdxClinicalTumor clinicalTumor;
-    private final PdxModelCreation modelCreation;
-    private final PdxQualityAssurance qualityAssurance;
-    private final PdxModelStudy modelStudy;
+    private final ArrayList<PdxClinicalTumor> clinicalTumor;
+    private final ArrayList<PdxModelCreation> modelCreation;
+    private final ArrayList<PdxQualityAssurance> qualityAssurance;
+    private final ArrayList<PdxModelStudy> modelStudy;
 
 
 
-    public PdxModel(PdxPatient pat, PdxClinicalTumor clinTum, PdxModelCreation mcreation, PdxQualityAssurance quality, PdxModelStudy modelStudy){
+    public PdxModel(PdxPatient pat, ArrayList<PdxClinicalTumor> clinTum, ArrayList<PdxModelCreation> mcreation, ArrayList<PdxQualityAssurance> quality, ArrayList<PdxModelStudy> modelStudy){
         this.patient=pat;
         this.clinicalTumor=clinTum;
         this.modelCreation=mcreation;
@@ -34,9 +35,9 @@ public class PdxModel {
     public PdxPatient getPatient() {
         return patient;
     }
-    public PdxClinicalTumor getClinicalTumor() { return clinicalTumor; }
-    public PdxModelCreation getModelCreation() { return modelCreation;}
-    public PdxQualityAssurance getQualityAssurance() { return qualityAssurance; }
-    public PdxModelStudy getModelStudy() { return modelStudy;}
+    public ArrayList<PdxClinicalTumor> getClinicalTumor() { return clinicalTumor; }
+    public ArrayList<PdxModelCreation> getModelCreation() { return modelCreation;}
+    public ArrayList<PdxQualityAssurance> getQualityAssurance() { return qualityAssurance; }
+    public ArrayList<PdxModelStudy> getModelStudy() { return modelStudy;}
 
 }

@@ -6,7 +6,7 @@ import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
 
 public class PdxModelStudy {
 
-   
+    private String modelID;
     private String studyID;
     private boolean metastasis;
     private int metastasisPassage;
@@ -15,9 +15,10 @@ public class PdxModelStudy {
     private ResponseToTreatment response;
     private ArrayList<PdxStudyTreatment> treatments;
 
-    private PdxModelStudy(String studyID, ArrayList<PdxStudyTreatment> treatments,
+    private PdxModelStudy(String modelID, String studyID, ArrayList<PdxStudyTreatment> treatments,
             boolean metastasis, int metastasisPassage, TermId metastasisLocation,
             int doublingLagTime, ResponseToTreatment response ) {
+        this.modelID = modelID;
         this.studyID = studyID;
         this.treatments = treatments;
         this.metastasis = metastasis;
@@ -36,7 +37,7 @@ public class PdxModelStudy {
     /**
      * @return the metastasis
      */
-    public boolean isMetastasis() {
+    public boolean hasMetastasis() {
         return metastasis;
     }
 
@@ -103,10 +104,18 @@ public class PdxModelStudy {
         this.studyID = studyID;
     }
 
+    /**
+     * @return the modelID
+     */
+    public String getModelID() {
+        return modelID;
+    }
+
     
 
     public static class Builder {
 
+        private String modelID;
         private String studyID;
         private ArrayList<PdxStudyTreatment> treatments;
         private boolean metastasis;
@@ -115,7 +124,8 @@ public class PdxModelStudy {
         private int doublingLagTime;  // days?
         private ResponseToTreatment response;
       
-         public Builder(String studyID){
+         public Builder(String modelID, String studyID){
+           this.modelID = modelID;
            this.studyID = studyID;
            
        }
@@ -148,7 +158,7 @@ public class PdxModelStudy {
      
 
         public PdxModelStudy build() {
-            return new PdxModelStudy(studyID, treatments,
+            return new PdxModelStudy(modelID,studyID, treatments,
                     metastasis, metastasisPassage, metastasisLocation,
                     doublingLagTime, response);
         }
