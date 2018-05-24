@@ -17,7 +17,6 @@ import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import org.apache.jena.shared.BadURIException;
 import org.apache.jena.vocabulary.OWL;
@@ -351,10 +350,24 @@ public class PdxModel2Rdf {
 
         // start working on nexted PT treatments
         // need to define RFD properties first
+        int index = 0;
         for (PdxPatientTreatment ptTreatment : patient.getPatientTreatments()) {
-            // treatment uri patient/drug/index?
-            //this.thisPatient.addProperty(hasTreatment,
+            index++;
+                // is this sufficent for an Id?
+                // private boolean postSample;
+                // private String regimen;
+                // private ResponseToTreatment response;
+                //private String reasonStopped;
+                Resource treatment = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ patient.getSubmitterPatientID() + "/treatment" + index);
+                treatment.addProperty(patientTreatmentRegimen, ptTreatment.getRegimen());
+                treatment.addProperty(this.patientTreatmentPostSampleProperty, ptTreatment.isPostSample()?this.TRUE_RESOURCE:this.FALSE_RESOURCE);
+                treatment.addProperty(patientTreatmentResponse, getResponseResource(ptTreatment.getResponse()));
+                treatment.addProperty(patientTreatmentReasonStopped, ptTreatment.getReasonStopped());
+                treatment.addProperty(this.patientTreatmentIndexProperty,
+                        ResourceFactory.createTypedLiteral(String.valueOf(ptTreatment.getIndex()),XSDDatatype.XSDinteger));
+                treatment.addProperty(this.hasPatientTreatmentProperty, patientResource);
 
+                patientResource.addProperty(hasPatientTreatmentProperty, treatment);
         }
     }
 
@@ -438,24 +451,8 @@ public class PdxModel2Rdf {
            
             
             ResponseToTreatment response = modelStudy.getResponse();
-            switch (response) {
-                case NOT_ASSESSED:
-                    thisModelStudy.addProperty(pdxTumorResponseProperty, notAssessed);
-                    break;
-                case STABLE_DISEASE:
-                    thisModelStudy.addProperty(pdxTumorResponseProperty, stableDisease);
-                    break;
-                case PARTIAL_RESPONSE:
-                    thisModelStudy.addProperty(pdxTumorResponseProperty, partialResponse);
-                    break;
-                case COMPLETE_RESPONSE:
-                    thisModelStudy.addProperty(pdxTumorResponseProperty, completeResponse);
-                    break;
-                case PROGRESSIVE_DISEASE:
-                    thisModelStudy.addProperty(pdxTumorResponseProperty, progressiveDisease);
-                    break;
-            }
-
+            
+            thisModelStudy.addProperty(pdxTumorResponseProperty, getResponseResource(response));
 
             int index = 0;
             for (PdxStudyTreatment studyTreatment : modelStudy.getTreatments()) {
@@ -479,7 +476,7 @@ public class PdxModel2Rdf {
 
             thisModelStudy.addProperty(RDF.type, this.pdxModelStudy);
             thisModelStudy.addProperty(RDFS.label, "Model study for " + modelStudy.getModelID());
-         //   rdfModelMap.get(modelStudy.getModelID()).addProperty(hasStudyProperty, thisModelStudy);
+            rdfModel.getResource(PDXNET_NAMESPACE +"/"+ modelStudy.getModelID()).addProperty(hasStudyProperty, thisModelStudy);
 
         }
     }
@@ -531,6 +528,28 @@ public class PdxModel2Rdf {
         for (PdxQualityAssurance quality : qas) {
            
         }
+    }
+    
+    private Resource getResponseResource(ResponseToTreatment response){
+        Resource resource = notAssessed;
+         switch (response) {
+                case NOT_ASSESSED:
+                    resource =  notAssessed;
+                    break;
+                case STABLE_DISEASE:
+                    resource =  stableDisease;
+                    break;
+                case PARTIAL_RESPONSE:
+                    resource =  partialResponse;
+                    break;
+                case COMPLETE_RESPONSE:
+                    resource =  completeResponse;
+                    break;
+                case PROGRESSIVE_DISEASE:
+                    resource =  progressiveDisease;
+                    break;
+            }
+         return resource;
     }
 
     private void createEntities() {

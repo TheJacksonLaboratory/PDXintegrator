@@ -208,7 +208,7 @@ public class PdxModelSimulator {
             tumor.setTissueHistologyTerm(diagnosis);
             tumor.setSpecimenTissue(uberon.toString());
             tumor.setSpecimenTissueTerm(uberon);
-            tumor.setSublineOf("subline of");
+            tumor.setSublineOf("subline of modelX");
             tumor.setSublineReason("subline reason");
             tumors.add(tumor);
             count--;
