@@ -509,7 +509,7 @@ public class PdxModel2Rdf {
                     ResourceFactory.createTypedLiteral(String.valueOf(mcreation.getEngraftmentTime()),
                             XSDDatatype.XSDinteger));
 
-            modelCreation.addProperty(RDF.type, modelCreation);
+            modelCreation.addProperty(RDF.type, this.pdxModelCreation);
             modelCreation.addProperty(RDFS.label, "PDX Model " + mcreation.getModelID());
         }
     }
