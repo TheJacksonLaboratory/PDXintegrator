@@ -437,8 +437,9 @@ public class PdxModel2Rdf {
         // this.thisModelStudy = rdfModel.createResource(String.format("%s%s",PDXNET_NAMESPACE,"Study "+model.getModelCreation().getSubmitterPdxId()));
         for (PdxModelStudy modelStudy : modelStudies) {
             Resource thisModelStudy = rdfModel.createResource(PDXNET_NAMESPACE + "/Study-" + modelStudy.getStudyID());
+            Resource modelCreation = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ modelStudy.getModelID());
             
-            thisModelStudy.addProperty(hasPdxModelProperty, modelStudy.getModelID());
+            thisModelStudy.addProperty(hasPdxModelProperty, modelCreation);
             
             if(modelStudy.hasMetastasis()){
                 thisModelStudy.addProperty(this.pdxStudyHasMetastasisProperty,this.TRUE_RESOURCE);
