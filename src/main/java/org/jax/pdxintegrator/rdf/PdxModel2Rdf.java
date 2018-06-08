@@ -554,15 +554,15 @@ public class PdxModel2Rdf {
     }
 
     private void createEntities() {
-        this.maleSex = rdfModel.createResource(NCIT_NAMESPACE +"/"+ male.getId());
-        this.femaleSex = rdfModel.createResource(NCIT_NAMESPACE +"/"+ female.getId());
+        this.maleSex = rdfModel.createResource(NCIT_NAMESPACE + male.getId());
+        this.femaleSex = rdfModel.createResource(NCIT_NAMESPACE + female.getId());
         this.maleSex.addProperty(RDF.type, this.pdxSex);
         //   this.maleSex.addProperty(RDFS.label,"Male");
 
         this.femaleSex.addProperty(RDF.type, this.pdxSex);
         //   this.femaleSex.addProperty(RDFS.label,"Female");
 
-        this.noConsent = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "consent_NO");
+        this.noConsent = rdfModel.createResource(PDXNET_NAMESPACE + "consent_NO");
         this.noConsent.addProperty(RDFS.label, "No patient consent provided");
         this.noConsent.addProperty(RDF.type, this.pdxPatientConsent);
 
