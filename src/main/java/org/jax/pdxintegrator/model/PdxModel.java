@@ -4,6 +4,7 @@ package org.jax.pdxintegrator.model;
 import java.util.ArrayList;
 import org.jax.pdxintegrator.model.modelcreation.PdxModelCreation;
 import org.jax.pdxintegrator.model.modelstudy.PdxModelStudy;
+import org.jax.pdxintegrator.model.omicsfile.PdxOmicsFile;
 import org.jax.pdxintegrator.model.patient.PdxPatient;
 import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
 import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
@@ -15,29 +16,31 @@ public class PdxModel {
 
 
     private final PdxPatient patient;
-    private final ArrayList<PdxClinicalTumor> clinicalTumor;
-    private final ArrayList<PdxModelCreation> modelCreation;
-    private final ArrayList<PdxQualityAssurance> qualityAssurance;
-    private final ArrayList<PdxModelStudy> modelStudy;
+    private final ArrayList<PdxClinicalTumor> clinicalTumors;
+    private final ArrayList<PdxModelCreation> modelCreations;
+    private final ArrayList<PdxQualityAssurance> qualityAssurances;
+    private final ArrayList<PdxModelStudy> modelStudies;
+    private final ArrayList<PdxOmicsFile> omicsFiles;
 
 
 
-    public PdxModel(PdxPatient pat, ArrayList<PdxClinicalTumor> clinTum, ArrayList<PdxModelCreation> mcreation, ArrayList<PdxQualityAssurance> quality, ArrayList<PdxModelStudy> modelStudy){
+    public PdxModel(PdxPatient pat, ArrayList<PdxClinicalTumor> clinTum, ArrayList<PdxModelCreation> mcreation, ArrayList<PdxQualityAssurance> quality, ArrayList<PdxModelStudy> modelStudy, ArrayList<PdxOmicsFile> omicsFiles){
         this.patient=pat;
-        this.clinicalTumor=clinTum;
-        this.modelCreation=mcreation;
-        this.qualityAssurance=quality;
-        this.modelStudy = modelStudy;
-
+        this.clinicalTumors=clinTum;
+        this.modelCreations=mcreation;
+        this.qualityAssurances=quality;
+        this.modelStudies = modelStudy;
+        this.omicsFiles = omicsFiles;
     }
 
 
     public PdxPatient getPatient() {
         return patient;
     }
-    public ArrayList<PdxClinicalTumor> getClinicalTumor() { return clinicalTumor; }
-    public ArrayList<PdxModelCreation> getModelCreation() { return modelCreation;}
-    public ArrayList<PdxQualityAssurance> getQualityAssurance() { return qualityAssurance; }
-    public ArrayList<PdxModelStudy> getModelStudy() { return modelStudy;}
+    public ArrayList<PdxClinicalTumor> getClinicalTumor() { return clinicalTumors; }
+    public ArrayList<PdxModelCreation> getModelCreation() { return modelCreations;}
+    public ArrayList<PdxQualityAssurance> getQualityAssurance() { return qualityAssurances; }
+    public ArrayList<PdxModelStudy> getModelStudy() { return modelStudies;}
+    public ArrayList<PdxOmicsFile> getOmicsFiles() { return omicsFiles;}
 
 }

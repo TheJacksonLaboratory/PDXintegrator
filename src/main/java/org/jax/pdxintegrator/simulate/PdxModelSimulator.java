@@ -16,6 +16,7 @@ import org.jax.pdxintegrator.model.modelcreation.PdxModelCreation;
 import org.jax.pdxintegrator.model.modelcreation.TumorPrepMethod;
 import org.jax.pdxintegrator.model.modelstudy.PdxModelStudy;
 import org.jax.pdxintegrator.model.modelstudy.PdxStudyTreatment;
+import org.jax.pdxintegrator.model.omicsfile.PdxOmicsFile;
 import org.jax.pdxintegrator.model.patient.*;
 import org.jax.pdxintegrator.model.qualityassurance.ModelCharacterization;
 import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
@@ -37,7 +38,6 @@ public class PdxModelSimulator {
     private final Age age;
     private final TermId diagnosis;
     private final Consent consent;
-    private final EthnicityRace ethnicityRace;
     private Random random=new Random();
 
 
@@ -65,7 +65,7 @@ public class PdxModelSimulator {
         this.sex=getRandomSex();
         this.age=getRandomAge();
         this.consent=getRandomConsent();
-        this.ethnicityRace=getRandomEthnicity();
+        
         this.neoplasmTerms=neoplasms;
         this.gradeTerms=grades;
         this.stageTerms=stages;
@@ -85,15 +85,23 @@ public class PdxModelSimulator {
         ArrayList<PdxModelCreation> modelCreations = new ArrayList();
         for(PdxClinicalTumor tumor : clinicalTumors){
             modelCreations.addAll(buildModelCreations(tumor.getSubmitterTumorID()));
+        
         }
+        
+        ArrayList<PdxOmicsFile> omicsFiles = new ArrayList();
+        
         ArrayList<PdxQualityAssurance> qas = new ArrayList();
         ArrayList<PdxModelStudy> modelStudies = new ArrayList();
         for(PdxModelCreation modelCreation : modelCreations){
             modelStudies.addAll(buildModelStudies(modelCreation.getModelID()));
             qas.add(buildQualityAssuranceModule(modelCreation.getModelID()));
+            omicsFiles.add(buildOmicsFile(modelCreation.getModelID(),null));
         }
+        
+        omicsFiles.add(buildOmicsFile(null,patientID));
         // same for other categories
-        buildModel(patient,clinicalTumors,modelCreations,qas, modelStudies);
+        
+        this.pdxmodel = new PdxModel(patient,clinicalTumors,modelCreations,qas, modelStudies,omicsFiles);
     }
 
 
@@ -101,15 +109,27 @@ public class PdxModelSimulator {
         return pdxmodel;
     }
 
-    private void buildModel(PdxPatient patient,
-                            ArrayList<PdxClinicalTumor> clinicalTumors,
-                            ArrayList<PdxModelCreation> modelCreations,
-                            ArrayList<PdxQualityAssurance> qas,
-                            ArrayList<PdxModelStudy> studies) {
+    private static int omicsCount = 1;
+    private PdxOmicsFile buildOmicsFile(String modelID, String patientID){
+        PdxOmicsFile omicsFile = new PdxOmicsFile();
+        omicsFile.setAccessLevel("access level value");
+        omicsFile.setCaptureKit("capture kit value");
+        omicsFile.setCreatedDateTime("Tuesday at noon");
+        omicsFile.setDataCategory("data category value");
+        omicsFile.setDataFormat("data format value");
+        omicsFile.setDataType("data type value");
+        omicsFile.setExperimentalStrategy("exp strategy");
+        omicsFile.setFileName("simulatedOmicsFile"+omicsCount++);
+        omicsFile.setFileSize("34K");
+        omicsFile.setIsFFPEPairedEnd("yes");
+        omicsFile.setModelID(modelID);
+        omicsFile.setPatientID(patientID);
+        omicsFile.setPassage("P1");
+        omicsFile.setPlatform("whole exome");
+        omicsFile.setSampleType("tumor");
+        omicsFile.setUpdatedDateTime("update date");
         
-        
-        
-        this.pdxmodel = new PdxModel(patient,clinicalTumors,modelCreations,qas, studies);
+        return omicsFile;
     }
 
 

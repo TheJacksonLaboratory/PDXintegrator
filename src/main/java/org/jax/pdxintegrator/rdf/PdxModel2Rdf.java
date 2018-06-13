@@ -24,6 +24,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 import org.jax.pdxintegrator.model.modelstudy.PdxModelStudy;
 import org.jax.pdxintegrator.model.modelstudy.PdxStudyTreatment;
+import org.jax.pdxintegrator.model.omicsfile.PdxOmicsFile;
 import org.jax.pdxintegrator.model.patient.PdxPatientTreatment;
 import static org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment.COMPLETE_RESPONSE;
 import static org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment.NOT_ASSESSED;
@@ -120,6 +121,26 @@ public class PdxModel2Rdf {
     private Property studyTreatmentUnits = null;
     private Property studyTreatmentRoute = null;
     private Property studyTreatmentFrequency = null;
+    
+    
+    // for omics files
+    private Property hasOmicsFile;
+    private Property hasAccessLevel;
+    private Property hasCreatedDateTime;
+    private Property hasDataCategory;	
+    private Property hasDataFormat;
+    private Property hasDataType;
+    // this should exist somewher else also....
+    private Property hasSampleType;	
+    private Property hasExperimentalStrategy;
+    private Property hasFileSize;
+    private Property hasPlatform;	
+    private Property hasCaptureKit;	
+    private Property hasUpdatedDateTime;
+    private Property hasFFPEPairedEnd;	
+    private Property hasFileName;
+    private Property hasPatientAssociation;
+    private Property hasModelAssociation;
 
     private Resource maleSex = null;
     private Resource femaleSex = null;
@@ -157,15 +178,16 @@ public class PdxModel2Rdf {
 
     /// these are the classes needed for the Seven Bridges model
     private OntClass pdxPatient;
-    private OntClass pdxDiagnosis;
-    private OntClass pdxSex;
     private OntClass pdxModelStudy;
     private OntClass pdxClinicalTumor;
     private OntClass pdxQualityAssurance;
     private OntClass pdxModelCreation;
     private OntClass pdxPatientTreatment;
     private OntClass pdxStudyTreatment;
-
+    private OntClass pdxOmicsFile;
+    
+    private OntClass pdxDiagnosis;
+    private OntClass pdxSex;
     private OntClass pdxTreatmentResponse;
     private OntClass pdxTumorSampleType;
     private OntClass pdxModelCharacterization;
@@ -180,7 +202,7 @@ public class PdxModel2Rdf {
     private OntClass pdxTumorHistology;
     private OntClass pdxBoolean;
     
-    //private HashMap<String,Resource> rdfModelMap = new HashMap();
+   
 
     public PdxModel2Rdf(List<PdxModel> modelList) {
         this.pdxmodels = modelList;
@@ -244,6 +266,10 @@ public class PdxModel2Rdf {
         String pdxMiModelCreationURI = String.format("%s%s", PDXNET_NAMESPACE, "#ModelCreation");
         this.pdxModelCreation = rdfModel.createClass(pdxMiModelCreationURI);
         this.pdxModelCreation.addProperty(RDFS.label, "Model Creation");
+        
+        String pdxOmicsFileURI = String.format("%s%s", PDXNET_NAMESPACE, "#OmicsFile");
+        this.pdxOmicsFile = rdfModel.createClass(pdxOmicsFileURI);
+        this.pdxOmicsFile.addProperty(RDFS.label, "Omics File");
 
         String pdxMiTreatmentResponseURI = String.format("%s%s", PDXNET_NAMESPACE, "#TreatmentResponse");
         this.pdxTreatmentResponse = rdfModel.createClass(pdxMiTreatmentResponseURI);
@@ -294,18 +320,20 @@ public class PdxModel2Rdf {
         this.pdxBoolean.addProperty(RDFS.label, "Boolean");
     }
 
-    private void outputPdxModel(PdxModel pdxmodel) {
+    private void outputPdxModel(PdxModel pdxModel) {
 
-        // Clinincal/Patient Module
-        outputPatientRDF(pdxmodel);
+        // Clinincal/Patient Module and PT Treatments
+        outputPatientRDF(pdxModel);
         // Clinical/Tumor Module
-        outputTumorRDF(pdxmodel.getClinicalTumor());
+        outputTumorRDF(pdxModel.getClinicalTumor());
         // Model Creation Module
-        outputModelCreationRdf(pdxmodel);
+        outputModelCreationRdf(pdxModel);
         // Quality Assurance Module
-        outputQualityAssuranceRdf(pdxmodel);
-        // to do -- other areas of the PDX-MI
-        outputModelStudyRDF(pdxmodel);
+        outputQualityAssuranceRdf(pdxModel);
+        // Model Study and Study Treatments
+        outputModelStudyRDF(pdxModel);
+        
+        outputOmicsFileRDF(pdxModel);
     }
 
     /**
@@ -531,6 +559,43 @@ public class PdxModel2Rdf {
         }
     }
     
+    private void outputOmicsFileRDF(PdxModel model){
+        for(PdxOmicsFile omicsFile : model.getOmicsFiles()){
+            
+            
+            // is file name sufficent?
+            Resource thisOmicsFile = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ omicsFile.getFileName());
+            thisOmicsFile.addProperty(RDF.type, this.pdxOmicsFile);
+            thisOmicsFile.addProperty(RDFS.label, omicsFile.getFileName());
+            
+            if(omicsFile.getPatientID()!=null){
+                this.rdfModel.getResource(String.format("%s/%s", PDXNET_NAMESPACE, omicsFile.getPatientID())).addProperty(this.hasOmicsFile, thisOmicsFile);
+                thisOmicsFile.addProperty(this.hasPatientAssociation,this.rdfModel.getResource(String.format("%s/%s", PDXNET_NAMESPACE, omicsFile.getPatientID()))); 
+            }
+            if(omicsFile.getModelID()!=null){
+                this.rdfModel.getResource(String.format("%s/%s", PDXNET_NAMESPACE, omicsFile.getModelID())).addProperty(this.hasOmicsFile, thisOmicsFile);
+                thisOmicsFile.addProperty(this.hasModelAssociation,String.format("%s/%s", PDXNET_NAMESPACE, omicsFile.getModelID()));
+            }
+            
+            thisOmicsFile.addProperty(this.hasAccessLevel, omicsFile.getAccessLevel());
+            thisOmicsFile.addProperty(this.hasCreatedDateTime,omicsFile.getCreatedDateTime());
+            thisOmicsFile.addProperty(this.hasDataCategory,omicsFile.getDataCategory());
+            thisOmicsFile.addProperty(this.hasDataFormat,omicsFile.getDataFormat());
+            thisOmicsFile.addProperty(this.hasDataType,omicsFile.getDataType());
+            thisOmicsFile.addProperty(this.hasSampleType,omicsFile.getSampleType());
+            thisOmicsFile.addProperty(this.hasExperimentalStrategy,omicsFile.getExperimentalStrategy());
+            thisOmicsFile.addProperty(this.hasFileSize,omicsFile.getFileSize());
+            thisOmicsFile.addProperty(this.hasPlatform,omicsFile.getPlatform());
+            thisOmicsFile.addProperty(this.hasCaptureKit,omicsFile.getCaptureKit());
+            thisOmicsFile.addProperty(this.hasUpdatedDateTime,omicsFile.getUpdatedDateTime());
+            // i suppose this is a boolean and should be treated differently ...
+            thisOmicsFile.addProperty(this.hasFFPEPairedEnd,omicsFile.getIsFFPEPairedEnd());
+            thisOmicsFile.addProperty(this.hasFileName,omicsFile.getFileName());
+       
+        }
+        
+    }
+    
     private Resource getResponseResource(ResponseToTreatment response){
         Resource resource = notAssessed;
          switch (response) {
@@ -604,28 +669,30 @@ public class PdxModel2Rdf {
         this.mouseRxEstrogen.addProperty(RDF.type, this.pdxTreatmentForEngraftment);
 
         this.notAssessed = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "Not_assessed");
-        this.completeResponse = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "Complete_response");
-        this.partialResponse = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "Partial_response");
-        this.stableDisease = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "Stable_disease");
-        this.progressiveDisease = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "Progressive_disease");
-
         this.notAssessed.addProperty(RDFS.label, "Not assessed");
-        this.completeResponse.addProperty(RDFS.label, "Complete response");
-        this.partialResponse.addProperty(RDFS.label, "Partial response");
-        this.stableDisease.addProperty(RDFS.label, "Stable disease");
-        this.progressiveDisease.addProperty(RDFS.label, "Progressive disease");
-
         this.notAssessed.addProperty(RDF.type, this.pdxTreatmentResponse);
+        
+        this.completeResponse = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "Complete_response");
+        this.completeResponse.addProperty(RDFS.label, "Complete response");
         this.completeResponse.addProperty(RDF.type, this.pdxTreatmentResponse);
+        
+        this.partialResponse = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "Partial_response");
+        this.partialResponse.addProperty(RDFS.label, "Partial response");
         this.partialResponse.addProperty(RDF.type, this.pdxTreatmentResponse);
+        
+        this.stableDisease = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "Stable_disease");
+        this.stableDisease.addProperty(RDFS.label, "Stable disease");
         this.stableDisease.addProperty(RDF.type, this.pdxTreatmentResponse);
+        
+        this.progressiveDisease = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "Progressive_disease");
+        this.progressiveDisease.addProperty(RDFS.label, "Progressive disease");
         this.progressiveDisease.addProperty(RDF.type, this.pdxTreatmentResponse);
 
         this.IHC = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "IHC");
-        this.histology = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "Histology");
         this.IHC.addProperty(RDF.type, this.pdxModelCharacterization);
         this.IHC.addProperty(RDFS.label, "IHC");
 
+        this.histology = rdfModel.createResource(PDXNET_NAMESPACE +"/"+ "Histology");
         this.histology.addProperty(RDF.type, this.pdxModelCharacterization);
         this.histology.addProperty(RDFS.label, "Histology");
 
@@ -675,10 +742,7 @@ public class PdxModel2Rdf {
         this.hasPatientTreatmentProperty.addProperty(RDF.type, OWL.ObjectProperty);
         this.hasPatientTreatmentProperty.addProperty(RDFS.range, this.pdxPatientTreatment);
 
-        // Not sure what this is, it isn't used.
-        //this.cancerDiagnosis = rdfModel.createProperty( PDXNET_NAMESPACE + "cancerDiagnosis" );
-        //this.cancerDiagnosis.addProperty(RDFS.label, "");
-        // this.cancerDiagnosis.addProperty(RDF.type,OWL.ObjectProperty);
+       
         // Patient sex
         this.sexProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasSex");
         this.sexProperty.addProperty(RDFS.label, "Has sex");
@@ -881,6 +945,75 @@ public class PdxModel2Rdf {
         this.studyTreatmentFrequency.addProperty(RDFS.label, "Study treatment frequency");
         this.studyTreatmentFrequency.addProperty(RDF.type, OWL.ObjectProperty);
 
+        // for omics files
+        this.hasOmicsFile = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasOmicsFile");
+        this.hasOmicsFile.addProperty(RDFS.label, "Has associated OMICS file");
+        this.hasOmicsFile.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasOmicsFile.addProperty(RDFS.range, this.pdxOmicsFile);
+        
+        this.hasPatientAssociation = rdfModel.createProperty(PDXNET_NAMESPACE,"#hasPatientAssociation");
+        this.hasPatientAssociation.addProperty(RDFS.label, "Has associated patient");
+        this.hasPatientAssociation.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasPatientAssociation.addProperty(RDFS.range, this.pdxPatient);
+        
+        this.hasModelAssociation = rdfModel.createProperty(PDXNET_NAMESPACE,"#hasModelAssociation");
+        this.hasModelAssociation.addProperty(RDFS.label, "Has associated model");
+        this.hasModelAssociation.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasModelAssociation.addProperty(RDFS.range, this.pdxModelCreation);
+        
+        this.hasAccessLevel = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasAccessLevel");
+        this.hasAccessLevel.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasAccessLevel.addProperty(RDFS.label, "Access level");
+                
+        this.hasCreatedDateTime  = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasCreatedDateTime");
+        this.hasCreatedDateTime.addProperty(RDFS.label, "Created date and time");
+        this.hasCreatedDateTime.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.hasDataCategory  = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasDataCategory");	
+        this.hasDataCategory.addProperty(RDFS.label, "Data category");
+        this.hasDataCategory.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.hasDataFormat  = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasDataFormat");
+        this.hasDataFormat.addProperty(RDFS.label, "Data format");
+        this.hasDataFormat.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.hasDataType  = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasDataType");
+        this.hasDataType.addProperty(RDFS.label, "Data type");
+        this.hasDataType.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.hasSampleType  = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasSampleType");	
+        this.hasSampleType.addProperty(RDFS.label, "Sample type");
+        this.hasSampleType.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.hasExperimentalStrategy  = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasExperimentalStrategy");
+         this.hasExperimentalStrategy.addProperty(RDFS.label, "Experimental strategy");
+         this.hasExperimentalStrategy.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.hasFileSize  = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasFileSize");
+        this.hasFileSize.addProperty(RDFS.label, "File size");
+        this.hasFileSize.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.hasPlatform  = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPlatform");	
+        this.hasPlatform.addProperty(RDFS.label, "Platform");
+        this.hasPlatform.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.hasCaptureKit  = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasCaptureKit");	
+        this.hasCaptureKit.addProperty(RDFS.label, "Capture kit");
+        this.hasCaptureKit.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.hasUpdatedDateTime  = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasUpdateDateTime");
+        this.hasUpdatedDateTime.addProperty(RDFS.label, "Update date and time");
+        this.hasUpdatedDateTime.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.hasFFPEPairedEnd  = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasFFPEPairedEnd");	
+        this.hasFFPEPairedEnd.addProperty(RDFS.label, "FFPE paired end");
+        this.hasFFPEPairedEnd.addProperty(RDF.type, OWL.ObjectProperty);
+        
+        this.hasFileName = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasFileName");
+        this.hasFileName.addProperty(RDFS.label, "File name");
+        this.hasFileName.addProperty(RDF.type, OWL.ObjectProperty);
+                
+                
         rdfModel.setNsPrefix("PDXNET", PDXNET_NAMESPACE);
         rdfModel.setNsPrefix("NCIT", NCIT_NAMESPACE);
         rdfModel.setNsPrefix("UBERON", UBERON_NAMESPACE);
