@@ -15,11 +15,11 @@ import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
 public class PdxModel {
 
 
-    private final PdxPatient patient;
+    private final PdxPatient patient;  // contains patient treatments
     private final ArrayList<PdxClinicalTumor> clinicalTumors;
     private final ArrayList<PdxModelCreation> modelCreations;
     private final ArrayList<PdxQualityAssurance> qualityAssurances;
-    private final ArrayList<PdxModelStudy> modelStudies;
+    private final ArrayList<PdxModelStudy> modelStudies;  // contains study treatmnets
     private final ArrayList<PdxOmicsFile> omicsFiles;
 
 
