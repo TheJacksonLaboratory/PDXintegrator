@@ -7,155 +7,220 @@ package org.jax.pdxintegrator.model.modelcreation;
  */
 public class PdxModelCreation {
 
-    public String getSubmitterPdxId() {
-        return submitterPdxId;
+    private String tumorID;
+    private String modelID;
+    private int passage;
+    private String mouseStrain;
+    private String mouseSource;
+    private String mouseSex;
+    private boolean humanized;
+    private String humanizationType;
+    private String engraftmentProcedure;
+    private String engraftmnetSite;
+    private String treatmentForEngraftment;
+    private boolean tissueCryoPreserved;
+    private String engraftmentRate;
+    private String engraftmentTime;
+    
+    public PdxModelCreation(String tumorID, String modelID){
+        this.tumorID = tumorID;
+        this.modelID = modelID;
     }
 
+    /**
+     * @return the tumorID
+     */
+    public String getTumorID() {
+        return tumorID;
+    }
+
+    /**
+     * @param tumorID the tumorID to set
+     */
+    public void setTumorID(String tumorID) {
+        this.tumorID = tumorID;
+    }
+
+    /**
+     * @return the modelID
+     */
+    public String getModelID() {
+        return modelID;
+    }
+
+    /**
+     * @param modelID the modelID to set
+     */
+    public void setModelID(String modelID) {
+        this.modelID = modelID;
+    }
+
+    /**
+     * @return the passage
+     */
+    public int getPassage() {
+        return passage;
+    }
+
+    /**
+     * @param passage the passage to set
+     */
+    public void setPassage(int passage) {
+        this.passage = passage;
+    }
+
+    /**
+     * @return the mouseStrain
+     */
     public String getMouseStrain() {
         return mouseStrain;
     }
 
+    /**
+     * @param mouseStrain the mouseStrain to set
+     */
+    public void setMouseStrain(String mouseStrain) {
+        this.mouseStrain = mouseStrain;
+    }
+
+    /**
+     * @return the mouseSource
+     */
     public String getMouseSource() {
         return mouseSource;
     }
 
-    public boolean isStrainImmuneSystemHumanized() {
-        return strainImmuneSystemHumanized;
+    /**
+     * @param mouseSource the mouseSource to set
+     */
+    public void setMouseSource(String mouseSource) {
+        this.mouseSource = mouseSource;
     }
 
+    /**
+     * @return the mouseSex
+     */
+    public String getMouseSex() {
+        return mouseSex;
+    }
+
+    /**
+     * @param mouseSex the mouseSex to set
+     */
+    public void setMouseSex(String mouseSex) {
+        this.mouseSex = mouseSex;
+    }
+
+    /**
+     * @return the humanized
+     */
+    public boolean isHumanized() {
+        return humanized;
+    }
+
+    /**
+     * @param humanized the humanized to set
+     */
+    public void setHumanized(boolean humanized) {
+        this.humanized = humanized;
+    }
+
+    /**
+     * @return the humanizationType
+     */
     public String getHumanizationType() {
         return humanizationType;
     }
 
-    public TumorPrepMethod getTumorPreparation() {
-        return tumorPreparation;
+    /**
+     * @param humanizationType the humanizationType to set
+     */
+    public void setHumanizationType(String humanizationType) {
+        this.humanizationType = humanizationType;
     }
 
-    public String getInjectionType() {
-        return injectionType;
+    /**
+     * @return the engraftmnetProcedure
+     */
+    public String getEngraftmentProcedure() {
+        return engraftmentProcedure;
     }
 
-    public MouseTreatmentForEngraftment getMouseTreatmentForEngraftment() {
-        return mouseTreatmentForEngraftment;
+    /**
+     * @param engraftmentProcedure the engraftmentProcedure to set
+     */
+    public void setEngraftmentProcedure(String engraftmentProcedure) {
+        this.engraftmentProcedure = engraftmentProcedure;
     }
 
-    public double getEngraftmentRate() {
+    /**
+     * @return the engraftmnetSite
+     */
+    public String getEngraftmnetSite() {
+        return engraftmnetSite;
+    }
+
+    /**
+     * @param engraftmnetSite the engraftmnetSite to set
+     */
+    public void setEngraftmnetSite(String engraftmnetSite) {
+        this.engraftmnetSite = engraftmnetSite;
+    }
+
+    /**
+     * @return the treatmentForEngraftment
+     */
+    public String getTreatmentForEngraftment() {
+        return treatmentForEngraftment;
+    }
+
+    /**
+     * @param treatmentForEngraftment the treatmentForEngraftment to set
+     */
+    public void setTreatmentForEngraftment(String treatmentForEngraftment) {
+        this.treatmentForEngraftment = treatmentForEngraftment;
+    }
+
+    /**
+     * @return the tissueCryoPreserved
+     */
+    public boolean isTissueCryoPreserved() {
+        return tissueCryoPreserved;
+    }
+
+    /**
+     * @param tissueCryoPreserved the tissueCryoPreserved to set
+     */
+    public void setTissueCryoPreserved(boolean tissueCryoPreserved) {
+        this.tissueCryoPreserved = tissueCryoPreserved;
+    }
+
+    /**
+     * @return the engraftmentRate
+     */
+    public String getEngraftmentRate() {
         return engraftmentRate;
     }
 
-    public int getEngraftmentTimeInDays() {
-        return engraftmentTimeInDays;
-    }
-
-    private final String submitterPdxId;
-    private final String mouseStrain;
-    private final String mouseSource;
-    private final boolean strainImmuneSystemHumanized;
-    private String humanizationType;
-    private TumorPrepMethod tumorPreparation;
-    private String injectionType;
-    private MouseTreatmentForEngraftment mouseTreatmentForEngraftment;
-    private double engraftmentRate;
-    private int engraftmentTimeInDays;
-
-    private PdxModelCreation(String id,
-            String strain,
-            String source,
-            boolean humanized,
-            String humanizationType,
-            TumorPrepMethod tumorPrep,
-            String injectionType,
-            MouseTreatmentForEngraftment mouseTreatmentEngraftment,
-            double engraftmentRate,
-            int engraftmentTimeInDays) {
-        submitterPdxId = id;
-        mouseStrain = strain;
-        mouseSource = source;
-        strainImmuneSystemHumanized = humanized;
-        this.humanizationType = humanizationType;
-        this.tumorPreparation = tumorPrep;
-        this.injectionType = injectionType;
-        this.mouseTreatmentForEngraftment = mouseTreatmentEngraftment;
+    /**
+     * @param engraftmentRate the engraftmentRate to set
+     */
+    public void setEngraftmentRate(String engraftmentRate) {
         this.engraftmentRate = engraftmentRate;
-        this.engraftmentTimeInDays = engraftmentTimeInDays;
     }
 
-    public static class Builder {
+    /**
+     * @return the engraftmentTime
+     */
+    public String getEngraftmentTime() {
+        return engraftmentTime;
+    }
 
-        // initialize with n/a for unavailable. Builder will fill out whatever is available.
-        private final String SubmitterPdxId;
-        private String mouseStrain = "n/a";
-        private String mouseSource = "n/a";
-        private boolean strainImmuneSystemHumanized = false;
-        private String humanizationType = "n/a";
-        private TumorPrepMethod TumorPreparation = null;
-        private String injectionType = "n/a";
-        private MouseTreatmentForEngraftment mouseTreatmentForEngraftment = null;
-        private double engraftmentRate = 0D;
-        private int engraftmentTimeInDays = 0;
-
-        public Builder(String id) {
-            SubmitterPdxId = id;
-        }
-
-        public Builder mouseStrain(String strain) {
-            this.mouseStrain = strain;
-            return this;
-        }
-
-        public Builder mouseSource(String source) {
-            this.mouseSource = source;
-            return this;
-        }
-
-        public Builder immuneSystemHumanized(boolean humanized) {
-            this.strainImmuneSystemHumanized = humanized;
-            return this;
-        }
-
-        public Builder tumorPreparationMethod(TumorPrepMethod prep) {
-            this.TumorPreparation = prep;
-            return this;
-        }
-
-        public Builder humanizationType(String type) {
-            this.humanizationType = type;
-            return this;
-        }
-
-        public Builder injectionType(String type) {
-            this.injectionType = type;
-            return this;
-        }
-
-        public Builder mouseTreatmentForEngraftment(MouseTreatmentForEngraftment type) {
-            this.mouseTreatmentForEngraftment = type;
-            return this;
-        }
-
-        public Builder engraftmentRate(double rate) {
-            this.engraftmentRate = rate;
-            return this;
-        }
-
-        public Builder engraftmentTimeInDays(int days) {
-            this.engraftmentTimeInDays = days;
-            return this;
-        }
-
-        public PdxModelCreation build() {
-            return new PdxModelCreation(SubmitterPdxId,
-                    mouseStrain,
-                    mouseSource,
-                    strainImmuneSystemHumanized,
-                    humanizationType,
-                    TumorPreparation,
-                    injectionType,
-                    mouseTreatmentForEngraftment,
-                    engraftmentRate,
-                    engraftmentTimeInDays);
-        }
-
+    /**
+     * @param engraftmentTime the engraftmentTime to set
+     */
+    public void setEngraftmentTime(String engraftmentTime) {
+        this.engraftmentTime = engraftmentTime;
     }
 
 }

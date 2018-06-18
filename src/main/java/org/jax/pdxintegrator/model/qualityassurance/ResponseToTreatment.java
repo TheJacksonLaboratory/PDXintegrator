@@ -1,6 +1,6 @@
 package org.jax.pdxintegrator.model.qualityassurance;
 
-public enum ResponseToStandardOfCare {
+public enum ResponseToTreatment {
 
     NOT_ASSESSED("Not assessed"),
     COMPLETE_RESPONSE("Complete response"),
@@ -10,7 +10,7 @@ public enum ResponseToStandardOfCare {
 
     private final String name;
 
-    ResponseToStandardOfCare(String n) {
+    ResponseToTreatment(String n) {
         name=n;
     }
 

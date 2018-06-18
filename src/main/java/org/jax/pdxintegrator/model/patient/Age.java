@@ -5,6 +5,7 @@ package org.jax.pdxintegrator.model.patient;
  * age at specimen collection?
  */
 public enum Age {
+    notProvided("Not provided"),
     age0_4("0-4 years"),
     age5_9("5-9 years"),
     age10_14("10-14 years"),

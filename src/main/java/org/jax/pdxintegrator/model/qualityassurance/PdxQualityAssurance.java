@@ -5,74 +5,79 @@ package org.jax.pdxintegrator.model.qualityassurance;
  */
 public class PdxQualityAssurance {
 
-    private final ModelCharacterization tumorCharacterizationTechnology;
-
-
-    private final boolean tumorNotMouseNotEbv;
-    private final ResponseToStandardOfCare response;
-    private final boolean animalHealthStatusSufficient;
-    private final boolean passageQaPerformed;
-
-    private PdxQualityAssurance(ModelCharacterization characterization, boolean notMouseNotEbv, boolean passageQa, ResponseToStandardOfCare resp, boolean animalHeatlStatus){
-        this.tumorCharacterizationTechnology=characterization;
-        this.tumorNotMouseNotEbv=notMouseNotEbv;
-        this.response=resp;
-        this.animalHealthStatusSufficient=animalHeatlStatus;
-        this.passageQaPerformed=passageQa;
+    private String modelID;
+    private int passage;
+    private String qcMethod;
+    private String qcResult;
+    private String animalHealthStatus;
+    
+    
+    public PdxQualityAssurance(String modelID){
+        this.modelID = modelID;
     }
 
-    public ModelCharacterization getTumorCharacterizationTechnology() {
-        return tumorCharacterizationTechnology;
+    /**
+     * @return the modelID
+     */
+    public String getModelID() {
+        return modelID;
     }
 
-    public boolean isTumorNotMouseNotEbv() {
-        return tumorNotMouseNotEbv;
+    /**
+     * @return the passage
+     */
+    public int getPassage() {
+        return passage;
     }
 
-    public ResponseToStandardOfCare getResponse() {
-        return response;
+    /**
+     * @param passage the passage to set
+     */
+    public void setPassage(int passage) {
+        this.passage = passage;
     }
 
-    public boolean isAnimalHealthStatusSufficient() {
-        return animalHealthStatusSufficient;
+    /**
+     * @return the qcMethod
+     */
+    public String getQcMethod() {
+        return qcMethod;
     }
 
-    public boolean isPassageQaPerformed() {
-        return passageQaPerformed;
+    /**
+     * @param qcMethod the qcMethod to set
+     */
+    public void setQcMethod(String qcMethod) {
+        this.qcMethod = qcMethod;
     }
 
-
-    public static class Builder {
-        private ModelCharacterization tumorCharacterizationTechnology;
-        private boolean tumorNotMouseNotEbv;
-        private ResponseToStandardOfCare response;
-        private boolean animalHealthStatusSufficient;
-        private boolean passageQaPerformed;
-
-        public Builder(ModelCharacterization characterization, boolean notMouseNotEbv, boolean passageQa) {
-            tumorCharacterizationTechnology=characterization;
-            tumorNotMouseNotEbv=notMouseNotEbv;
-            passageQaPerformed=passageQa;
-        }
-
-        public Builder response(ResponseToStandardOfCare rep) {
-            this.response=rep;
-            return this;
-        }
-
-        public Builder animalHealthStatusOk(boolean ok) {
-            this.animalHealthStatusSufficient=ok;
-            return this;
-        }
-
-
-        public PdxQualityAssurance build() {
-            return new PdxQualityAssurance(tumorCharacterizationTechnology,
-                    tumorNotMouseNotEbv,
-                    passageQaPerformed,
-                    response, animalHealthStatusSufficient);
-        }
-
-
+    /**
+     * @return the qcResult
+     */
+    public String getQcResult() {
+        return qcResult;
     }
+
+    /**
+     * @param qcResult the qcResult to set
+     */
+    public void setQcResult(String qcResult) {
+        this.qcResult = qcResult;
+    }
+
+    /**
+     * @return the animalHealthStatus
+     */
+    public String getAnimalHealthStatus() {
+        return animalHealthStatus;
+    }
+
+    /**
+     * @param animalHealthStatus the animalHealthStatus to set
+     */
+    public void setAnimalHealthStatus(String animalHealthStatus) {
+        this.animalHealthStatus = animalHealthStatus;
+    }
+
+   
 }
