@@ -574,7 +574,7 @@ public class PdxModel2Rdf {
             }
             if(omicsFile.getModelID()!=null){
                 this.rdfModel.getResource(String.format("%s/%s", PDXNET_NAMESPACE, omicsFile.getModelID())).addProperty(this.hasOmicsFile, thisOmicsFile);
-                thisOmicsFile.addProperty(this.hasModelAssociation,String.format("%s/%s", PDXNET_NAMESPACE, omicsFile.getModelID()));
+                thisOmicsFile.addProperty(this.hasModelAssociation,this.rdfModel.getResource(String.format("%s/%s", PDXNET_NAMESPACE, omicsFile.getModelID())));
             }
             
             thisOmicsFile.addProperty(this.hasAccessLevel, omicsFile.getAccessLevel());
