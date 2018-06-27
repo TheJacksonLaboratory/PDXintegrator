@@ -148,6 +148,8 @@ public class CommandParser {
                     printUsage("[ERROR] --drugbank option required for drugbank command");
                 }
                 this.command = new DrugBankCommand(drugBankPath,DEFAULT_DRUGBANK_OUTPUT_FILE);
+            } else if (mycommand.equals("JAXData")){
+                this.command = new JAXDataCommand();
             }else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));
             }
