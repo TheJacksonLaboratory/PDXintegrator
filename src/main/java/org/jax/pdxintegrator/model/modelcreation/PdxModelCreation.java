@@ -6,10 +6,13 @@ package org.jax.pdxintegrator.model.modelcreation;
  * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
  */
 public class PdxModelCreation {
+    
+    //Fields: Tumor ID, Model ID, Host Strain, Mouse Source, Mouse Sex, Is Mouse Humanized, Humanization Type, Engraftment Procedure, Engraftment Site, Treatment for Engraftment, 
+    //PDX Model Histology, Was passaged tissue cryopreserved, Passaged tissue engraftment rate, Passaged tissue engraftment time, Subline of Model, Subline Reason
 
     private String tumorID;
+    // pdmr or institution creating model?
     private String modelID;
-    private int passage;
     private String mouseStrain;
     private String mouseSource;
     private String mouseSex;
@@ -18,9 +21,12 @@ public class PdxModelCreation {
     private String engraftmentProcedure;
     private String engraftmnetSite;
     private String treatmentForEngraftment;
-    private boolean tissueCryoPreserved;
+    private String modelHistology;
+    private Boolean passagedTissueCryoPreserved;
     private String engraftmentRate;
     private String engraftmentTime;
+    private String sublineOfModel;
+    private String sublineReason;
     
     public PdxModelCreation(String tumorID, String modelID){
         this.tumorID = tumorID;
@@ -55,19 +61,7 @@ public class PdxModelCreation {
         this.modelID = modelID;
     }
 
-    /**
-     * @return the passage
-     */
-    public int getPassage() {
-        return passage;
-    }
-
-    /**
-     * @param passage the passage to set
-     */
-    public void setPassage(int passage) {
-        this.passage = passage;
-    }
+   
 
     /**
      * @return the mouseStrain
@@ -181,18 +175,12 @@ public class PdxModelCreation {
         this.treatmentForEngraftment = treatmentForEngraftment;
     }
 
-    /**
-     * @return the tissueCryoPreserved
-     */
-    public boolean isTissueCryoPreserved() {
-        return tissueCryoPreserved;
+    public Boolean getPassagedTissueCryoPreserved() {
+        return passagedTissueCryoPreserved;
     }
 
-    /**
-     * @param tissueCryoPreserved the tissueCryoPreserved to set
-     */
-    public void setTissueCryoPreserved(boolean tissueCryoPreserved) {
-        this.tissueCryoPreserved = tissueCryoPreserved;
+    public void setPassagedTissueCryoPreserved(boolean tissueCryoPreserved) {
+        this.passagedTissueCryoPreserved = tissueCryoPreserved;
     }
 
     /**
@@ -221,6 +209,48 @@ public class PdxModelCreation {
      */
     public void setEngraftmentTime(String engraftmentTime) {
         this.engraftmentTime = engraftmentTime;
+    }
+
+    /**
+     * @return the modelHistology
+     */
+    public String getModelHistology() {
+        return modelHistology;
+    }
+
+    /**
+     * @param modelHistology the modelHistology to set
+     */
+    public void setModelHistology(String modelHistology) {
+        this.modelHistology = modelHistology;
+    }
+
+    /**
+     * @return the sublineOfModel
+     */
+    public String getSublineOfModel() {
+        return sublineOfModel;
+    }
+
+    /**
+     * @param sublineOfModel the sublineOfModel to set
+     */
+    public void setSublineOfModel(String sublineOfModel) {
+        this.sublineOfModel = sublineOfModel;
+    }
+
+    /**
+     * @return the sublineReason
+     */
+    public String getSublineReason() {
+        return sublineReason;
+    }
+
+    /**
+     * @param sublineReason the sublineReason to set
+     */
+    public void setSublineReason(String sublineReason) {
+        this.sublineReason = sublineReason;
     }
 
 }

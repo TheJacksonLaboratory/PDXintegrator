@@ -8,31 +8,34 @@ import com.github.phenomics.ontolib.ontology.data.TermId;
  */
 public class PdxClinicalTumor {
 
+    //Fields: Patient ID, Tumor ID, Event Index, Treatment Naïve, Age at collection, Initial Diagnosis, Primary Tissue, Disease Progression, 
+    //Specimen Tissue, Tissue Histology, Clinical Diagnostic Markers, Tumor Grade, T Stage, N Stage , M Stage, Overall Stage, Sample Type
 
     private String patientID;
     private String submitterTumorID;
-    /** The term id for an UBERON term for the anatomical tissue of origin of the tumor. */
+    private String eventIndex;
+    private boolean treatmentNaive;
+    private String ageAtCollection;
+    private String initialDiagnosis;
+    private TermId initialDiagnosisTerm;
     private String tissueOfOrigin; // primary tissue
     private TermId tissueOfOriginTerm;
+    private String diseaseProgression;
     /** NCIT Term id for primary, recurrence, metastasis. */
-    private TermId categoryTerm; // disease progression
+    private TermId diseaseProgressionTerm; // disease progression
     private String specimenTissue;
     private TermId specimenTissueTerm;
-    
     private String tissueHistology;
     /** NCIT Term id for tissue histology */
     private TermId tissueHistologyTerm;
-    
     private String clinicalMarkers;
     private String tumorGrade;
     private String tStage;
     private String nStage;
     private String mStage;
     private String overallStage;
-    private boolean treatmentNaive;
     private String sampleType;
-    private String sublineOf;
-    private String sublineReason;
+    
     
    
 
@@ -90,19 +93,7 @@ public class PdxClinicalTumor {
         this.tissueOfOriginTerm = tissueOfOriginTerm;
     }
 
-    /**
-     * @return the categoryTerm
-     */
-    public TermId getCategoryTerm() {
-        return categoryTerm;
-    }
-
-    /**
-     * @param categoryTerm the categoryTerm to set
-     */
-    public void setCategoryTerm(TermId categoryTerm) {
-        this.categoryTerm = categoryTerm;
-    }
+    
 
     /**
      * @return the specimenTissue
@@ -178,42 +169,42 @@ public class PdxClinicalTumor {
      * @return the tStage
      */
     public String getTStage() {
-        return tStage;
+        return gettStage();
     }
 
     /**
      * @param tStage the tStage to set
      */
     public void setTStage(String tStage) {
-        this.tStage = tStage;
+        this.settStage(tStage);
     }
 
     /**
      * @return the nStage
      */
     public String getNStage() {
-        return nStage;
+        return getnStage();
     }
 
     /**
      * @param nStage the nStage to set
      */
     public void setNStage(String nStage) {
-        this.nStage = nStage;
+        this.setnStage(nStage);
     }
 
     /**
      * @return the mStage
      */
     public String getMStage() {
-        return mStage;
+        return getmStage();
     }
 
     /**
      * @param mStage the mStage to set
      */
     public void setMStage(String mStage) {
-        this.mStage = mStage;
+        this.setmStage(mStage);
     }
 
     /**
@@ -258,34 +249,7 @@ public class PdxClinicalTumor {
         this.sampleType = sampleType;
     }
 
-    /**
-     * @return the sublineOf
-     */
-    public String getSublineOf() {
-        return sublineOf;
-    }
-
-    /**
-     * @param sublineOf the sublineOf to set
-     */
-    public void setSublineOf(String sublineOf) {
-        this.sublineOf = sublineOf;
-    }
-
-    /**
-     * @return the sublineReason
-     */
-    public String getSublineReason() {
-        return sublineReason;
-    }
-
-    /**
-     * @param sublineReason the sublineReason to set
-     */
-    public void setSublineReason(String sublineReason) {
-        this.sublineReason = sublineReason;
-    }
-
+    
     /**
      * @return the tissueOfOrigin
      */
@@ -305,6 +269,132 @@ public class PdxClinicalTumor {
      */
     public String getTumorGrade() {
         return tumorGrade;
+    }
+
+    /**
+     * @return the eventIndex
+     */
+    public String getEventIndex() {
+        return eventIndex;
+    }
+
+    /**
+     * @param eventIndex the eventIndex to set
+     */
+    public void setEventIndex(String eventIndex) {
+        this.eventIndex = eventIndex;
+    }
+
+    /**
+     * @return the ageAtCollection
+     */
+    public String getAgeAtCollection() {
+        return ageAtCollection;
+    }
+
+    /**
+     * @param ageAtCollection the ageAtCollection to set
+     */
+    public void setAgeAtCollection(String ageAtCollection) {
+        this.ageAtCollection = ageAtCollection;
+    }
+
+    /**
+     * @return the initialDiagnosis
+     */
+    public String getInitialDiagnosis() {
+        return initialDiagnosis;
+    }
+
+    /**
+     * @param initialDiagnosis the initialDiagnosis to set
+     */
+    public void setInitialDiagnosis(String initialDiagnosis) {
+        this.initialDiagnosis = initialDiagnosis;
+    }
+
+    /**
+     * @return the initialDiagnosisTerm
+     */
+    public TermId getInitialDiagnosisTerm() {
+        return initialDiagnosisTerm;
+    }
+
+    /**
+     * @param initialDiagnosisTerm the initialDiagnosisTerm to set
+     */
+    public void setInitialDiagnosisTerm(TermId initialDiagnosisTerm) {
+        this.initialDiagnosisTerm = initialDiagnosisTerm;
+    }
+
+    /**
+     * @return the diseaseProgression
+     */
+    public String getDiseaseProgression() {
+        return diseaseProgression;
+    }
+
+    /**
+     * @param diseaseProgression the diseaseProgression to set
+     */
+    public void setDiseaseProgression(String diseaseProgression) {
+        this.diseaseProgression = diseaseProgression;
+    }
+
+    /**
+     * @return the diseaseProgressionTerm
+     */
+    public TermId getDiseaseProgressionTerm() {
+        return diseaseProgressionTerm;
+    }
+
+    /**
+     * @param diseaseProgressionTerm the diseaseProgressionTerm to set
+     */
+    public void setDiseaseProgressionTerm(TermId diseaseProgressionTerm) {
+        this.diseaseProgressionTerm = diseaseProgressionTerm;
+    }
+
+    /**
+     * @return the tStage
+     */
+    public String gettStage() {
+        return tStage;
+    }
+
+    /**
+     * @param tStage the tStage to set
+     */
+    public void settStage(String tStage) {
+        this.tStage = tStage;
+    }
+
+    /**
+     * @return the nStage
+     */
+    public String getnStage() {
+        return nStage;
+    }
+
+    /**
+     * @param nStage the nStage to set
+     */
+    public void setnStage(String nStage) {
+        this.nStage = nStage;
+    }
+
+    /**
+     * @return the mStage
+     */
+    public String getmStage() {
+        return mStage;
+    }
+
+    /**
+     * @param mStage the mStage to set
+     */
+    public void setmStage(String mStage) {
+        this.mStage = mStage;
     }
 
     

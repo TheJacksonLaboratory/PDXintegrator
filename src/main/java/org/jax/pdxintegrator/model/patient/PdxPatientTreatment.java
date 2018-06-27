@@ -12,39 +12,33 @@ import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
  * @author sbn
  */
 public class PdxPatientTreatment {
-    private int index;
-    private boolean postSample;
+    
+    //Fields: Patient ID, Event Index, clincal treatment setting, Regimen (Drug), Response, Reason Stopped, Treatment Notes
+    //done
+    
+    private String patientID;
+    private String eventIndex;
+    private String clinicalTreatmentSetting;
     private String regimen;
     private ResponseToTreatment response;
     private String reasonStopped;
+    private String treatmentNotes;
 
     /**
      * @return the index
      */
-    public int getIndex() {
-        return index;
+    public String getEventIndex() {
+        return eventIndex;
     }
 
     /**
      * @param index the index to set
      */
-    public void setIndex(int index) {
-        this.index = index;
+    public void setEventIndex(String index) {
+        this.eventIndex = index;
     }
 
-    /**
-     * @return the postSample
-     */
-    public boolean isPostSample() {
-        return postSample;
-    }
-
-    /**
-     * @param postSample the postSample to set
-     */
-    public void setPostSample(boolean postSample) {
-        this.postSample = postSample;
-    }
+   
 
     /**
      * @return the regimen
@@ -86,6 +80,48 @@ public class PdxPatientTreatment {
      */
     public void setReasonStopped(String reasonStopped) {
         this.reasonStopped = reasonStopped;
+    }
+
+    /**
+     * @return the treatmentNotes
+     */
+    public String getTreatmentNotes() {
+        return treatmentNotes;
+    }
+
+    /**
+     * @param treatmentNotes the treatmentNotes to set
+     */
+    public void setTreatmentNotes(String treatmentNotes) {
+        this.treatmentNotes = treatmentNotes;
+    }
+
+    /**
+     * @return the patientID
+     */
+    public String getPatientID() {
+        return patientID;
+    }
+
+    /**
+     * @param patientID the patientID to set
+     */
+    public void setPatientID(String patientID) {
+        this.patientID = patientID;
+    }
+
+    /**
+     * @return the clinicalTreatmentSetting
+     */
+    public String getClinicalTreatmentSetting() {
+        return clinicalTreatmentSetting;
+    }
+
+    /**
+     * @param clinicalTreatmentSetting the clinicalTreatmentSetting to set
+     */
+    public void setClinicalTreatmentSetting(String clinicalTreatmentSetting) {
+        this.clinicalTreatmentSetting = clinicalTreatmentSetting;
     }
           
     

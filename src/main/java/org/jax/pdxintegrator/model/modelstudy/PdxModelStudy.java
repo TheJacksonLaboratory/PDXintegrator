@@ -1,6 +1,5 @@
 package org.jax.pdxintegrator.model.modelstudy;
 
-import com.github.phenomics.ontolib.ontology.data.TermId;
 import java.util.ArrayList;
 import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
 
@@ -10,14 +9,14 @@ public class PdxModelStudy {
     private String studyID;
     private boolean metastasis;
     private int metastasisPassage;
-    private TermId metastasisLocation; // could be multiple locations
-    private int doublingLagTime;  // days?
-    private ResponseToTreatment response;
+    private String metastasisLocation; // could be multiple locations
+    private int doublingLagTime;  // days? (I removed this)
+    
     private ArrayList<PdxStudyTreatment> treatments;
 
     private PdxModelStudy(String modelID, String studyID, ArrayList<PdxStudyTreatment> treatments,
-            boolean metastasis, int metastasisPassage, TermId metastasisLocation,
-            int doublingLagTime, ResponseToTreatment response ) {
+            boolean metastasis, int metastasisPassage, String metastasisLocation,
+            int doublingLagTime) {
         this.modelID = modelID;
         this.studyID = studyID;
         this.treatments = treatments;
@@ -25,14 +24,10 @@ public class PdxModelStudy {
         this.metastasisPassage = metastasisPassage;
         this.metastasisLocation = metastasisLocation;
         this.doublingLagTime = doublingLagTime;
-        this.response = response;
+        
        
 
     }
-
-    
-
-    
 
     /**
      * @return the metastasis
@@ -51,7 +46,7 @@ public class PdxModelStudy {
     /**
      * @return the metastasisLocation
      */
-    public TermId getMetastasisLocation() {
+    public String getMetastasisLocation() {
         return metastasisLocation;
     }
 
@@ -76,20 +71,7 @@ public class PdxModelStudy {
         this.treatments = treatments;
     }
 
-    /**
-     * @return the response
-     */
-    public ResponseToTreatment getResponse() {
-        return response;
-    }
-
-    /**
-     * @param response the response to set
-     */
-    public void setResponse(ResponseToTreatment response) {
-        this.response = response;
-    }
-
+   
     /**
      * @return the studyID
      */
@@ -120,7 +102,7 @@ public class PdxModelStudy {
         private ArrayList<PdxStudyTreatment> treatments;
         private boolean metastasis;
         private int metastasisPassage;
-        private TermId metastasisLocation; // could be multiple locations
+        private String metastasisLocation; // could be multiple locations
         private int doublingLagTime;  // days?
         private ResponseToTreatment response;
       
@@ -140,7 +122,7 @@ public class PdxModelStudy {
             return this;
         }
 
-        public Builder metastasisLocation(TermId metastasesLocation) {
+        public Builder metastasisLocation(String metastasesLocation) {
             this.metastasisLocation = metastasesLocation;
             return this;
         }
@@ -150,17 +132,13 @@ public class PdxModelStudy {
             return this;
         }
         
-        public Builder response(ResponseToTreatment response){
-            this.response = response;
-            return this;
-        }
-
+       
      
 
         public PdxModelStudy build() {
             return new PdxModelStudy(modelID,studyID, treatments,
                     metastasis, metastasisPassage, metastasisLocation,
-                    doublingLagTime, response);
+                    doublingLagTime);
         }
 
     }

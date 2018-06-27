@@ -162,7 +162,6 @@ public class PdxModelSimulator {
             int engraftmentDays=getRandomEngraftmentTime();
 
             PdxModelCreation modelCreation =  new PdxModelCreation(tumorID,modelID);
-            modelCreation.setPassage(random.nextInt(5));
             modelCreation.setMouseStrain("NOD.Cg-Prkdc<scid> Il2rg<tm1Wj>l/SzJ");
             modelCreation.setMouseSource("JAX");
             modelCreation.setMouseSex(random.nextInt(1) > 0 ? "Male":"Female");
@@ -188,32 +187,42 @@ public class PdxModelSimulator {
             /* Populate these fields
                 private String patientID;
                 private String submitterTumorID;
+                private String eventIndex;
+                private boolean treatmentNaive;
+                private String ageAtCollection;
+                private String initialDiagnosis;
+                private TermId initialDiagnosisTerm;
+
+                // The term id for an UBERON term for the anatomical tissue of origin of the tumor. 
                 private String tissueOfOrigin; // primary tissue
                 private TermId tissueOfOriginTerm;
-                private TermId categoryTerm; // disease progression
+                private String diseaseProgression;
+                // NCIT Term id for primary, recurrence, metastasis.
+                private TermId diseaseProgressionTerm; // disease progression
                 private String specimenTissue;
-                private TermId specimenTissueTerm
+                private TermId specimenTissueTerm;
+
                 private String tissueHistology;
+                // NCIT Term id for tissue histology 
                 private TermId tissueHistologyTerm;
+
                 private String clinicalMarkers;
                 private String tumorGrade;
                 private String tStage;
-                private String NStage;
-                private String MStage;
+                private String nStage;
+                private String mStage;
                 private String overallStage;
-                private boolean treatmentNaive;
                 private String sampleType;
-                private String sublineOf;
-                private String sublineReason;
+
             */
             String tumorID=String.format("TUMOR-%s",patient.getSubmitterPatientID())+"-"+count;
-            TermId uberon = getUberonId(patient.getDiagnosisTerm());
+            TermId uberon = getUberonId(diagnosis);
             TermId category = getRandomTumorCategory();
-            TermId diagnosis = patient.getDiagnosisTerm();
+            
             TermId grade = getRandomTumorGrade();
             TermId stage = getRandomStage();
             PdxClinicalTumor tumor = new PdxClinicalTumor(patient.getSubmitterPatientID(),tumorID);
-            tumor.setCategoryTerm(category);
+            tumor.setDiseaseProgressionTerm(category);
             tumor.setClinicalMarkers("BRCA+");
             tumor.setMStage(("MStagePlaceholder"));
             tumor.setNStage("NstagePlaceholder");
@@ -228,8 +237,6 @@ public class PdxModelSimulator {
             tumor.setTissueHistologyTerm(diagnosis);
             tumor.setSpecimenTissue(uberon.toString());
             tumor.setSpecimenTissueTerm(uberon);
-            tumor.setSublineOf("subline of modelX");
-            tumor.setSublineReason("subline reason");
             tumors.add(tumor);
             count--;
             
@@ -266,10 +273,10 @@ public class PdxModelSimulator {
             PdxModelStudy.Builder builder = new PdxModelStudy.Builder(modelID, "Study-"+modelID+"-"+count).doublingLagTime(10);
             if(getRandomBoolean()){
                 builder.metastasis(true);
-                builder.metastasisLocation(getUberonId(null));
+                builder.metastasisLocation(getUberonId(null).toString());
                 
             }
-            builder.response(getRandomResponseToStandardOfCare());
+           
             builder.treatments(buildStudyTreatments("Study-"+modelID+"-"+count));
             studies.add(builder.build());
             count--;
@@ -297,14 +304,13 @@ public class PdxModelSimulator {
         */
         ArrayList<PdxPatientTreatment> treatments = buildPatientTreatments();
         String virologyStatus = "HIV-/HPV+";
-        PdxPatient.Builder builder= new PdxPatient.Builder(patientID);
+        PdxPatient.Builder builder= new PdxPatient.Builder("PDTCName",patientID);
         builder.virologyStatus(virologyStatus);
         builder.treatments(treatments);
-        builder.diagnosisTerms(diagnosis);
-        builder.diagnosis(diagnosis.toString());
+        
         builder.sex(sex);
         builder.consent(consent);
-        builder.ageAtCollection(age);
+       
         builder.ageAtDiagnosis(age);
         builder.ethnicity("hispanic");
         builder.race("caucasian");
@@ -319,8 +325,8 @@ public class PdxModelSimulator {
         int numTreatments = random.nextInt(4);
         while(numTreatments > 0){
             PdxPatientTreatment treatment = new PdxPatientTreatment();
-            treatment.setIndex(numTreatments);
-            treatment.setPostSample(false);
+            treatment.setEventIndex(numTreatments+"");
+            
             treatment.setRegimen(this.getRandomCancerDrug());
             treatment.setReasonStopped("did not tolerate");
             treatment.setResponse(this.getRandomResponseToStandardOfCare());

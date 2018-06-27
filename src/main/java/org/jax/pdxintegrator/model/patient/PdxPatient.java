@@ -8,18 +8,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PdxPatient {
+    
+    //Fields: PDTC, Patient ID, Sex, Age at Primary Diagnosis, Race, Ethnicity, Virology Status, Consent
+    // done
 
+    private String pdtc;
     private final String submitterPatientID;
     private final Sex sex;
     private final Age ageAtDiagnosis;
-    private final Age ageAtCollection;
-    private final TermId diagnosisTerm;
-    private final String diagnosis;
     private final Consent consent;
     private final String ethnicity;
     private final String race;
     private ArrayList<PdxPatientTreatment> patientTreatments;
     private String virologyStatus;
+    private String clinicalTreatmentSetting;
+    private String treatmentNotes;
 
  
     public String getSubmitterPatientID() {
@@ -34,17 +37,7 @@ public class PdxPatient {
         return ageAtDiagnosis;
     }
     
-    public Age getAgeAtCollection() {
-        return ageAtCollection;
-    }
-
-    public TermId getDiagnosisTerm() {
-        return diagnosisTerm;
-    }
     
-    public String diagnosis() {
-        return diagnosis;
-    }
 
     public Consent getConsent() {
         return consent;
@@ -58,18 +51,19 @@ public class PdxPatient {
         return ethnicity;
     }
 
-    private PdxPatient(String id, Sex s, Age ageAtDiagnosis, Age ageAtCollection, TermId dx, String diagnosis, Consent c, String race, String ethnicity, ArrayList<PdxPatientTreatment> rx, String vs){
+    private PdxPatient(String pdtc, String id, Sex s, Age ageAtDiagnosis,  Consent c, String race, String ethnicity, ArrayList<PdxPatientTreatment> rx, String vs,
+                       String clinicalTreatmentSetting, String treatmentNotes){
+        this.pdtc = pdtc;
         this.submitterPatientID=id;
         this.sex= s;
         this.ageAtDiagnosis = ageAtDiagnosis;
-        this.ageAtCollection = ageAtCollection;
-        this.diagnosisTerm=dx;
-        this.diagnosis = diagnosis;
         this.consent=c;
         this.ethnicity=ethnicity;
         this.race = race;
         this.patientTreatments=rx;
         this.virologyStatus = vs;
+        this.clinicalTreatmentSetting = clinicalTreatmentSetting;
+        this.treatmentNotes = treatmentNotes;
     }
 
     /**
@@ -100,26 +94,70 @@ public class PdxPatient {
         this.virologyStatus = virologyStatus;
     }
 
+    /**
+     * @return the pdtc
+     */
+    public String getPdtc() {
+        return pdtc;
+    }
+
+    /**
+     * @param pdtc the pdtc to set
+     */
+    public void setPdtc(String pdtc) {
+        this.pdtc = pdtc;
+    }
+
+    /**
+     * @return the clinicalTreatmentSetting
+     */
+    public String getClinicalTreatmentSetting() {
+        return clinicalTreatmentSetting;
+    }
+
+    /**
+     * @param clinicalTreatmentSetting the clinicalTreatmentSetting to set
+     */
+    public void setClinicalTreatmentSetting(String clinicalTreatmentSetting) {
+        this.clinicalTreatmentSetting = clinicalTreatmentSetting;
+    }
+
+    /**
+     * @return the treatmentNotes
+     */
+    public String getTreatmentNotes() {
+        return treatmentNotes;
+    }
+
+    /**
+     * @param treatmentNotes the treatmentNotes to set
+     */
+    public void setTreatmentNotes(String treatmentNotes) {
+        this.treatmentNotes = treatmentNotes;
+    }
+
 
 
 
 
 
     public static class Builder {
+        private String pdtc;
         private  String submitterPatientID;
         private  Sex sex;
         private  Age ageAtDiagnosis;
-        private  Age ageAtCollection;
-        private  TermId diagnosisTerm;
-        private  String diagnosis;
+        
         private  Consent consent;
         private  String ethnicity;
         private  String race;
         private ArrayList<PdxPatientTreatment> patientTreatments;
         private String virologyStatus;
+        private String clinicalTreatmentSetting;
+        private String treatmentNotes;
 
 
-        public Builder(String id){
+        public Builder(String pdtc, String id){
+            this.pdtc = pdtc;
             this.submitterPatientID=id;
            
         }
@@ -134,21 +172,7 @@ public class PdxPatient {
             return this;
         }
         
-        public Builder ageAtCollection(Age aaC){
-            this.ageAtCollection = aaC;
-            return this;
-        }
-        
-        public Builder diagnosisTerms(TermId diagnosis){
-            this.diagnosisTerm = diagnosis;
-            return this;
-        }
-        
-        
-        public Builder diagnosis(String diagnosis){
-            this.diagnosis  = diagnosis;
-            return this;
-        }
+       
         
         
         public Builder consent(Consent consent){
@@ -176,10 +200,20 @@ public class PdxPatient {
             return this;
         }
         
+        public Builder clinicalTreatmnetSetting(String cts){
+            clinicalTreatmentSetting = cts;
+            return this;
+        }
+        
+        public Builder treatmentNotes(String notes){
+            treatmentNotes = notes;
+            return this;
+        }
+        
         
         public PdxPatient build() {
         
-            PdxPatient pat = new PdxPatient(submitterPatientID, sex, ageAtDiagnosis, ageAtCollection, diagnosisTerm, diagnosis, consent, race,ethnicity, patientTreatments, virologyStatus);
+            PdxPatient pat = new PdxPatient(pdtc,submitterPatientID, sex, ageAtDiagnosis,  consent, race,ethnicity, patientTreatments, virologyStatus, clinicalTreatmentSetting, treatmentNotes);
   
             return pat;
         }
