@@ -7,23 +7,32 @@ public class PdxModelStudy {
 
     private String modelID;
     private String studyID;
+    private String description;
+    private Integer passage;
+    private String hostStrain;
+    private String implantationSite;
+    // the following were removed by Mike L. et al
     private boolean metastasis;
     private int metastasisPassage;
     private String metastasisLocation; // could be multiple locations
-    private int doublingLagTime;  // days? (I removed this)
+   
+    // these were added by Mike L. et al
+    // i don't know what they are
+    private String endpoint1;
+    private String endpoint2;
+    private String endpoint3;
     
     private ArrayList<PdxStudyTreatment> treatments;
 
     private PdxModelStudy(String modelID, String studyID, ArrayList<PdxStudyTreatment> treatments,
-            boolean metastasis, int metastasisPassage, String metastasisLocation,
-            int doublingLagTime) {
+            boolean metastasis, int metastasisPassage, String metastasisLocation) {
         this.modelID = modelID;
         this.studyID = studyID;
         this.treatments = treatments;
         this.metastasis = metastasis;
         this.metastasisPassage = metastasisPassage;
         this.metastasisLocation = metastasisLocation;
-        this.doublingLagTime = doublingLagTime;
+       
         
        
 
@@ -50,13 +59,7 @@ public class PdxModelStudy {
         return metastasisLocation;
     }
 
-    /**
-     * @return the doublingLagTime
-     */
-    public int getDoublingLagTime() {
-        return doublingLagTime;
-    }
-
+   
     /**
      * @return the treatments
      */
@@ -103,8 +106,8 @@ public class PdxModelStudy {
         private boolean metastasis;
         private int metastasisPassage;
         private String metastasisLocation; // could be multiple locations
-        private int doublingLagTime;  // days?
-        private ResponseToTreatment response;
+      
+       
       
          public Builder(String modelID, String studyID){
            this.modelID = modelID;
@@ -127,18 +130,13 @@ public class PdxModelStudy {
             return this;
         }
 
-        public Builder doublingLagTime(int doublingLagTime) {
-            this.doublingLagTime = doublingLagTime;
-            return this;
-        }
-        
+      
        
      
 
         public PdxModelStudy build() {
             return new PdxModelStudy(modelID,studyID, treatments,
-                    metastasis, metastasisPassage, metastasisLocation,
-                    doublingLagTime);
+                    metastasis, metastasisPassage, metastasisLocation);
         }
 
     }

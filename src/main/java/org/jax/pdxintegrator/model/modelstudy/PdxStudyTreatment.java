@@ -12,20 +12,23 @@ package org.jax.pdxintegrator.model.modelstudy;
 public class PdxStudyTreatment {
 
     private String studyID;
+    private String cohort;
+    private Integer cohortSize;
     private String drug;
+    private Integer nsc;
     private String dose;
-    private String units;
     private String route;
-    private String frequency;
+    private String dosingSchedule;
+    private Integer numberOfCycles;
+    private Integer studyDuration;
+    private String endpoint1Response;
+    private String endpoint2Response;
+    private String endpoint3Response;
 
-    public PdxStudyTreatment(String studyID, String drug, String dose, String units, String route, String frequency) {
+    
+    public PdxStudyTreatment(String studyID) {
         this.studyID = studyID;
-        this.drug = drug;
-        this.dose = dose;
-        this.units = units;
-        this.route = route;
-        this.frequency = frequency;
-
+        
     }
 
     /**
@@ -70,19 +73,7 @@ public class PdxStudyTreatment {
         this.dose = dose;
     }
 
-    /**
-     * @return the units
-     */
-    public String getUnits() {
-        return units;
-    }
-
-    /**
-     * @param units the units to set
-     */
-    public void setUnits(String units) {
-        this.units = units;
-    }
+    
 
     /**
      * @return the route
@@ -98,61 +89,118 @@ public class PdxStudyTreatment {
         this.route = route;
     }
 
+   
     /**
-     * @return the frequency
+     * @return the cohort
      */
-    public String getFrequency() {
-        return frequency;
+    public String getCohort() {
+        return cohort;
     }
 
     /**
-     * @param freqeuncy the frequency to set
+     * @param cohort the cohort to set
      */
-    public void setFrequency(String frequency) {
-        this.frequency = frequency;
+    public void setCohort(String cohort) {
+        this.cohort = cohort;
     }
 
-    public static class Builder {
-
-        private String studyID;
-        private String drug;
-        private String dose;
-        private String units;
-        private String route;
-        private String frequency;
-
-        public Builder(String studyID) {
-            this.studyID = studyID;
-           
-        }
-
-        public Builder setDrug(String drug) {
-            this.drug = drug;
-            return this;
-        }
-
-        public Builder setDose(String dose) {
-            this.dose = dose;
-            return this;
-        }
-
-        public Builder setUnits(String units) {
-            this.units = units;
-            return this;
-        }
-
-        public Builder setRoute(String route) {
-            this.route = route;
-            return this;
-        }
-
-        public Builder setFrequency(String frequency) {
-            this.frequency = frequency;
-            return this;
-        }
-
-        public PdxStudyTreatment build() {
-            return new PdxStudyTreatment(studyID, drug, dose, units, route, frequency);
-        }
+    /**
+     * @return the cohortSize
+     */
+    public Integer getCohortSize() {
+        return cohortSize;
     }
+
+    /**
+     * @param cohortSize the cohortSize to set
+     */
+    public void setCohortSize(Integer cohortSize) {
+        this.cohortSize = cohortSize;
+    }
+
+    /**
+     * @return the dosingSchedule
+     */
+    public String getDosingSchedule() {
+        return dosingSchedule;
+    }
+
+    /**
+     * @param dosingSchedule the dosingSchedule to set
+     */
+    public void setDosingSchedule(String dosingSchedule) {
+        this.dosingSchedule = dosingSchedule;
+    }
+
+    /**
+     * @return the numberOfCycles
+     */
+    public Integer getNumberOfCycles() {
+        return numberOfCycles;
+    }
+
+    /**
+     * @param numberOfCycles the numberOfCycles to set
+     */
+    public void setNumberOfCycles(Integer numberOfCycles) {
+        this.numberOfCycles = numberOfCycles;
+    }
+
+    /**
+     * @return the studyDuration
+     */
+    public Integer getStudyDuration() {
+        return studyDuration;
+    }
+
+    /**
+     * @param studyDuration the studyDuration to set
+     */
+    public void setStudyDuration(Integer studyDuration) {
+        this.studyDuration = studyDuration;
+    }
+
+    /**
+     * @return the endpoint1Response
+     */
+    public String getEndpoint1Response() {
+        return endpoint1Response;
+    }
+
+    /**
+     * @param endpoint1Response the endpoint1Response to set
+     */
+    public void setEndpoint1Response(String endpoint1Response) {
+        this.endpoint1Response = endpoint1Response;
+    }
+
+    /**
+     * @return the endpoint2Response
+     */
+    public String getEndpoint2Response() {
+        return endpoint2Response;
+    }
+
+    /**
+     * @param endpoint2Response the endpoint2Response to set
+     */
+    public void setEndpoint2Response(String endpoint2Response) {
+        this.endpoint2Response = endpoint2Response;
+    }
+
+    /**
+     * @return the endpoint3Response
+     */
+    public String getEndpoint3Response() {
+        return endpoint3Response;
+    }
+
+    /**
+     * @param endpoint3Response the endpoint3Response to set
+     */
+    public void setEndpoint3Response(String endpoint3Response) {
+        this.endpoint3Response = endpoint3Response;
+    }
+
+   
 }

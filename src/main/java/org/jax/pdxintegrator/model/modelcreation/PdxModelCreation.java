@@ -6,27 +6,30 @@ package org.jax.pdxintegrator.model.modelcreation;
  * @author <a href="mailto:peter.robinson@jax.org">Peter Robinson</a>
  */
 public class PdxModelCreation {
-    
-    //Fields: Tumor ID, Model ID, Host Strain, Mouse Source, Mouse Sex, Is Mouse Humanized, Humanization Type, Engraftment Procedure, Engraftment Site, Treatment for Engraftment, 
-    //PDX Model Histology, Was passaged tissue cryopreserved, Passaged tissue engraftment rate, Passaged tissue engraftment time, Subline of Model, Subline Reason
-
+   
     private String tumorID;
     // pdmr or institution creating model?
     private String modelID;
     private String mouseStrain;
     private String mouseSource;
     private String mouseSex;
-    private boolean humanized;
+    private Boolean humanized;
     private String humanizationType;
+    private String engraftmentMaterial;
+    private String treatmentForEngraftment;
     private String engraftmentProcedure;
     private String engraftmnetSite;
-    private String treatmentForEngraftment;
+    private Boolean cryopreservedBeforeEngraftment;
     private String modelHistology;
-    private Boolean passagedTissueCryoPreserved;
-    private String engraftmentRate;
-    private String engraftmentTime;
+    private Integer doublingTime;
+    private Boolean viablyCryopresered;
+    private Boolean metastasis;
+    private String metastastaticSites;
+    private Boolean macroMetastasisRequiresExcision;
     private String sublineOfModel;
     private String sublineReason;
+    private String engraftmentRate;
+    private String engraftmentTime;
     
     public PdxModelCreation(String tumorID, String modelID){
         this.tumorID = tumorID;
@@ -109,14 +112,14 @@ public class PdxModelCreation {
      * @return the humanized
      */
     public boolean isHumanized() {
-        return humanized;
+        return getHumanized();
     }
 
     /**
      * @param humanized the humanized to set
      */
     public void setHumanized(boolean humanized) {
-        this.humanized = humanized;
+        this.setHumanized((Boolean) humanized);
     }
 
     /**
@@ -175,13 +178,7 @@ public class PdxModelCreation {
         this.treatmentForEngraftment = treatmentForEngraftment;
     }
 
-    public Boolean getPassagedTissueCryoPreserved() {
-        return passagedTissueCryoPreserved;
-    }
-
-    public void setPassagedTissueCryoPreserved(boolean tissueCryoPreserved) {
-        this.passagedTissueCryoPreserved = tissueCryoPreserved;
-    }
+   
 
     /**
      * @return the engraftmentRate
@@ -252,5 +249,119 @@ public class PdxModelCreation {
     public void setSublineReason(String sublineReason) {
         this.sublineReason = sublineReason;
     }
+
+    /**
+     * @return the humanized
+     */
+    public Boolean getHumanized() {
+        return humanized;
+    }
+
+    /**
+     * @param humanized the humanized to set
+     */
+    public void setHumanized(Boolean humanized) {
+        this.humanized = humanized;
+    }
+
+    /**
+     * @return the engraftmentMaterial
+     */
+    public String getEngraftmentMaterial() {
+        return engraftmentMaterial;
+    }
+
+    /**
+     * @param engraftmentMaterial the engraftmentMaterial to set
+     */
+    public void setEngraftmentMaterial(String engraftmentMaterial) {
+        this.engraftmentMaterial = engraftmentMaterial;
+    }
+
+    /**
+     * @return the cryopreservedBeforeEngraftment
+     */
+    public Boolean getCryopreservedBeforeEngraftment() {
+        return cryopreservedBeforeEngraftment;
+    }
+
+    /**
+     * @param cryopreservedBeforeEngraftment the cryopreservedBeforeEngraftment to set
+     */
+    public void setCryopreservedBeforeEngraftment(Boolean cryopreservedBeforeEngraftment) {
+        this.cryopreservedBeforeEngraftment = cryopreservedBeforeEngraftment;
+    }
+
+    /**
+     * @return the doublingTime
+     */
+    public Integer getDoublingTime() {
+        return doublingTime;
+    }
+
+    /**
+     * @param doublingTime the doublingTime to set
+     */
+    public void setDoublingTime(Integer doublingTime) {
+        this.doublingTime = doublingTime;
+    }
+
+    /**
+     * @return the viablyCryopresered
+     */
+    public Boolean getViablyCryopresered() {
+        return viablyCryopresered;
+    }
+
+    /**
+     * @param viablyCryopresered the viablyCryopresered to set
+     */
+    public void setViablyCryopresered(Boolean viablyCryopresered) {
+        this.viablyCryopresered = viablyCryopresered;
+    }
+
+    /**
+     * @return the metastasis
+     */
+    public Boolean getMetastasis() {
+        return metastasis;
+    }
+
+    /**
+     * @param metastasis the metastasis to set
+     */
+    public void setMetastasis(Boolean metastasis) {
+        this.metastasis = metastasis;
+    }
+
+    /**
+     * @return the metastastaticSites
+     */
+    public String getMetastastaticSites() {
+        return metastastaticSites;
+    }
+
+    /**
+     * @param metastastaticSites the metastastaticSites to set
+     */
+    public void setMetastastaticSites(String metastastaticSites) {
+        this.metastastaticSites = metastastaticSites;
+    }
+
+    /**
+     * @return the macroMetastasisRequiresExcision
+     */
+    public Boolean getMacroMetastasisRequiresExcision() {
+        return macroMetastasisRequiresExcision;
+    }
+
+    /**
+     * @param macroMetastasisRequiresExcision the macroMetastasisRequiresExcision to set
+     */
+    public void setMacroMetastasisRequiresExcision(Boolean macroMetastasisRequiresExcision) {
+        this.macroMetastasisRequiresExcision = macroMetastasisRequiresExcision;
+    }
+
+   
 
 }

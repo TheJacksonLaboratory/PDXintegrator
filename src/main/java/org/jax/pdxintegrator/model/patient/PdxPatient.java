@@ -1,11 +1,6 @@
 package org.jax.pdxintegrator.model.patient;
 
-import com.github.phenomics.ontolib.ontology.data.TermId;
-
-import java.io.BufferedWriter;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class PdxPatient {
     

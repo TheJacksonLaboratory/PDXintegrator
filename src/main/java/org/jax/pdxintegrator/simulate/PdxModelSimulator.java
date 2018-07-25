@@ -222,7 +222,7 @@ public class PdxModelSimulator {
             TermId grade = getRandomTumorGrade();
             TermId stage = getRandomStage();
             PdxClinicalTumor tumor = new PdxClinicalTumor(patient.getSubmitterPatientID(),tumorID);
-            tumor.setDiseaseProgressionTerm(category);
+            tumor.setClincalEventPointTerm(category);
             tumor.setClinicalMarkers("BRCA+");
             tumor.setMStage(("MStagePlaceholder"));
             tumor.setNStage("NstagePlaceholder");
@@ -249,7 +249,7 @@ public class PdxModelSimulator {
         
         PdxQualityAssurance qa = new PdxQualityAssurance(modelID);
         qa.setAnimalHealthStatus("animalHealthStatus");
-        qa.setPassage(0);
+        qa.setPassageTested(0);
         qa.setQcMethod("QCMethod");
         
         qa.setQcResult("QC result");
@@ -270,7 +270,7 @@ public class PdxModelSimulator {
         ArrayList<PdxModelStudy> studies = new ArrayList();
         int count = random.nextInt(3)+1;
         while(count>0){
-            PdxModelStudy.Builder builder = new PdxModelStudy.Builder(modelID, "Study-"+modelID+"-"+count).doublingLagTime(10);
+            PdxModelStudy.Builder builder = new PdxModelStudy.Builder(modelID, "Study-"+modelID+"-"+count);
             if(getRandomBoolean()){
                 builder.metastasis(true);
                 builder.metastasisLocation(getUberonId(null).toString());
@@ -341,14 +341,14 @@ public class PdxModelSimulator {
         ArrayList<PdxStudyTreatment> treatments = new ArrayList();
         int numTreatments = random.nextInt(4);
          while(numTreatments > 0){
-            PdxStudyTreatment.Builder builder = new PdxStudyTreatment.Builder(studyID);
-            builder.setDose("1");
-            builder.setUnits("mg/kg");
-            builder.setFrequency("Daily");
-            builder.setRoute("in chow");
-            builder.setDrug(this.getRandomCancerDrug());
+            PdxStudyTreatment treatment = new PdxStudyTreatment(studyID);
+            treatment.setDose("1");
+          
+         
+            treatment.setRoute("in chow");
+            treatment.setDrug(this.getRandomCancerDrug());
             
-            treatments.add(builder.build());
+            treatments.add(treatment);
             
             numTreatments--;
         }
