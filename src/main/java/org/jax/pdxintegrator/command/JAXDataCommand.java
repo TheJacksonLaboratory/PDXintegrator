@@ -5,7 +5,6 @@
  */
 package org.jax.pdxintegrator.command;
 
-import com.github.phenomics.ontolib.ontology.data.TermId;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +12,9 @@ import org.apache.logging.log4j.Logger;
 import org.jax.pdxintegrator.model.PdxModel;
 import org.jax.pdxintegrator.rdf.PdxModel2Rdf;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +36,8 @@ public class JAXDataCommand extends Command {
 
     private HashMap<String, Integer> labelIndex = new HashMap();
     private HashMap<String, String[]> modelData = new HashMap();
-
+    private HashMap<String,String[]> treatmentMap = new HashMap();
+    
     private List<PdxModel> models = new ArrayList<>();
 
     public JAXDataCommand() {
@@ -63,10 +66,36 @@ public class JAXDataCommand extends Command {
        
 
     }
+    
+    /*
+    
+    */
 
     
 
     private void parse() {
+        
+         
+        String fileName = "C:/PDXTreatments.txt";
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+
+            String line = null;
+            // for each line in the file
+            // new lines are always treated as delimiters
+            br.readLine(); // headers
+            while ((line = br.readLine()) != null) {
+                //   System.out.println(line);
+                String[] parts = line.split(",");
+             
+                treatmentMap.put(parts[0],parts);
+            }
+
+        } catch (IOException ioe) {
+            // something went wrong
+            ioe.printStackTrace();
+        }
+    
 
         try {
 
@@ -215,7 +244,7 @@ public class JAXDataCommand extends Command {
         tumor.setTissueHistology(data[labelIndex.get("Clinical Diagnosis")]);
 
         tumor.setSpecimenTissue(data[labelIndex.get("Specimen Site")]);
-        tumor.setDiseaseProgression(data[labelIndex.get("Tumor Type")]);
+        tumor.setClinicalEventPoint(data[labelIndex.get("Tumor Type")]);
         tumors.add(tumor);
 
         return tumors;
@@ -226,7 +255,7 @@ public class JAXDataCommand extends Command {
         ArrayList<PdxQualityAssurance> qas = new ArrayList();
         PdxQualityAssurance qa = new PdxQualityAssurance(getModelID(data));
 
-        qa.setPassage(0);
+        qa.setPassageTested(null);
         qa.setQcMethod("QCMethod");
 
         qa.setQcResult("QC result");
@@ -250,7 +279,7 @@ public class JAXDataCommand extends Command {
 
         PdxModelStudy.Builder builder = new PdxModelStudy.Builder(getModelID(data), getStudyID(data));
 
-        builder.treatments(buildStudyTreatments(getStudyID(data)));
+        builder.treatments(buildStudyTreatments(data));
         studies.add(builder.build());
 
         return studies;
@@ -309,20 +338,36 @@ public class JAXDataCommand extends Command {
         return treatments;
     }
 
-    private ArrayList<PdxStudyTreatment> buildStudyTreatments(String studyID) {
+    private ArrayList<PdxStudyTreatment> buildStudyTreatments(String[] data) {
         ArrayList<PdxStudyTreatment> treatments = new ArrayList();
-        int numTreatments = 0;
-        while (numTreatments > 0) {
-            PdxStudyTreatment.Builder builder = new PdxStudyTreatment.Builder(studyID);
-            builder.setDose("1");
-            builder.setUnits("mg/kg");
-            builder.setFrequency("Daily");
-            builder.setRoute("in chow");
-            builder.setDrug("treatment drug");
+        String modelID = data[labelIndex.get("Model ID")];
+        if(treatmentMap.containsKey(modelID)){
+            String[] parts = treatmentMap.get(modelID);
+            int count = (parts.length - 1) / 3;
+                
+                for (int i = 0; i < count; i++) {
+                    PdxStudyTreatment treatment = new PdxStudyTreatment(getStudyID(data));
+                    
+                    String drug =parts[(i * 3) + 1];
+                    String dose = parts[(i * 3) + 2];
+                    String response = parts[(i * 3) + 3];
+//                    if(drug.contains("+")){
+//                        String[] drugs = drug.split("\\+");
+//                        String[] doses = dose.split(";");
+//                        drug = drugs[0]+" "+doses[0]+","+drugs[1]+" "+doses[1];
+//                    }else{
+//                        drug +=" "+dose;
+//                    }
+//                    System.out.println("\tDrug:" + drug);
+//                    //System.out.println("\tDose:" + parts[(i * 3) + 2]);
+//                    System.out.println("\tResponse:" + parts[(i * 3) + 3] + "\n");
+                       treatment.setDrug(drug);
+                       treatment.setDose(dose);
+                       treatment.setEndpoint1Response(response);
+                       treatments.add(treatment);
 
-            treatments.add(builder.build());
-
-            numTreatments--;
+                }
+           
         }
         return treatments;
     }
@@ -375,5 +420,8 @@ public class JAXDataCommand extends Command {
             
         
     }
+    
+    
+    
 
 }

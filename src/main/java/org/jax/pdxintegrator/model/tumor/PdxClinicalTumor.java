@@ -14,15 +14,16 @@ public class PdxClinicalTumor {
     private String patientID;
     private String submitterTumorID;
     private String eventIndex;
+    private String collectionProcedure;
     private boolean treatmentNaive;
     private String ageAtCollection;
     private String initialDiagnosis;
     private TermId initialDiagnosisTerm;
     private String tissueOfOrigin; // primary tissue
     private TermId tissueOfOriginTerm;
-    private String diseaseProgression;
+    private String clinicalEventPoint;
     /** NCIT Term id for primary, recurrence, metastasis. */
-    private TermId diseaseProgressionTerm; // disease progression
+    private TermId clincalEventPointTerm; // disease progression
     private String specimenTissue;
     private TermId specimenTissueTerm;
     private String tissueHistology;
@@ -35,7 +36,10 @@ public class PdxClinicalTumor {
     private String mStage;
     private String overallStage;
     private String sampleType;
-    
+    private String metastaticSites;
+    private String strAnalysis;
+    private String strMarkers;
+    private String strEvaluation;
     
    
 
@@ -327,33 +331,7 @@ public class PdxClinicalTumor {
         this.initialDiagnosisTerm = initialDiagnosisTerm;
     }
 
-    /**
-     * @return the diseaseProgression
-     */
-    public String getDiseaseProgression() {
-        return diseaseProgression;
-    }
-
-    /**
-     * @param diseaseProgression the diseaseProgression to set
-     */
-    public void setDiseaseProgression(String diseaseProgression) {
-        this.diseaseProgression = diseaseProgression;
-    }
-
-    /**
-     * @return the diseaseProgressionTerm
-     */
-    public TermId getDiseaseProgressionTerm() {
-        return diseaseProgressionTerm;
-    }
-
-    /**
-     * @param diseaseProgressionTerm the diseaseProgressionTerm to set
-     */
-    public void setDiseaseProgressionTerm(TermId diseaseProgressionTerm) {
-        this.diseaseProgressionTerm = diseaseProgressionTerm;
-    }
+   
 
     /**
      * @return the tStage
@@ -395,6 +373,104 @@ public class PdxClinicalTumor {
      */
     public void setmStage(String mStage) {
         this.mStage = mStage;
+    }
+
+    /**
+     * @return the collectionProcedure
+     */
+    public String getCollectionProcedure() {
+        return collectionProcedure;
+    }
+
+    /**
+     * @param collectionProcedure the collectionProcedure to set
+     */
+    public void setCollectionProcedure(String collectionProcedure) {
+        this.collectionProcedure = collectionProcedure;
+    }
+
+    /**
+     * @return the clinicalEventPoint
+     */
+    public String getClinicalEventPoint() {
+        return clinicalEventPoint;
+    }
+
+    /**
+     * @param clinicalEventPoint the clinicalEventPoint to set
+     */
+    public void setClinicalEventPoint(String clinicalEventPoint) {
+        this.clinicalEventPoint = clinicalEventPoint;
+    }
+
+    /**
+     * @return the metastaticSites
+     */
+    public String getMetastaticSites() {
+        return metastaticSites;
+    }
+
+    /**
+     * @param metastaticSites the metastaticSites to set
+     */
+    public void setMetastaticSites(String metastaticSites) {
+        this.metastaticSites = metastaticSites;
+    }
+
+    /**
+     * @return the strAnalysis
+     */
+    public String getStrAnalysis() {
+        return strAnalysis;
+    }
+
+    /**
+     * @param strAnalysis the strAnalysis to set
+     */
+    public void setStrAnalysis(String strAnalysis) {
+        this.strAnalysis = strAnalysis;
+    }
+
+    /**
+     * @return the strMarkers
+     */
+    public String getStrMarkers() {
+        return strMarkers;
+    }
+
+    /**
+     * @param strMarkers the strMarkers to set
+     */
+    public void setStrMarkers(String strMarkers) {
+        this.strMarkers = strMarkers;
+    }
+
+    /**
+     * @return the strEvaluation
+     */
+    public String getStrEvaluation() {
+        return strEvaluation;
+    }
+
+    /**
+     * @param strEvaluation the strEvaluation to set
+     */
+    public void setStrEvaluation(String strEvaluation) {
+        this.strEvaluation = strEvaluation;
+    }
+
+    /**
+     * @return the clincalEventPointTerm
+     */
+    public TermId getClincalEventPointTerm() {
+        return clincalEventPointTerm;
+    }
+
+    /**
+     * @param clincalEventPointTerm the clincalEventPointTerm to set
+     */
+    public void setClincalEventPointTerm(TermId clincalEventPointTerm) {
+        this.clincalEventPointTerm = clincalEventPointTerm;
     }
 
     
