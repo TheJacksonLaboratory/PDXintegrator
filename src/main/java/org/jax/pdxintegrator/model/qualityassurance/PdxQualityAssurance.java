@@ -5,6 +5,10 @@ package org.jax.pdxintegrator.model.qualityassurance;
  */
 public class PdxQualityAssurance {
 
+    
+    
+
+    
     private String modelID;
     private String strAnalysis;
     private Integer passageTested;
@@ -15,6 +19,7 @@ public class PdxQualityAssurance {
     private String clinicalDiagnosticMarkerNotes;
     private String cd45IHC;
     private String cd45IHCAssayResult;
+    private String PanCytokeratin;
     private String PanCytokeratinAssayResult;
     private String humanSpecificCytokeratin19;
     private String ebvTranscriptDetection;
@@ -290,6 +295,20 @@ public class PdxQualityAssurance {
      */
     public void setOverallEvaluation(String overallEvaluation) {
         this.overallEvaluation = overallEvaluation;
+    }
+
+    /**
+     * @return the PanCytokeratin
+     */
+    public String getPanCytokeratin() {
+        return PanCytokeratin;
+    }
+
+    /**
+     * @param PanCytokeratin the PanCytokeratin to set
+     */
+    public void setPanCytokeratin(String PanCytokeratin) {
+        this.PanCytokeratin = PanCytokeratin;
     }
 
    

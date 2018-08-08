@@ -24,7 +24,8 @@ public class PdxOmicsFile {
             private String platform;	
             private String captureKit;	
             private String updatedDateTime;
-            private String isFFPEPairedEnd;	
+            private Boolean isFFPE;
+            private Boolean isPairedEnd;	
             private String fileName;
             private String passage;
 
@@ -211,17 +212,17 @@ public class PdxOmicsFile {
     }
 
     /**
-     * @return the isFFPEPairedEnd
+     * @return the isFFPE
      */
-    public String getIsFFPEPairedEnd() {
-        return isFFPEPairedEnd;
+    public Boolean getIsFFPE() {
+        return isFFPE;
     }
 
     /**
-     * @param isFFPEPairedEnd the isFFPEPairedEnd to set
+     * @param isFFPE the isFFPE to set
      */
-    public void setIsFFPEPairedEnd(String isFFPEPairedEnd) {
-        this.isFFPEPairedEnd = isFFPEPairedEnd;
+    public void setIsFFPE(Boolean isFFPE) {
+        this.isFFPE = isFFPE;
     }
 
     /**
@@ -250,6 +251,20 @@ public class PdxOmicsFile {
      */
     public void setPassage(String passage) {
         this.passage = passage;
+    }
+
+    /**
+     * @return the isPairedEnd
+     */
+    public Boolean getIsPairedEnd() {
+        return isPairedEnd;
+    }
+
+    /**
+     * @param isPairedEnd the isPairedEnd to set
+     */
+    public void setIsPairedEnd(Boolean isPairedEnd) {
+        this.isPairedEnd = isPairedEnd;
     }
     
 }

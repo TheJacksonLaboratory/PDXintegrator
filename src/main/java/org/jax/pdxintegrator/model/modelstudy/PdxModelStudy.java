@@ -11,10 +11,12 @@ public class PdxModelStudy {
     private Integer passage;
     private String hostStrain;
     private String implantationSite;
+    private String baselineTumorTargetSize;
     // the following were removed by Mike L. et al
     private boolean metastasis;
     private int metastasisPassage;
     private String metastasisLocation; // could be multiple locations
+    
    
     // these were added by Mike L. et al
     // i don't know what they are
@@ -22,7 +24,13 @@ public class PdxModelStudy {
     private String endpoint2;
     private String endpoint3;
     
-    private ArrayList<PdxStudyTreatment> treatments;
+    private ArrayList<PdxStudyTreatment> treatments = new ArrayList<>();
+    
+    public PdxModelStudy(String modelId, String studyId){
+        this.modelID = modelId;
+        this.studyID = studyId;
+        
+    }
 
     private PdxModelStudy(String modelID, String studyID, ArrayList<PdxStudyTreatment> treatments,
             boolean metastasis, int metastasisPassage, String metastasisLocation) {
@@ -94,6 +102,118 @@ public class PdxModelStudy {
      */
     public String getModelID() {
         return modelID;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the passage
+     */
+    public Integer getPassage() {
+        return passage;
+    }
+
+    /**
+     * @param passage the passage to set
+     */
+    public void setPassage(Integer passage) {
+        this.passage = passage;
+    }
+
+    /**
+     * @return the hostStrain
+     */
+    public String getHostStrain() {
+        return hostStrain;
+    }
+
+    /**
+     * @param hostStrain the hostStrain to set
+     */
+    public void setHostStrain(String hostStrain) {
+        this.hostStrain = hostStrain;
+    }
+
+    /**
+     * @return the implantationSite
+     */
+    public String getImplantationSite() {
+        return implantationSite;
+    }
+
+    /**
+     * @param implantationSite the implantationSite to set
+     */
+    public void setImplantationSite(String implantationSite) {
+        this.implantationSite = implantationSite;
+    }
+
+    /**
+     * @return the endpoint1
+     */
+    public String getEndpoint1() {
+        return endpoint1;
+    }
+
+    /**
+     * @param endpoint1 the endpoint1 to set
+     */
+    public void setEndpoint1(String endpoint1) {
+        this.endpoint1 = endpoint1;
+    }
+
+    /**
+     * @return the endpoint2
+     */
+    public String getEndpoint2() {
+        return endpoint2;
+    }
+
+    /**
+     * @param endpoint2 the endpoint2 to set
+     */
+    public void setEndpoint2(String endpoint2) {
+        this.endpoint2 = endpoint2;
+    }
+
+    /**
+     * @return the endpoint3
+     */
+    public String getEndpoint3() {
+        return endpoint3;
+    }
+
+    /**
+     * @param endpoint3 the endpoint3 to set
+     */
+    public void setEndpoint3(String endpoint3) {
+        this.endpoint3 = endpoint3;
+    }
+
+    /**
+     * @return the baselineTumorTargetSize
+     */
+    public String getBaselineTumorTargetSize() {
+        return baselineTumorTargetSize;
+    }
+
+    /**
+     * @param baselineTumorTargetSize the baselineTumorTargetSize to set
+     */
+    public void setBaselineTumorTargetSize(String baselineTumorTargetSize) {
+        this.baselineTumorTargetSize = baselineTumorTargetSize;
     }
 
     

@@ -111,15 +111,15 @@ public class PdxModelCreation {
     /**
      * @return the humanized
      */
-    public boolean isHumanized() {
-        return getHumanized();
+    public Boolean isHumanized() {
+        return humanized;
     }
 
     /**
      * @param humanized the humanized to set
      */
-    public void setHumanized(boolean humanized) {
-        this.setHumanized((Boolean) humanized);
+    public void setHumanized(Boolean humanized) {
+        this.humanized = humanized;
     }
 
     /**
@@ -250,20 +250,7 @@ public class PdxModelCreation {
         this.sublineReason = sublineReason;
     }
 
-    /**
-     * @return the humanized
-     */
-    public Boolean getHumanized() {
-        return humanized;
-    }
-
-    /**
-     * @param humanized the humanized to set
-     */
-    public void setHumanized(Boolean humanized) {
-        this.humanized = humanized;
-    }
-
+    
     /**
      * @return the engraftmentMaterial
      */

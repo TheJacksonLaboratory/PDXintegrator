@@ -121,7 +121,8 @@ public class PdxModelSimulator {
         omicsFile.setExperimentalStrategy("exp strategy");
         omicsFile.setFileName("simulatedOmicsFile"+omicsCount++);
         omicsFile.setFileSize("34K");
-        omicsFile.setIsFFPEPairedEnd("yes");
+        omicsFile.setIsFFPE(true);
+        omicsFile.setIsPairedEnd(true);
         omicsFile.setModelID(modelID);
         omicsFile.setPatientID(patientID);
         omicsFile.setPassage("P1");

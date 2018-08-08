@@ -150,6 +150,8 @@ public class CommandParser {
                 this.command = new DrugBankCommand(drugBankPath,DEFAULT_DRUGBANK_OUTPUT_FILE);
             } else if (mycommand.equals("JAXData")){
                 this.command = new JAXDataCommand();
+            }else if (mycommand.equals("BCMData")){
+                this.command = new BCMDataCommand();
             }else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));
             }

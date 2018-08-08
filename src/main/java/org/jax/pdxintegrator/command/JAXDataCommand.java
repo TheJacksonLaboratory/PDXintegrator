@@ -28,6 +28,7 @@ import org.jax.pdxintegrator.model.patient.PdxPatient;
 import org.jax.pdxintegrator.model.patient.PdxPatientTreatment;
 import org.jax.pdxintegrator.model.patient.Sex;
 import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
+import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
 import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
 
 public class JAXDataCommand extends Command {
@@ -67,12 +68,7 @@ public class JAXDataCommand extends Command {
 
     }
     
-    /*
-    
-    */
-
-    
-
+  
     private void parse() {
         
          
@@ -111,6 +107,7 @@ public class JAXDataCommand extends Command {
                 labelIndex.put(labels[i], i);
             }
             BufferedReader buf = new BufferedReader(new FileReader("C:/activePDX.txt"));
+            buf.readLine();//headers
             String line = buf.readLine();
             while (line != null) {
 
@@ -144,14 +141,15 @@ public class JAXDataCommand extends Command {
         PdxOmicsFile omicsFile = new PdxOmicsFile();
         omicsFile.setAccessLevel("access level value");
         omicsFile.setCaptureKit("capture kit value");
-        omicsFile.setCreatedDateTime("Tuesday at noon");
+        omicsFile.setCreatedDateTime("2017-12-31");
         omicsFile.setDataCategory("data category value");
         omicsFile.setDataFormat("data format value");
         omicsFile.setDataType("data type value");
         omicsFile.setExperimentalStrategy("exp strategy");
         omicsFile.setFileName("simulatedOmicsFile");
         omicsFile.setFileSize("34K");
-        omicsFile.setIsFFPEPairedEnd("yes");
+        omicsFile.setIsFFPE(true);
+        omicsFile.setIsPairedEnd(true);
         omicsFile.setModelID(modelID);
         omicsFile.setPatientID(patientID);
         omicsFile.setPassage("P1");
@@ -314,29 +312,15 @@ public class JAXDataCommand extends Command {
         
         builder.consent(Consent.YES);
 
-        // WRONG!
-        builder.ageAtDiagnosis(getAge(data[labelIndex.get("Age")]));
+       
+        builder.ageAtDiagnosis(Age.getAgeForString(data[labelIndex.get("Age")]));
         builder.ethnicity(data[labelIndex.get("Ethnicity")]);
         builder.race(data[labelIndex.get("Race")]);
 
         return builder.build();
     }
 
-    private ArrayList<PdxPatientTreatment> buildPatientTreatments() {
-        ArrayList<PdxPatientTreatment> treatments = new ArrayList();
-        int numTreatments = 4;
-        while (numTreatments > 0) {
-            PdxPatientTreatment treatment = new PdxPatientTreatment();
-            treatment.setEventIndex(numTreatments + "");
-
-            treatment.setRegimen("patient treatment drug");
-            treatment.setReasonStopped("did not tolerate");
-           // treatment.setResponse(ResponseToStandardOfCare);
-            treatments.add(treatment);
-          //  numTreatments--;
-        }
-        return treatments;
-    }
+  
 
     private ArrayList<PdxStudyTreatment> buildStudyTreatments(String[] data) {
         ArrayList<PdxStudyTreatment> treatments = new ArrayList();
@@ -363,7 +347,7 @@ public class JAXDataCommand extends Command {
 //                    System.out.println("\tResponse:" + parts[(i * 3) + 3] + "\n");
                        treatment.setDrug(drug);
                        treatment.setDose(dose);
-                       treatment.setEndpoint1Response(response);
+                       treatment.setEndpoint1Response(ResponseToTreatment.getResponse(response));
                        treatments.add(treatment);
 
                 }
@@ -388,38 +372,7 @@ public class JAXDataCommand extends Command {
         return "JAX-" + data[labelIndex.get("Model ID")];
     }
     
-    private Age getAge(String age){
-        Age a = Age.notProvided;
     
-        try{
-            int ageInt = new Integer(age);
-            if(ageInt < 5) return Age.age0_4;
-            if(ageInt < 10) return Age.age5_9;
-            if(ageInt < 15) return Age.age10_14;
-            if(ageInt < 20) return Age.age15_19;
-            if(ageInt < 25) return Age.age20_24;
-            if(ageInt < 30) return Age.age25_29;
-            if(ageInt < 35) return Age.age30_34;
-            if(ageInt < 40) return Age.age35_39;
-            if(ageInt < 45) return Age.age40_44;
-            if(ageInt < 50) return Age.age45_49;
-            if(ageInt < 55) return Age.age50_54;
-            if(ageInt < 60) return Age.age55_59;
-            if(ageInt < 65) return Age.age60_64;
-            if(ageInt < 70) return Age.age65_69;
-            if(ageInt < 75) return Age.age70_74;
-            if(ageInt < 80) return Age.age75_79;
-            if(ageInt < 85) return Age.age80_84;
-            if(ageInt < 90) return Age.age85_89;
-            if(ageInt < 95) return Age.age90_94;
-            if(ageInt < 100) return Age.age95_99;
-            if(ageInt < 105) return Age.age100_104;
-        }catch(Exception e){}
-        return a;
-            
-            
-        
-    }
     
     
     
