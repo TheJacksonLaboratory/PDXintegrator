@@ -17,9 +17,9 @@ public class PdxStudyTreatment {
     private String modelID;
     private String cohort;
     private Integer cohortSize;
-    private String drug;
+    private String drug="";
     private Integer nsc;
-    private String dose;
+    private String dose="";
     private String route;
     private String dosingSchedule;
     private Integer numberOfCycles;

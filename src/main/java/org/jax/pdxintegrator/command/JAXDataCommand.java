@@ -30,6 +30,7 @@ import org.jax.pdxintegrator.model.patient.Sex;
 import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
 import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
 import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
+import org.jax.pdxintegrator.ncit.NcitOwlApiParser;
 
 public class JAXDataCommand extends Command {
 
@@ -71,8 +72,38 @@ public class JAXDataCommand extends Command {
   
     private void parse() {
         
+       NcitOwlApiParser parser = new NcitOwlApiParser("data/ncit.obo");
+       parser.parse();
+        
+        String fileName = "C:/jax2NCIT.txt";
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+
+            String line = null;
+            // for each line in the file
+            // new lines are always treated as delimiters
+            br.readLine(); // headers
+            while ((line = br.readLine()) != null) {
+                //   System.out.println(line);
+                String[] parts = line.split("\t");
+                parts[0] = parts[0].trim();
+                parts[1] = parts[1].trim();
+                String id = "Not found";
+                if(parser.getNeoplasm(parts[1])!= null){
+                    id = parser.getNeoplasm(parts[1]).getId()+"";
+                }
+                if(id.equals("Not found"))
+                System.out.println(parts[0]+"\t"+parts[1]+"\t"+id);
+            
+            }
+
+        } catch (IOException ioe) {
+            // something went wrong
+            ioe.printStackTrace();
+        }
+        
          
-        String fileName = "C:/PDXTreatments.txt";
+        fileName = "C:/PDXTreatments.txt";
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
 
@@ -186,10 +217,14 @@ public class JAXDataCommand extends Command {
 
         PdxModelCreation modelCreation = new PdxModelCreation(getTumorID(data), getModelID(data));
         modelCreation.setMouseStrain("NOD.Cg-Prkdc<scid> Il2rg<tm1Wj>l/SzJ");
-        modelCreation.setMouseSource("The Jackson Lab stock #" + data[labelIndex.get("Stock Num")]);
+        String stock = "";
+        if(data[labelIndex.get("Stock Num")].trim().length()>0){
+           stock = " stock #" + data[labelIndex.get("Stock Num")];
+        }
+        modelCreation.setMouseSource("The Jackson Lab"+stock);
         modelCreation.setMouseSex(data[labelIndex.get("Mouse Sex")]);
         modelCreation.setHumanized(false);
-        modelCreation.setEngraftmnetSite(data[labelIndex.get("Engraftment Site")]);
+        modelCreation.setEngraftmentSite(data[labelIndex.get("Engraftment Site")]);
         modelCreations.add(modelCreation);
 
         return modelCreations;

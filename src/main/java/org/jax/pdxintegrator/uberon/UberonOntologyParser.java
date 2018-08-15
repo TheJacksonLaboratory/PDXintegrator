@@ -28,6 +28,7 @@ public class UberonOntologyParser {
     private String uberonPath =null;
 
     private List<UberonTerm> termlist=new ArrayList<>();
+    private HashMap<String,UberonTerm> termMap = new HashMap<>();
 
 
     Ontology<HpoTerm, HpoTermRelation> inheritanceSubontology=null;
@@ -39,7 +40,7 @@ public class UberonOntologyParser {
         uberonPath =path;
     }
 
-
+   
 
     private void addTerm(String termId, String termLabel) {
         termLabel=termLabel.replace("^^xsd:string","");
@@ -47,6 +48,8 @@ public class UberonOntologyParser {
         try {
             UberonTerm term = new UberonTerm(termId,termLabel);
             termlist.add(term);
+            termMap.put(termLabel,term);
+           
         } catch (PDXException pde) {
             pde.printStackTrace();
         }
@@ -96,5 +99,9 @@ public class UberonOntologyParser {
 
     public List<UberonTerm> getTermlist() {
         return termlist;
+    }
+    
+    public UberonTerm getUberonTerm(String name){
+        return termMap.get(name);
     }
 }

@@ -18,13 +18,13 @@ public class PdxModelCreation {
     private String engraftmentMaterial;
     private String treatmentForEngraftment;
     private String engraftmentProcedure;
-    private String engraftmnetSite;
+    private String engraftmentSite;
     private Boolean cryopreservedBeforeEngraftment;
     private String modelHistology;
     private Integer doublingTime;
     private Boolean viablyCryopresered;
     private Boolean metastasis;
-    private String metastastaticSites;
+    private String metastaticSites;
     private Boolean macroMetastasisRequiresExcision;
     private String sublineOfModel;
     private String sublineReason;
@@ -151,17 +151,17 @@ public class PdxModelCreation {
     }
 
     /**
-     * @return the engraftmnetSite
+     * @return the engraftmentSite
      */
-    public String getEngraftmnetSite() {
-        return engraftmnetSite;
+    public String getEngraftmentSite() {
+        return engraftmentSite;
     }
 
     /**
-     * @param engraftmnetSite the engraftmnetSite to set
+     * @param engraftmentSite the engraftmentSite to set
      */
-    public void setEngraftmnetSite(String engraftmnetSite) {
-        this.engraftmnetSite = engraftmnetSite;
+    public void setEngraftmentSite(String engraftmentSite) {
+        this.engraftmentSite = engraftmentSite;
     }
 
     /**
@@ -322,17 +322,17 @@ public class PdxModelCreation {
     }
 
     /**
-     * @return the metastastaticSites
+     * @return the metastaticSites
      */
-    public String getMetastastaticSites() {
-        return metastastaticSites;
+    public String getMetastaticSites() {
+        return metastaticSites;
     }
 
     /**
-     * @param metastastaticSites the metastastaticSites to set
+     * @param metastaticSites the metastaticSites to set
      */
-    public void setMetastastaticSites(String metastastaticSites) {
-        this.metastastaticSites = metastastaticSites;
+    public void setMetastaticSites(String metastaticSites) {
+        this.metastaticSites = metastaticSites;
     }
 
     /**

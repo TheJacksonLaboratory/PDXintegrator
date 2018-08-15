@@ -30,6 +30,7 @@ public class NcitOwlApiParser {
     private final String NcitOboPath;
 
     private List<NcitTerm> termlist=new ArrayList<>();
+    private HashMap<String, NcitTerm> termMap = new HashMap<>();
 
     private List<NcitTerm> gradeTermList=new ArrayList<>();
 
@@ -53,6 +54,7 @@ public class NcitOwlApiParser {
         try {
             NcitTerm term = new NcitTerm(termId,termLabel);
             list.add(term);
+            termMap.put(termLabel,term);
         } catch (PDXException pde) {
             pde.printStackTrace();
         }
@@ -91,6 +93,8 @@ public class NcitOwlApiParser {
                         //System.out.println("\t"+annot.toString());
                         if (annot.getProperty().isLabel()) {
                             String label = annot.getValue().toString();
+                            if(label.toLowerCase().replaceAll("\"","").contains("lobular breast carcinoma"))
+                            System.out.println("Term:"+label);
                            addTerm(termlist,iri.getShortForm(),label);
                            break;
                         }
@@ -104,9 +108,12 @@ public class NcitOwlApiParser {
                     IRI iri = ne.getIRI();
                     Set<OWLAnnotation> annotationAxioms = getAllAnnotationAxioms(ne,ontology);
                     for (OWLAnnotation annot : annotationAxioms) {
-                        //System.out.println("\t"+annot.toString());
+                        
                         if (annot.getProperty().isLabel()) {
                             String label = annot.getValue().toString();
+                            if(label.replaceAll("\"","").startsWith("Grade"))
+                            System.out.println("Grade:"+label+" "+iri.getShortForm());
+                            
                             addTerm(gradeTermList,iri.getShortForm(),label);
                             break;
                         }
@@ -120,9 +127,10 @@ public class NcitOwlApiParser {
                     IRI iri = ne.getIRI();
                     Set<OWLAnnotation> annotationAxioms = getAllAnnotationAxioms(ne, ontology);
                     for (OWLAnnotation annot : annotationAxioms) {
-                        //System.out.println("\t"+annot.toString());
+                       
                         if (annot.getProperty().isLabel()) {
                             String label = annot.getValue().toString();
+                            System.out.println("Stage:"+label);
                             addTerm(stageTermList, iri.getShortForm(), label);
                             break;
                         }
@@ -140,4 +148,8 @@ public class NcitOwlApiParser {
     }
     public List<NcitTerm> getGradeTermList() { return gradeTermList; }
     public List<NcitTerm> getStageTermList() { return stageTermList; }
+    
+    public NcitTerm getNeoplasm(String term){
+        return termMap.get(term);
+    }
 }

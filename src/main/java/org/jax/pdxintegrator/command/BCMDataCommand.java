@@ -249,11 +249,29 @@ public class BCMDataCommand extends Command {
     }
 
     private HashMap<String, ArrayList<PdxModelCreation>> buildModelCreations(ArrayList<String> data) {
-        //Tumor ID	Model ID	Host Strain	Mouse Source/Vendor
-        //Source/Vendor Model Number	Mouse Sex	Is Mouse Humanized For Initial Engraftment?
-        //Humanization Type	Engraftment Material	PDX Model Metastasis
-        //Known Model Metastatic site(s)	Does PDX model Macro-Metastasis Require Excision  of the primary tumor?
-        //Is this a Subline of Another Model	Subline Reason
+    /*    Tumor ID
+            Model ID
+            Host Strain
+            Mouse Source/Vendor
+            Source/Vendor Model Number
+            Mouse Sex
+            Is Mouse Humanized For Initial Engraftment?
+            Humanization Type
+            Engraftment Material
+            Treatment for Engraftment
+            Engraftment Procedure
+            Engraftment Site
+            Was tumor of origin tissue cryopreserved prior to engraftment?
+            PDX Model Histology
+            PDX Doubling Time
+            Can PDX be viably cryopreserved for Passage?
+            Cryopreserved tissue engraftment quality
+            PDX Model Metastasis
+            Known Model Metastatic site(s)
+            Does PDX model Macro-Metastasis Require Excision  of the primary tumor?
+            Is this a Subline of Another Model
+            Subline Reason
+            */
         HashMap<String, ArrayList<PdxModelCreation>> models = new HashMap<>();
         for (String row : data) {
             String[] parts = row.split("\t",-1);
@@ -272,18 +290,31 @@ public class BCMDataCommand extends Command {
            // always not applicable
             model.setHumanizationType(parts[7]);
             model.setEngraftmentMaterial(parts[8]);
+            model.setTreatmentForEngraftment(parts[9]);
+            model.setEngraftmentProcedure(parts[10]);
+            model.setEngraftmentSite(parts[11]);
+            model.setCryopreservedBeforeEngraftment(getBoolean(parts[12]));
+            model.setModelHistology(parts[13]);
+            try{
+                model.setDoublingTime(new Integer(parts[14]));
+            }catch(NumberFormatException e){
+                System.out.println("cant convert "+parts[14]+" into a doubling time");
+            }
+            model.setViablyCryopresered(getBoolean(parts[15]));
+            // missing this field in RDF
+            //model.setCryopreservedQuaility(parts[16]);
             
-            if(parts[9].toLowerCase().startsWith("y"))
+            if(parts[17].toLowerCase().startsWith("y"))
                 model.setMetastasis(true);
-            if(parts[9].toLowerCase().startsWith("n")){
+            if(parts[17].toLowerCase().startsWith("n") || parts[17].toLowerCase().startsWith("micro")){
                 model.setMetastasis(false);
             }
             
-            model.setMetastastaticSites(parts[10]);
+            model.setMetastaticSites(parts[18]);
             
-            if(parts[11].toLowerCase().startsWith("y"))
+            if(parts[19].toLowerCase().startsWith("y"))
                 model.setMacroMetastasisRequiresExcision(true);
-            if(parts[11].toLowerCase().startsWith("n")){
+            if(parts[19].toLowerCase().startsWith("n")){
                 model.setMacroMetastasisRequiresExcision(false);
             }
            
