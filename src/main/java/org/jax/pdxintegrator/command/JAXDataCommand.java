@@ -13,11 +13,10 @@ import org.jax.pdxintegrator.model.PdxModel;
 import org.jax.pdxintegrator.rdf.PdxModel2Rdf;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.jax.pdxintegrator.model.ModelTerms;
 import org.jax.pdxintegrator.model.modelcreation.PdxModelCreation;
 import org.jax.pdxintegrator.model.modelstudy.PdxModelStudy;
 import org.jax.pdxintegrator.model.modelstudy.PdxStudyTreatment;
@@ -25,12 +24,10 @@ import org.jax.pdxintegrator.model.omicsfile.PdxOmicsFile;
 import org.jax.pdxintegrator.model.patient.Age;
 import org.jax.pdxintegrator.model.patient.Consent;
 import org.jax.pdxintegrator.model.patient.PdxPatient;
-import org.jax.pdxintegrator.model.patient.PdxPatientTreatment;
 import org.jax.pdxintegrator.model.patient.Sex;
 import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
 import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
 import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
-import org.jax.pdxintegrator.ncit.NcitOwlApiParser;
 
 public class JAXDataCommand extends Command {
 
@@ -57,7 +54,9 @@ public class JAXDataCommand extends Command {
 
     private void outputData() {
         logger.trace("We will now output JAX PDX data for "+models.size()+" models.");
-
+        ModelTerms mt = new ModelTerms();
+        mt.findTerms(models);
+               
         PdxModel2Rdf p2rdf = new PdxModel2Rdf(models);
         try{
             FileOutputStream fos = new FileOutputStream("jaxData.rdf", false);
@@ -72,38 +71,9 @@ public class JAXDataCommand extends Command {
   
     private void parse() {
         
-       NcitOwlApiParser parser = new NcitOwlApiParser("data/ncit.obo");
-       parser.parse();
-        
-        String fileName = "C:/jax2NCIT.txt";
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(fileName));
-
-            String line = null;
-            // for each line in the file
-            // new lines are always treated as delimiters
-            br.readLine(); // headers
-            while ((line = br.readLine()) != null) {
-                //   System.out.println(line);
-                String[] parts = line.split("\t");
-                parts[0] = parts[0].trim();
-                parts[1] = parts[1].trim();
-                String id = "Not found";
-                if(parser.getNeoplasm(parts[1])!= null){
-                    id = parser.getNeoplasm(parts[1]).getId()+"";
-                }
-                if(id.equals("Not found"))
-                System.out.println(parts[0]+"\t"+parts[1]+"\t"+id);
-            
-            }
-
-        } catch (IOException ioe) {
-            // something went wrong
-            ioe.printStackTrace();
-        }
-        
+       
          
-        fileName = "C:/PDXTreatments.txt";
+        String fileName = "C:/PDXTreatments.txt";
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
 

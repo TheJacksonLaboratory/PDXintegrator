@@ -11,10 +11,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import static org.apache.jena.assembler.JA.data;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jax.pdxintegrator.model.ModelTerms;
 import org.jax.pdxintegrator.model.PdxModel;
 import org.jax.pdxintegrator.model.modelcreation.PdxModelCreation;
 import org.jax.pdxintegrator.model.modelstudy.PdxModelStudy;
@@ -107,6 +106,8 @@ public class BCMDataCommand extends Command {
             models.add(new PdxModel(modelPatient, modelTumors, modelModelCreations, modelQAs, modelModelStudies, modelOmicsFiles));
         }
 
+        ModelTerms mt = new ModelTerms();
+        mt.findTerms(models);
         PdxModel2Rdf p2rdf = new PdxModel2Rdf(models);
         try {
             FileOutputStream fos = new FileOutputStream("bcmData.rdf", false);

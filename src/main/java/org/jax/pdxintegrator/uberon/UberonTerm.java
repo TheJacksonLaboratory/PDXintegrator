@@ -21,7 +21,7 @@ public class UberonTerm {
      * @param label The title of this NCIT term
      * @throws PDXException if we cannot parse the id String, an exception is thrown.
      */
-    UberonTerm(String idString, String  label) throws PDXException {
+    public UberonTerm(String idString, String  label) throws PDXException {
         if (!idString.startsWith("UBERON_")) {
             throw new PDXException("Malformed UBERON id: "+idString);
         }

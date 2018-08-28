@@ -454,6 +454,7 @@ public class PdxModel2Rdf {
                 
                 Resource treatment = rdfModel.createResource(PDXNET_NAMESPACE + "/" + patient.getSubmitterPatientID() + "/patienttreatment/" + id);
                 treatment.addProperty(RDF.type, this.pdxPatientTreatment);
+                treatment.addProperty(RDFS.label, ptTreatment.getRegimen());
                 setProperty(treatment,hasPatientTreatmentRegimen, ptTreatment.getRegimen());
 
                 setProperty(treatment,hasPatientTreatmentResponse, ptTreatment.getResponse());
@@ -461,7 +462,7 @@ public class PdxModel2Rdf {
                 
                 treatment.addProperty(hasPatientTreatmentIndexProperty,
                             ResourceFactory.createTypedLiteral(String.valueOf(eventIndex), XSDDatatype.XSDinteger));
-                treatment.addProperty(hasPatientTreatmentProperty, patientResource);
+                treatment.addProperty(hasPatientProperty, patientResource);
 
                 patientResource.addProperty(hasPatientTreatmentProperty, treatment);
             }
@@ -1252,7 +1253,7 @@ public class PdxModel2Rdf {
         this.hasPatientTreatmentRegimen.addProperty(RDF.type, OWL.DatatypeProperty);
 
         this.hasPatientTreatmentResponse = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTreatmentResponse");
-        this.hasPatientTreatmentResponse.addProperty(RDFS.label, "Treatment reponse");
+        this.hasPatientTreatmentResponse.addProperty(RDFS.label, "has treatment reponse");
         this.hasPatientTreatmentResponse.addProperty(RDF.type, OWL.DatatypeProperty);
         this.hasPatientTreatmentResponse.addProperty(RDFS.range, this.pdxTreatmentResponse);
 
@@ -1299,15 +1300,15 @@ public class PdxModel2Rdf {
         this.hasStudyTreatmentDrugProperty.addProperty(RDF.type, OWL.DatatypeProperty);
 
         this.hasStudyTreatmentEndpoint1ResponseProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyTreatmentEndpoint1Response");
-        this.hasStudyTreatmentEndpoint1ResponseProperty.addProperty(RDFS.label, "Study treatment endpoint 1 response");
+        this.hasStudyTreatmentEndpoint1ResponseProperty.addProperty(RDFS.label, "Has study treatment endpoint 1 response");
         this.hasStudyTreatmentEndpoint1ResponseProperty.addProperty(RDF.type, OWL.DatatypeProperty);
 
         this.hasStudyTreatmentEndpoint2ResponseProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyTreatmentEndpoint2Response");
-        this.hasStudyTreatmentEndpoint2ResponseProperty.addProperty(RDFS.label, "Study treatment endpoint 2 response");
+        this.hasStudyTreatmentEndpoint2ResponseProperty.addProperty(RDFS.label, "Has study treatment endpoint 2 response");
         this.hasStudyTreatmentEndpoint2ResponseProperty.addProperty(RDF.type, OWL.DatatypeProperty);
 
         this.hasStudyTreatmentEndpoint3ResponseProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyTreatmentEndpoint3Response");
-        this.hasStudyTreatmentEndpoint3ResponseProperty.addProperty(RDFS.label, "Study treatment endpoint 3 response");
+        this.hasStudyTreatmentEndpoint3ResponseProperty.addProperty(RDFS.label, "Has study treatment endpoint 3 response");
         this.hasStudyTreatmentEndpoint3ResponseProperty.addProperty(RDF.type, OWL.DatatypeProperty);
 
         this.hasStudyTreatmentDoseProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyTreatmentDose");

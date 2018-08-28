@@ -1,5 +1,8 @@
 package org.jax.pdxintegrator.model.modelcreation;
 
+import com.github.phenomics.ontolib.ontology.data.TermId;
+import java.util.ArrayList;
+
 /**
  * This class represents the Model Creation module of the PDX-MI.
  *
@@ -25,6 +28,7 @@ public class PdxModelCreation {
     private Boolean viablyCryopresered;
     private Boolean metastasis;
     private String metastaticSites;
+    private ArrayList<TermId> metastaticSiteTerms = new ArrayList<>();
     private Boolean macroMetastasisRequiresExcision;
     private String sublineOfModel;
     private String sublineReason;
@@ -349,6 +353,23 @@ public class PdxModelCreation {
         this.macroMetastasisRequiresExcision = macroMetastasisRequiresExcision;
     }
 
+    /**
+     * @return the metastaticSiteTerms
+     */
+    public ArrayList<TermId> getMetastaticSiteTerms() {
+        return metastaticSiteTerms;
+    }
+
+    /**
+     * @param metastaticSiteTerms the metastaticSiteTerms to set
+     */
+    public void setMetastaticSiteTerms(ArrayList<TermId> metastaticSiteTerms) {
+        this.metastaticSiteTerms = metastaticSiteTerms;
+    }
+
+     public void addMetastaticSiteTerm(TermId metastaticSiteTerm) {
+        this.metastaticSiteTerms.add(metastaticSiteTerm);
+    }
    
 
 }

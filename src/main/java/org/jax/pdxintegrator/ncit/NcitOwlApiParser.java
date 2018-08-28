@@ -54,7 +54,7 @@ public class NcitOwlApiParser {
         try {
             NcitTerm term = new NcitTerm(termId,termLabel);
             list.add(term);
-            termMap.put(termLabel,term);
+            termMap.put(termLabel.toLowerCase(),term);
         } catch (PDXException pde) {
             pde.printStackTrace();
         }
@@ -93,7 +93,7 @@ public class NcitOwlApiParser {
                         //System.out.println("\t"+annot.toString());
                         if (annot.getProperty().isLabel()) {
                             String label = annot.getValue().toString();
-                            if(label.toLowerCase().replaceAll("\"","").contains("lobular breast carcinoma"))
+                            if(label.toLowerCase().replaceAll("\"","").contains("metastatic breast"))
                             System.out.println("Term:"+label);
                            addTerm(termlist,iri.getShortForm(),label);
                            break;
@@ -150,6 +150,6 @@ public class NcitOwlApiParser {
     public List<NcitTerm> getStageTermList() { return stageTermList; }
     
     public NcitTerm getNeoplasm(String term){
-        return termMap.get(term);
+        return termMap.get(term.toLowerCase());
     }
 }

@@ -1,6 +1,8 @@
 package org.jax.pdxintegrator.model.tumor;
 
 import com.github.phenomics.ontolib.ontology.data.TermId;
+import java.util.ArrayList;
+import org.jax.pdxintegrator.uberon.UberonTerm;
 
 /**
  * Main class for modeling the Clinical/Tumor part of the PDX-MI
@@ -37,6 +39,7 @@ public class PdxClinicalTumor {
     private String overallStage;
     private String sampleType;
     private String metastaticSites;
+    private ArrayList<TermId> metastaticSiteTerms = new ArrayList<>();
     private String strAnalysis;
     private String strMarkers;
     private String strEvaluation;
@@ -473,6 +476,22 @@ public class PdxClinicalTumor {
         this.clincalEventPointTerm = clincalEventPointTerm;
     }
 
-    
+    /**
+     * @return the metastaticSiteTerms
+     */
+    public ArrayList<TermId> getMetastaticSiteTerms() {
+        return metastaticSiteTerms;
+    }
+
+    /**
+     * @param metastaticSiteTerms the metastaticSiteTerms to set
+     */
+    public void setMetastaticSiteTerms(ArrayList<TermId> metastaticSiteTerms) {
+        this.metastaticSiteTerms = metastaticSiteTerms;
+    }
+
+    public void addMetastaticSiteTerm(TermId termId){
+        this.metastaticSiteTerms.add(termId);
+    }
 
 }

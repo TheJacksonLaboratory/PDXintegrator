@@ -48,7 +48,7 @@ public class UberonOntologyParser {
         try {
             UberonTerm term = new UberonTerm(termId,termLabel);
             termlist.add(term);
-            termMap.put(termLabel,term);
+            termMap.put(termLabel.toLowerCase(),term);
            
         } catch (PDXException pde) {
             pde.printStackTrace();
@@ -102,6 +102,6 @@ public class UberonOntologyParser {
     }
     
     public UberonTerm getUberonTerm(String name){
-        return termMap.get(name);
+        return termMap.get(name.toLowerCase());
     }
 }
