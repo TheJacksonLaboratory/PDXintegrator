@@ -53,8 +53,6 @@ public class BCMDataCommand extends Command {
 
         String base = "C:/Users/sbn/Desktop/PDXNet/BCM/BCM";
 
-        String[] files = {"ModelDetails.txt", "Patient.txt", "StudyTreatments.txt",
-            "ModelStudy.txt", "PatientTreatments.txt", "Tumor.txt", "Omics.txt", "QA.txt"};
 
         HashMap<String, PdxPatient> patients = buildPatients(parse(base + "Patient.txt"));
         HashMap<String, ArrayList<PdxPatientTreatment>> patientTreatments = buildPatientTreatments(parse(base + "PatientTreatments.txt"));
@@ -62,7 +60,7 @@ public class BCMDataCommand extends Command {
         HashMap<String, ArrayList<PdxClinicalTumor>> clinicalTumors = buildTumors(parse(base + "Tumor.txt"));
         HashMap<String, ArrayList<PdxModelCreation>> modelCreations = buildModelCreations(parse(base + "ModelDetails.txt"));
 
-        HashMap<String, ArrayList<PdxOmicsFile>> omicsFiles = buildOmicsFiles(parse(base + "Omics.txt"));
+        HashMap<String, ArrayList<PdxOmicsFile>> omicsFiles = buildOmicsFiles(parse(base + "Omics2.txt"));
 
         HashMap<String, ArrayList<PdxQualityAssurance>> qas = buildQAs(parse(base + "QA.txt"));
         HashMap<String, ArrayList<PdxModelStudy>> modelStudies = buildModelStudies(parse(base + "ModelStudy.txt"));
@@ -93,7 +91,13 @@ public class BCMDataCommand extends Command {
                 }else{
                     System.out.println("no studies for "+mc.getModelID());
                 }
-                modelOmicsFiles.addAll(omicsFiles.get(mc.getModelID()));
+                
+                if(omicsFiles.containsKey(mc.getModelID())){
+                    modelOmicsFiles.addAll(omicsFiles.get(mc.getModelID()));
+                }else{
+                    System.out.println("No OMICS Files for "+mc.getModelID());
+                }
+                
             }
             for(PdxModelStudy study : modelModelStudies){
                 if(studyTreatments.containsKey(study.getModelID())){
@@ -142,6 +146,7 @@ public class BCMDataCommand extends Command {
         HashMap<String, PdxPatient> patients = new HashMap<>();
         for (String row : data) {
             String[] parts = row.split("\t",-1);
+            parts[1] = "BCM"+parts[1];
             PdxPatient.Builder builder = new PdxPatient.Builder(parts[0], parts[1]);
             String sex = parts[2];
             if (sex != null) {
@@ -181,6 +186,7 @@ public class BCMDataCommand extends Command {
         HashMap<String, ArrayList<PdxClinicalTumor>> tumors = new HashMap<>();
         for (String row : data) {
             String[] parts = row.split("\t",-1);
+            parts[0] = "BCM"+parts[0];
             PdxClinicalTumor tumor = new PdxClinicalTumor(parts[0],parts[1]);
             tumor.setEventIndex(parts[2]);
             tumor.setCollectionProcedure(parts[3]);
@@ -227,6 +233,7 @@ public class BCMDataCommand extends Command {
         HashMap<String, ArrayList<PdxPatientTreatment>> treatments = new HashMap<>();
         for (String row : data) {
             String[] parts = row.split("\t",-1);
+            parts[0] = "BCM"+parts[0];
             PdxPatientTreatment treatment = new PdxPatientTreatment();
             treatment.setPatientID(parts[0]);
             treatment.setEventIndex(parts[1]);
@@ -437,22 +444,37 @@ public class BCMDataCommand extends Command {
 
     private HashMap<String, ArrayList<PdxOmicsFile>> buildOmicsFiles(ArrayList<String> data) {
 
-        //Patient ID	Model ID	Access Level	Created datetime	
-        //Data Category	Data Format	Data Type	Sample Type	
-        //Experimental Strategy	File Size	Platform	Capture Kit	
-        //Updated Datetime	Is FFPE	Paired_end	File name	Passage
+        //Patient ID, Model ID, Access Level, Created datetime, Data Category, 
+        //Data Format, Data Type, Sample Type, 
+        //Experimental Strategy, Platform, Capture Kit, Updated Datetime, 
+        //Is FFPE, Paired_end, File name, File Size, Passage            
+        
         HashMap<String, ArrayList<PdxOmicsFile>> omics = new HashMap<>();
         
-        String fileName ="placeHolderOmicsFileName";
-        int index = 1;
-
+        String modelID ="";
+        String patientID = "";
         for (String row : data) {
-
+            System.out.println(row);
             String[] parts = row.split("\t",-1);
 
             PdxOmicsFile omicsFile = new PdxOmicsFile();
-
-            omicsFile.setPatientID(parts[0]);
+            if(parts[0].trim().length()==0){
+                parts[0] = patientID;
+            }else{
+                patientID = parts[0];
+            }
+            omicsFile.setPatientID("BCM"+parts[0]);
+            
+            if(parts[1].trim().length()==0){
+                parts[1] = modelID;
+            }else{
+                modelID = parts[1];
+            }
+//Patient ID, Model ID, Access Level, Created datetime, Data Category, 
+        //Data Format, Data Type, Sample Type, 
+        //Experimental Strategy, Platform, Capture Kit, Updated Datetime, 
+        //Is FFPE, Paired_end, File name, File Size, Passage            
+        
             omicsFile.setModelID(parts[1]);
             omicsFile.setAccessLevel(parts[2]);
             omicsFile.setCreatedDateTime(parts[3]);
@@ -461,26 +483,28 @@ public class BCMDataCommand extends Command {
             omicsFile.setDataType(parts[6]);
             omicsFile.setSampleType(parts[7]);
             omicsFile.setExperimentalStrategy(parts[8]);
-            omicsFile.setFileSize(parts[9]);
-            omicsFile.setPlatform(parts[10]);
-            omicsFile.setCaptureKit(parts[11]);
-            omicsFile.setUpdatedDateTime(fixDate(parts[12]));
-            omicsFile.setIsFFPE(getBoolean(parts[13]));
-            omicsFile.setIsPairedEnd(getBoolean(parts[14]));
-            //omicsFile.setFileName(parts[15]);
-            //fix me!
-            omicsFile.setFileName(fileName+index++);
+            omicsFile.setPlatform(parts[9]);
+            omicsFile.setCaptureKit(parts[10]);
+            omicsFile.setUpdatedDateTime(fixDate(parts[11]));
+            omicsFile.setIsFFPE(getBoolean(parts[12]));
+            omicsFile.setIsPairedEnd(getBoolean(parts[13]));
+            omicsFile.setFileName(parts[14]);
+            omicsFile.setFileSize(parts[15]);
             omicsFile.setPassage(parts[16]);
             
-            if(omics.containsKey(omicsFile.getModelID())){
-                omics.get(omicsFile.getModelID()).add(omicsFile);
-            }else{
-                
-                ArrayList<PdxOmicsFile> list = new ArrayList<>();
-                list.add(omicsFile);
-                omics.put(omicsFile.getModelID(), list);
+            // don't bother if no filename is provided.
+            if(parts[14].trim().length()>0){
+                if(omics.containsKey(omicsFile.getModelID())){
+                    omics.get(omicsFile.getModelID()).add(omicsFile);
+                }else{
+
+                    ArrayList<PdxOmicsFile> list = new ArrayList<>();
+                    list.add(omicsFile);
+                    omics.put(omicsFile.getModelID(), list);
+                }
             }
-        }
+         }
+     
         return omics;
     }
 
