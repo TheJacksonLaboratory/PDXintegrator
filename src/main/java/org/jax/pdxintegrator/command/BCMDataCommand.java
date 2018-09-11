@@ -107,7 +107,7 @@ public class BCMDataCommand extends Command {
 
             System.out.println("Patient " + patientID + " has " + modelTumors.size() + " tumors, " + modelModelCreations.size() + " modelcreations, " + modelQAs.size() + " qas, " + modelModelStudies.size() + " modelStudies, " + modelOmicsFiles.size() + " omicsfiles.");
 
-            models.add(new PdxModel(modelPatient, modelTumors, modelModelCreations, modelQAs, modelModelStudies, modelOmicsFiles));
+            models.add(new PdxModel("BCM",modelPatient, modelTumors, modelModelCreations, modelQAs, modelModelStudies, modelOmicsFiles));
         }
 
         ModelTerms mt = new ModelTerms();

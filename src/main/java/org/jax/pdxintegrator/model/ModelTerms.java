@@ -44,6 +44,8 @@ public class ModelTerms {
 
     String ncitPath = "data/ncit.obo";
     String uberonPath = "data/basic.obo";
+    
+    // this should be PDTC specific i think
     String mappingFile = "data/mappingFile.txt";
 
     HashMap<String, String> missingUBERON = new HashMap<>();
@@ -71,6 +73,9 @@ public class ModelTerms {
                 tumor.setTissueOfOriginTerm(getUberonTerm(tumor.getTissueOfOrigin()));
 
                 tumor.setSpecimenTissueTerm(getUberonTerm(tumor.getSpecimenTissue()));
+                
+                // if we do this we explicity change submitted values;
+                ///tumor.getTumorGrade(getTumorGrades(tumor.getTumorGrade());
 
                 String metsT = tumor.getMetastaticSites(); // possible list of ; seperated terms
                 if (metsT != null) {
@@ -127,12 +132,7 @@ public class ModelTerms {
 
     }
 
-    /*
-    What about model specific mappings?
-    adenocarcinoma --> Anal Adenocarcinoma
-    adenocarcinoma --> Cecum Adenocarcinoma
-    adenocarcinoma --> Colon Adenocarcinoma
-     */
+   
     private void loadMappings() {
         try {
             BufferedReader br = new BufferedReader(new FileReader(mappingFile));
@@ -211,15 +211,4 @@ public class ModelTerms {
 
 }
 
-/*
-Identify values that need to be converted to terms and associated ontologies
-Iterate over model and collect all those values
 
-Try to map values to terms
-Write out file
-Ontolog:String:Not Found
-Ontology:String:Mapped String: Mapped Term
-
-Use file to map terms
-
- */

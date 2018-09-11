@@ -12,14 +12,7 @@ public class PdxModelStudy {
     private String hostStrain;
     private String implantationSite;
     private String baselineTumorTargetSize;
-    // the following were removed by Mike L. et al
-    private boolean metastasis;
-    private int metastasisPassage;
-    private String metastasisLocation; // could be multiple locations
-    
    
-    // these were added by Mike L. et al
-    // i don't know what they are
     private String endpoint1;
     private String endpoint2;
     private String endpoint3;
@@ -32,40 +25,18 @@ public class PdxModelStudy {
         
     }
 
-    private PdxModelStudy(String modelID, String studyID, ArrayList<PdxStudyTreatment> treatments,
-            boolean metastasis, int metastasisPassage, String metastasisLocation) {
+    private PdxModelStudy(String modelID, String studyID, ArrayList<PdxStudyTreatment> treatments) {
         this.modelID = modelID;
         this.studyID = studyID;
         this.treatments = treatments;
-        this.metastasis = metastasis;
-        this.metastasisPassage = metastasisPassage;
-        this.metastasisLocation = metastasisLocation;
+        
        
         
        
 
     }
 
-    /**
-     * @return the metastasis
-     */
-    public boolean hasMetastasis() {
-        return metastasis;
-    }
-
-    /**
-     * @return the metastasisPassage
-     */
-    public int getMetastasisPassage() {
-        return metastasisPassage;
-    }
-
-    /**
-     * @return the metastasisLocation
-     */
-    public String getMetastasisLocation() {
-        return metastasisLocation;
-    }
+    
 
    
     /**
@@ -223,10 +194,7 @@ public class PdxModelStudy {
         private String modelID;
         private String studyID;
         private ArrayList<PdxStudyTreatment> treatments;
-        private boolean metastasis;
-        private int metastasisPassage;
-        private String metastasisLocation; // could be multiple locations
-      
+     
        
       
          public Builder(String modelID, String studyID){
@@ -240,23 +208,14 @@ public class PdxModelStudy {
            return this;
        }
 
-        public Builder metastasis(boolean metastasis) {
-            this.metastasis = metastasis;
-            return this;
-        }
-
-        public Builder metastasisLocation(String metastasesLocation) {
-            this.metastasisLocation = metastasesLocation;
-            return this;
-        }
+      
 
       
        
      
 
         public PdxModelStudy build() {
-            return new PdxModelStudy(modelID,studyID, treatments,
-                    metastasis, metastasisPassage, metastasisLocation);
+            return new PdxModelStudy(modelID,studyID, treatments);
         }
 
     }

@@ -101,7 +101,7 @@ public class PdxModelSimulator {
         omicsFiles.add(buildOmicsFile(null,patientID));
         // same for other categories
         
-        this.pdxmodel = new PdxModel(patient,clinicalTumors,modelCreations,qas, modelStudies,omicsFiles);
+        this.pdxmodel = new PdxModel("PDTCName",patient,clinicalTumors,modelCreations,qas, modelStudies,omicsFiles);
     }
 
 
@@ -272,12 +272,7 @@ public class PdxModelSimulator {
         int count = random.nextInt(3)+1;
         while(count>0){
             PdxModelStudy.Builder builder = new PdxModelStudy.Builder(modelID, "Study-"+modelID+"-"+count);
-            if(getRandomBoolean()){
-                builder.metastasis(true);
-                builder.metastasisLocation(getUberonId(null).toString());
-                
-            }
-           
+            
             builder.treatments(buildStudyTreatments("Study-"+modelID+"-"+count));
             studies.add(builder.build());
             count--;

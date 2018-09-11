@@ -135,31 +135,10 @@ public class JAXDataCommand extends Command {
 
         // omicsFiles.add(buildOmicsFile(null, patientID));
         // same for other categories
-        models.add(new PdxModel(patient, clinicalTumors, modelCreations, qas, modelStudies, omicsFiles));
+        models.add(new PdxModel("JAX",patient, clinicalTumors, modelCreations, qas, modelStudies, omicsFiles));
     }
 
-    private PdxOmicsFile buildOmicsFile(String modelID, String patientID) {
-        PdxOmicsFile omicsFile = new PdxOmicsFile();
-        omicsFile.setAccessLevel("access level value");
-        omicsFile.setCaptureKit("capture kit value");
-        omicsFile.setCreatedDateTime("2017-12-31");
-        omicsFile.setDataCategory("data category value");
-        omicsFile.setDataFormat("data format value");
-        omicsFile.setDataType("data type value");
-        omicsFile.setExperimentalStrategy("exp strategy");
-        omicsFile.setFileName("simulatedOmicsFile");
-        omicsFile.setFileSize("34K");
-        omicsFile.setIsFFPE(true);
-        omicsFile.setIsPairedEnd(true);
-        omicsFile.setModelID(modelID);
-        omicsFile.setPatientID(patientID);
-        omicsFile.setPassage("P1");
-        omicsFile.setPlatform("whole exome");
-        omicsFile.setSampleType("tumor");
-        omicsFile.setUpdatedDateTime("update date");
-
-        return omicsFile;
-    }
+   
 
     private ArrayList<PdxModelCreation> buildModelCreations(String[] data) {
         /*  private String tumorID;
