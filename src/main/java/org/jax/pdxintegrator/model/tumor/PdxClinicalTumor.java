@@ -25,7 +25,7 @@ public class PdxClinicalTumor {
     private TermId tissueOfOriginTerm;
     private String clinicalEventPoint;
     /** NCIT Term id for primary, recurrence, metastasis. */
-    private TermId clincalEventPointTerm; // disease progression
+    private TermId clinicalEventPointTerm; // disease progression
     private String specimenTissue;
     private TermId specimenTissueTerm;
     private String tissueHistology;
@@ -463,17 +463,17 @@ public class PdxClinicalTumor {
     }
 
     /**
-     * @return the clincalEventPointTerm
+     * @return the clinicalEventPointTerm
      */
-    public TermId getClincalEventPointTerm() {
-        return clincalEventPointTerm;
+    public TermId getClinicalEventPointTerm() {
+        return clinicalEventPointTerm;
     }
 
     /**
-     * @param clincalEventPointTerm the clincalEventPointTerm to set
+     * @param clinicalEventPointTerm the clinicalEventPointTerm to set
      */
-    public void setClincalEventPointTerm(TermId clincalEventPointTerm) {
-        this.clincalEventPointTerm = clincalEventPointTerm;
+    public void setClinicalEventPointTerm(TermId clinicalEventPointTerm) {
+        this.clinicalEventPointTerm = clinicalEventPointTerm;
     }
 
     /**

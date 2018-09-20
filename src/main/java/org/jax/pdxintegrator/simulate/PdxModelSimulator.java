@@ -165,7 +165,7 @@ public class PdxModelSimulator {
             PdxModelCreation modelCreation =  new PdxModelCreation(tumorID,modelID);
             modelCreation.setMouseStrain("NOD.Cg-Prkdc<scid> Il2rg<tm1Wj>l/SzJ");
             modelCreation.setMouseSource("JAX");
-            modelCreation.setMouseSex(random.nextInt(1) > 0 ? "Male":"Female");
+            modelCreation.setMouseSex(random.nextInt(1) > 0 ? Sex.MALE:Sex.FEMALE);
             modelCreation.setEngraftmentProcedure(tumorprepmethod.getTumorPrepMethodString());
             modelCreation.setTreatmentForEngraftment(mouseRx.getMouseTreatmentForEngraftmentString());
             modelCreation.setEngraftmentRate(engraftment+"");
@@ -223,7 +223,7 @@ public class PdxModelSimulator {
             TermId grade = getRandomTumorGrade();
             TermId stage = getRandomStage();
             PdxClinicalTumor tumor = new PdxClinicalTumor(patient.getSubmitterPatientID(),tumorID);
-            tumor.setClincalEventPointTerm(category);
+            tumor.setClinicalEventPointTerm(category);
             tumor.setClinicalMarkers("BRCA+");
             tumor.setMStage(("MStagePlaceholder"));
             tumor.setNStage("NstagePlaceholder");

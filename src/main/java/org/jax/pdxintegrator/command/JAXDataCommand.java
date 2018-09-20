@@ -171,7 +171,13 @@ public class JAXDataCommand extends Command {
            stock = " stock #" + data[labelIndex.get("Stock Num")];
         }
         modelCreation.setMouseSource("The Jackson Lab"+stock);
-        modelCreation.setMouseSex(data[labelIndex.get("Mouse Sex")]);
+        String sex = data[labelIndex.get("Mouse Sex")];
+       
+        if (sex.toUpperCase().startsWith("F")) {
+            modelCreation.setMouseSex(Sex.FEMALE);
+        } else if (sex.toUpperCase().startsWith("M")) {
+            modelCreation.setMouseSex(Sex.MALE);
+        }
         modelCreation.setHumanized(false);
         modelCreation.setEngraftmentSite(data[labelIndex.get("Engraftment Site")]);
         modelCreations.add(modelCreation);

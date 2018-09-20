@@ -42,12 +42,8 @@ public class ModelTerms {
     NcitOwlApiParser ncitParser;
     UberonOntologyParser uberonParser;
 
-    String ncitPath = "data/ncit.obo";
-    String uberonPath = "data/basic.obo";
+   
     
-    // this should be PDTC specific i think
-    String mappingFile = "data/mappingFile.txt";
-
     HashMap<String, String> missingUBERON = new HashMap<>();
     HashMap<String, String> missingNCIT = new HashMap<>();
 
@@ -61,9 +57,11 @@ public class ModelTerms {
         uberonParser = new UberonOntologyParser("data/basic.obo");
         uberonParser.parse();
 
-        loadMappings();
+        
 
         for (PdxModel model : models) {
+            String mappingFile = "data/"+model.getPDTC()+"mappingFile.txt";
+            loadMappings(mappingFile);
             for (PdxClinicalTumor tumor : model.getClinicalTumor()) {
                 
                 tumor.setInitialDiagnosisTerm(getNcitNeoplasmTerm(tumor.getInitialDiagnosis(),tumor.getTissueOfOrigin()));
@@ -98,42 +96,43 @@ public class ModelTerms {
                     }
                 }
             }
-        }
+        
 
-        //   write out terms
-        try {
+            //   write out terms
+            try {
 
-            FileWriter fw = new FileWriter(mappingFile);
-            
-            for(String value : ncitMappings.keySet()){
-                fw.write(NCIT + "\t" + value + "\t" + ncitMappings.get(value) + "\n");
+                FileWriter fw = new FileWriter(mappingFile);
+
+                for(String value : ncitMappings.keySet()){
+                    fw.write(NCIT + "\t" + value + "\t" + ncitMappings.get(value) + "\n");
+                }
+
+                for(String value : uberonMappings.keySet()){
+                    fw.write(UBERON + "\t" + value + "\t" + uberonMappings.get(value) + "\n");
+                }
+
+                for (String value : missingNCIT.keySet()) {
+
+                    fw.write(NCIT + "\t" + value + "\t" + NOTFOUND + "\n");
+                }
+
+                for (String value : missingUBERON.keySet()) {
+
+                    fw.write(UBERON + "\t" + value + "\t" + NOTFOUND + "\n");
+
+                }
+
+                fw.close();
+                System.out.println("Wrote  to " + mappingFile);
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
             }
-            
-            for(String value : uberonMappings.keySet()){
-                fw.write(UBERON + "\t" + value + "\t" + uberonMappings.get(value) + "\n");
-            }
-
-            for (String value : missingNCIT.keySet()) {
-
-                fw.write(NCIT + "\t" + value + "\t" + NOTFOUND + "\n");
-            }
-
-            for (String value : missingUBERON.keySet()) {
-
-                fw.write(UBERON + "\t" + value + "\t" + NOTFOUND + "\n");
-
-            }
-
-            fw.close();
-            System.out.println("Wrote  to " + mappingFile);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
         }
 
     }
 
    
-    private void loadMappings() {
+    private void loadMappings(String mappingFile) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(mappingFile));
 

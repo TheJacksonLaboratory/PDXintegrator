@@ -2,6 +2,7 @@ package org.jax.pdxintegrator.model.modelcreation;
 
 import com.github.phenomics.ontolib.ontology.data.TermId;
 import java.util.ArrayList;
+import org.jax.pdxintegrator.model.patient.Sex;
 
 /**
  * This class represents the Model Creation module of the PDX-MI.
@@ -15,7 +16,7 @@ public class PdxModelCreation {
     private String modelID;
     private String mouseStrain;
     private String mouseSource;
-    private String mouseSex;
+    private Sex mouseSex;
     private Boolean humanized;
     private String humanizationType;
     private String engraftmentMaterial;
@@ -101,15 +102,15 @@ public class PdxModelCreation {
     /**
      * @return the mouseSex
      */
-    public String getMouseSex() {
+    public Sex getMouseSex() {
         return mouseSex;
     }
 
     /**
      * @param mouseSex the mouseSex to set
      */
-    public void setMouseSex(String mouseSex) {
-        this.mouseSex = mouseSex;
+    public void setMouseSex(Sex sex) {
+        this.mouseSex = sex;
     }
 
     /**

@@ -287,7 +287,13 @@ public class BCMDataCommand extends Command {
             PdxModelCreation model = new PdxModelCreation(parts[0],parts[1]);
             model.setMouseStrain(parts[2]);
             model.setMouseSource(parts[3]+ " "+parts[4]);
-            model.setMouseSex(parts[5]);
+            
+            String sex = parts[5];
+            if (sex.toUpperCase().startsWith("F")) {
+                model.setMouseSex(Sex.FEMALE);
+            } else if (sex.toUpperCase().startsWith("M")) {
+                model.setMouseSex(Sex.MALE);
+            }
             
             //always no
             if(parts[6].toLowerCase().startsWith("y"))

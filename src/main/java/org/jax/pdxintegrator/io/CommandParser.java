@@ -9,6 +9,7 @@ import org.jax.pdxintegrator.command.*;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import org.jax.pdxintegrator.rdf.Test;
 
 /**
  * Class to parse command-line arguments
@@ -152,6 +153,10 @@ public class CommandParser {
                 this.command = new JAXDataCommand();
             }else if (mycommand.equals("BCMData")){
                 this.command = new BCMDataCommand();
+            }else if (mycommand.equals("test")){
+                Test t = new Test();
+                t.build();
+                if(true)System.exit(0);
             }else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));
             }
