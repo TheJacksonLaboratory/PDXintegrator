@@ -13,7 +13,7 @@ public class UberonTerm {
     /** The label (title) of this NCIT term. */
     private final String label;
     /** In our OLPG/ontolib library, term ids are represented by a prefix and a code. */
-    private final static TermPrefix UBERON_PREFIX= new ImmutableTermPrefix("UBERON");
+    private final static TermPrefix UBERON_PREFIX= new ImmutableTermPrefix("UBERON:");
 
     /**
      *
@@ -34,19 +34,19 @@ public class UberonTerm {
         this.label=label;
     }
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return String.format("%07d",id);
     }
 
     public String getIdAsString() {
-        return String.format("UBERON:%d",id);
+        return String.format("UBERON:%07d",id);
     }
 
     public String getLabel() {
         return label;
     }
 
-    public TermId getTermId() { return new ImmutableTermId(UBERON_PREFIX,String.format("%d",this.id));
+    public TermId getTermId() { return new ImmutableTermId(UBERON_PREFIX,String.format("%07d",this.id));
 
     }
 

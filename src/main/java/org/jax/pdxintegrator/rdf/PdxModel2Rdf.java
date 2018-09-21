@@ -521,7 +521,7 @@ public class PdxModel2Rdf {
             setProperty(tumorSample, hasTumorSpecimenTissueProperty, clintumor.getSpecimenTissue());
             try {
                 Resource tissueResource = rdfModel.createResource(UBERON_NAMESPACE + clintumor.getSpecimenTissueTerm().getId());
-          //      tissueResource.addProperty(RDF.type, this.pdxSpecimenTissue);
+                tissueResource.addProperty(RDF.type, this.pdxSpecimenTissue);
                 tumorSample.addProperty(hasTumorSpecimenTissueTermProperty, tissueResource);
             } catch (NullPointerException npe) {
                 // no tissue term
@@ -739,7 +739,7 @@ public class PdxModel2Rdf {
             for (TermId site : mcreation.getMetastaticSiteTerms()) {
                 try {
                     Resource tissueResource = rdfModel.createResource(UBERON_NAMESPACE + site.getId());
-           //         tissueResource.addProperty(RDF.type, this.pdxMetastaticSite);
+                    tissueResource.addProperty(RDF.type, this.pdxMetastaticSite);
                     modelCreation.addProperty(hasMetastaticSiteTermProperty, tissueResource);
                 } catch (NullPointerException npe) {
                     // no term
@@ -1285,6 +1285,7 @@ public class PdxModel2Rdf {
         this.hasTumorInitialDiagnosisTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorInitialDiagnosisTerm");
         this.hasTumorInitialDiagnosisTermProperty.addProperty(RDFS.label, "has Initial diagnosis term");
         this.hasTumorInitialDiagnosisTermProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasTumorInitialDiagnosisTermProperty.addProperty(RDFS.range,this.pdxDiagnosis);
 
         this.hasTumorTissueOfOriginProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorTissueOfOrigin");
         this.hasTumorTissueOfOriginProperty.addProperty(RDFS.label, "has Tissue of origin");
@@ -1293,6 +1294,7 @@ public class PdxModel2Rdf {
         this.hasTumorTissueOfOriginTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorTissueOfOriginTerm");
         this.hasTumorTissueOfOriginTermProperty.addProperty(RDFS.label, "has Tissue of origin term");
         this.hasTumorTissueOfOriginTermProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasTumorTissueOfOriginTermProperty.addProperty(RDFS.range,this.pdxTissueOfOrigin);
 
         this.hasTumorSpecimenTissueProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorSpecimenTissue");
         this.hasTumorSpecimenTissueProperty.addProperty(RDFS.label, "has Specimen tissue");
@@ -1301,6 +1303,7 @@ public class PdxModel2Rdf {
         this.hasTumorSpecimenTissueTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorSpecimenTissueTerm");
         this.hasTumorSpecimenTissueTermProperty.addProperty(RDFS.label, "has Specimen tissue term");
         this.hasTumorSpecimenTissueTermProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasTumorSpecimenTissueTermProperty.addProperty(RDFS.range,this.pdxSpecimenTissue);
 
         this.hasTumorTissueHistologyProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorTissueHistology");
         this.hasTumorTissueHistologyProperty.addProperty(RDFS.label, "has Tumor tissue histology");
@@ -1309,6 +1312,7 @@ public class PdxModel2Rdf {
         this.hasTumorTissueHistologyTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorTissueHistologyTerm");
         this.hasTumorTissueHistologyTermProperty.addProperty(RDFS.label, "has Tissue histology term");
         this.hasTumorTissueHistologyTermProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasTumorTissueHistologyTermProperty.addProperty(RDFS.range,this.pdxTumorHistology);
 
         this.hasTumorClinicalMarkersProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorClinicalMarkers");
         this.hasTumorClinicalMarkersProperty.addProperty(RDFS.label, "has Diagnostic clinical markers");
@@ -1485,6 +1489,7 @@ public class PdxModel2Rdf {
         this.hasMetastaticSiteTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasMetastaticSiteTerm");
         this.hasMetastaticSiteTermProperty.addProperty(RDFS.label, "has Metastastatic site term");
         this.hasMetastaticSiteTermProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasMetastaticSiteTermProperty.addProperty(RDFS.range, this.pdxMetastaticSite);
 
         this.hasViablyCryopreseredProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasViablyCryopresered");
         this.hasViablyCryopreseredProperty.addProperty(RDFS.label, "hss Viably cryopresered");

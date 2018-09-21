@@ -78,6 +78,7 @@ public class UberonOntologyParser {
                         if (annot.getProperty().isLabel()) {
                             String label = annot.getValue().toString();
                             addTerm(iri.getShortForm(),label);
+                            
                             break;
                         }
                     }
