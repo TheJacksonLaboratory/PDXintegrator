@@ -28,6 +28,7 @@ import org.jax.pdxintegrator.model.patient.Sex;
 import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
 import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
 import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
+import org.jax.pdxintegrator.model.tumor.TumorGrade;
 
 public class JAXDataCommand extends Command {
 
@@ -226,7 +227,8 @@ public class JAXDataCommand extends Command {
         tumor.setNStage(data[labelIndex.get("N-Stage")]);
         tumor.setTStage(data[labelIndex.get("T-Stage")]);
         tumor.setOverallStage(data[labelIndex.get("Stages")]);
-        tumor.setTumorGrade(data[labelIndex.get("Grades")]);
+        tumor.setTumorGrade(TumorGrade.getTumorGrade(data[labelIndex.get("Grades")]));
+        System.out.println("Set grade to "+tumor.getTumorGrade().name()+" for value "+data[labelIndex.get("Grades")]);
         tumor.setSampleType(data[labelIndex.get("Sample Type")]);
         tumor.setTissueOfOrigin(data[labelIndex.get("Primary Site")]);
         tumor.setTissueHistology(data[labelIndex.get("Clinical Diagnosis")]);

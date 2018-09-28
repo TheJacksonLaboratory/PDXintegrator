@@ -57,11 +57,16 @@ public class ModelTerms {
         uberonParser = new UberonOntologyParser("data/basic.obo");
         uberonParser.parse();
 
-        
+        String pdtc = "";
+        String mappingFile="";
 
         for (PdxModel model : models) {
-            String mappingFile = "data/"+model.getPDTC()+"mappingFile.txt";
-            loadMappings(mappingFile);
+            // don't need a new file if the PDTC didn't change
+            if(!pdtc.equals(model.getPDTC())){
+                pdtc = model.getPDTC();
+                mappingFile = "data/"+model.getPDTC()+"mappingFile.txt";
+                loadMappings(mappingFile);
+            }
             for (PdxClinicalTumor tumor : model.getClinicalTumor()) {
                 
                 tumor.setInitialDiagnosisTerm(getNcitNeoplasmTerm(tumor.getInitialDiagnosis(),tumor.getTissueOfOrigin()));
@@ -73,7 +78,7 @@ public class ModelTerms {
                 tumor.setSpecimenTissueTerm(getUberonTerm(tumor.getSpecimenTissue()));
                 
                 // if we do this we explicity change submitted values;
-                ///tumor.getTumorGrade(getTumorGrades(tumor.getTumorGrade());
+                //tumor.getTumorGrade(getTumorGrades(tumor.getTumorGrade()));
 
                 String metsT = tumor.getMetastaticSites(); // possible list of ; seperated terms
                 if (metsT != null) {
@@ -99,6 +104,7 @@ public class ModelTerms {
         
 
             //   write out terms
+            //  can we only do this once? not for every model?
             try {
 
                 FileWriter fw = new FileWriter(mappingFile);
@@ -155,7 +161,8 @@ public class ModelTerms {
                     } else {
                         System.out.println("Error in mapping file unknown Ontology:" + parts[0]);
                     }
-                } else {
+                } else if (!NOTFOUND.equals(parts[2].trim()))  {
+                    
                     System.out.println("Error in mapping file bad format:" + line);
                 }
 

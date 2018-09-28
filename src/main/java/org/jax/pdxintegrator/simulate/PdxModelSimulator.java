@@ -22,6 +22,7 @@ import org.jax.pdxintegrator.model.qualityassurance.ModelCharacterization;
 import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
 import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
 import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
+import org.jax.pdxintegrator.model.tumor.TumorGrade;
 import org.jax.pdxintegrator.ncit.neoplasm.NcitTerm;
 import org.jax.pdxintegrator.uberon.UberonTerm;
 
@@ -229,7 +230,7 @@ public class PdxModelSimulator {
             tumor.setNStage("NstagePlaceholder");
             tumor.setTStage("TstagePlaceholder");
             tumor.setOverallStage(stage.getId());
-            tumor.setTumorGrade(grade.getId());
+            tumor.setTumorGrade(TumorGrade.getTumorGrade(grade.getId()));
             tumor.setPatientID(patientID);
             tumor.setSampleType("sampleType");
             tumor.setTissueOfOrigin(uberon.toString());

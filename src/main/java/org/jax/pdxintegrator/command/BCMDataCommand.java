@@ -27,6 +27,7 @@ import org.jax.pdxintegrator.model.patient.Sex;
 import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
 import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
 import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
+import org.jax.pdxintegrator.model.tumor.TumorGrade;
 import org.jax.pdxintegrator.rdf.PdxModel2Rdf;
 
 /**
@@ -204,7 +205,7 @@ public class BCMDataCommand extends Command {
             tumor.setSpecimenTissue(parts[9].replaceAll("\"",""));
             tumor.setTissueHistology(parts[10].replaceAll("\"",""));
             tumor.setClinicalMarkers(parts[11]);
-            tumor.setTumorGrade(parts[12]);
+            tumor.setTumorGrade(TumorGrade.getTumorGrade(parts[12]));
             tumor.setTStage(parts[13]);
             tumor.setNStage(parts[14]);
             tumor.setMStage(parts[15]);

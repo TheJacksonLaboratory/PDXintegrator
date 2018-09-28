@@ -32,7 +32,7 @@ public class PdxClinicalTumor {
     /** NCIT Term id for tissue histology */
     private TermId tissueHistologyTerm;
     private String clinicalMarkers;
-    private String tumorGrade;
+    private TumorGrade tumorGrade;
     private String tStage;
     private String nStage;
     private String mStage;
@@ -168,7 +168,7 @@ public class PdxClinicalTumor {
     /**
      * @param tumorGrade the tumorGrade to set
      */
-    public void setTumorGrade(String tumorGrade) {
+    public void setTumorGrade(TumorGrade tumorGrade) {
         this.tumorGrade = tumorGrade;
     }
 
@@ -274,7 +274,7 @@ public class PdxClinicalTumor {
     /**
      * @return the tumorGrade
      */
-    public String getTumorGrade() {
+    public TumorGrade getTumorGrade() {
         return tumorGrade;
     }
 
