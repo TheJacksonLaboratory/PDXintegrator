@@ -59,8 +59,7 @@ public class PdxModel2Rdf {
     private Property hasSubmitterTumorIdProperty;
 
     private Property hasTumorProperty;
-    private Property hasTumorCategoryProperty;
-
+   
     private Property hasTumorGradeProperty;
     private Property hasTStageProperty;
     private Property hasMStageProperty;
@@ -267,6 +266,7 @@ public class PdxModel2Rdf {
     private OntClass pdxTumorStage;
     private OntClass pdxTumorHistology;
     private OntClass pdxMetastaticSite;
+   
 
     public PdxModel2Rdf(List<PdxModel> modelList) {
         this.pdxmodels = modelList;
@@ -1065,13 +1065,14 @@ public class PdxModel2Rdf {
         this.hasPatientIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "#hasPatientID");
         this.hasPatientIdProperty.addProperty(RDFS.label, "has Patient ID");
         this.hasPatientIdProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasPatientIdProperty.addProperty(RDFS.range, XSD.xstring);
         
         // Unique tumor id
         this.hasSubmitterTumorIdProperty = rdfModel.createProperty(PDXNET_NAMESPACE + "#hasSubmitterTumorId");
         this.hasSubmitterTumorIdProperty.addProperty(RDFS.label, "has Unique identifer for sampled tissue");
         this.hasSubmitterTumorIdProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasSubmitterTumorIdProperty.addProperty(RDFS.range, XSD.xstring);
+        
         // Tumor Sample Object
         this.hasTumorProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasClinicalTumor");
         this.hasTumorProperty.addProperty(RDFS.label, "has Clinical tumor");
@@ -1114,76 +1115,92 @@ public class PdxModel2Rdf {
         this.hasEthnicityProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasEthnicity");
         this.hasEthnicityProperty.addProperty(RDFS.label, "has Ethnicity");
         this.hasEthnicityProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        // should probably be defined classes
+        this.hasEthnicityProperty.addProperty(RDFS.range, XSD.xstring);
 
         // Race of patient
         this.hasRaceProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasRace");
         this.hasRaceProperty.addProperty(RDFS.label, "has Race");
         this.hasRaceProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        // should probably be defined classes
+        this.hasRaceProperty.addProperty(RDFS.range, XSD.xstring);
 
         // Virology status of patient
         this.hasPatientVirolgyStatusProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPatientVirologyStatus");
         this.hasPatientVirolgyStatusProperty.addProperty(RDFS.label, "has Patient virology status");
         this.hasPatientVirolgyStatusProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasPatientVirolgyStatusProperty.addProperty(RDFS.range, XSD.xstring);
+        
         // Clinical treatment setting status of patient
         this.hasPatientClinicalTreatmentSettingProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPatientClinicalTreatmentSetting");
         this.hasPatientClinicalTreatmentSettingProperty.addProperty(RDFS.label, "has Patient clinical treatment setting");
         this.hasPatientClinicalTreatmentSettingProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasPatientClinicalTreatmentSettingProperty.addProperty(RDFS.range, XSD.xstring);
+        
         // Treatment notes for patient
         this.hasPatientTreatmentNotesProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPatientTreatmentNotes");
         this.hasPatientTreatmentNotesProperty.addProperty(RDFS.label, "has Patient treatmnet notes");
         this.hasPatientTreatmentNotesProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasPatientTreatmentNotesProperty.addProperty(RDFS.range, XSD.xstring);
 
-        // Tumor Category
-        this.hasTumorCategoryProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorCategory");
-        this.hasTumorCategoryProperty.addProperty(RDFS.label, "has Tumor category");
-        this.hasTumorCategoryProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+       
 
         // Histology for model
         this.hasModelHistologyProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasModelHistology");
         this.hasModelHistologyProperty.addProperty(RDFS.label, "has Model histology");
         this.hasModelHistologyProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasModelHistologyProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasModelHistologyTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasModelHistologyTerm");
         this.hasModelHistologyTermProperty.addProperty(RDFS.label, "has Model histology term");
         this.hasModelHistologyTermProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasModelHistologyTermProperty.addProperty(RDFS.range,this.pdxTumorHistology);
 
         // Grade of tumor
         this.hasTumorGradeProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorGrade");
         this.hasTumorGradeProperty.addProperty(RDFS.label, "has Tumor grade");
-        this.hasTumorGradeProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasTumorGradeProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasTumorGradeProperty.addProperty(RDFS.range, this.pdxTumorGrade);
+        
 
-        // Stage of tumor
+        // Stage of tumor these should probably all be objects since we are using AJCC vocab?
         this.hasTumorOverallStageProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasOverallStage");
         this.hasTumorOverallStageProperty.addProperty(RDFS.label, "has Overall stage");
         this.hasTumorOverallStageProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasTumorOverallStageProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasTStageProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTStage");
         this.hasTStageProperty.addProperty(RDFS.label, "has T stage");
         this.hasTStageProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasTStageProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasNStageProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasNStage");
         this.hasNStageProperty.addProperty(RDFS.label, "has N stage");
         this.hasNStageProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasNStageProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasMStageProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasMStage");
         this.hasMStageProperty.addProperty(RDFS.label, "has M stage");
         this.hasMStageProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasMStageProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasTumorSampleTypeProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorSampleType");
         this.hasTumorSampleTypeProperty.addProperty(RDFS.label, "has Tumor sample type");
         this.hasTumorSampleTypeProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasTumorSampleTypeProperty.addProperty(RDFS.range, XSD.xstring);
 
         // PDX model generated from patient tumor
         this.hasPdxModelProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPdxModel");
         this.hasPdxModelProperty.addProperty(RDFS.label, "has PDX model");
         this.hasPdxModelProperty.addProperty(RDF.type, OWL.ObjectProperty);
-
+        this.hasPdxModelProperty.addProperty(RDFS.range, this.pdxModelCreation);
+        
+        
         // Mouse strain for PDX model
         this.hasStrainProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStrain");
         this.hasStrainProperty.addProperty(RDFS.label, "has Strain");
         this.hasStrainProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasStrainProperty.addProperty(RDFS.range, XSD.xstring);
 
         // Is the mouse strain humanized
         this.hasModelHumanizedProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasHumanization");
@@ -1195,39 +1212,47 @@ public class PdxModel2Rdf {
         this.hasModelHumanizationTypeProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasHumanizationType");
         this.hasModelHumanizationTypeProperty.addProperty(RDFS.label, "has Type of mouse humanization");
         this.hasModelHumanizationTypeProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasModelHumanizationTypeProperty.addProperty(RDFS.range, XSD.xstring);
 
         // Type of tumor preperation
         this.hasTumorPreparation = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorPreparation");
         this.hasTumorPreparation.addProperty(RDFS.label, "has Type of tumor preparation for engraftment");
         this.hasTumorPreparation.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasTumorPreparation.addProperty(RDFS.range, XSD.xstring);
 
         // Instituion providing mouse
         this.hasStrainSourceProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStrainSource");
         this.hasStrainSourceProperty.addProperty(RDFS.label, "has Institution providing strain");
         this.hasStrainSourceProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasStrainSourceProperty.addProperty(RDFS.range, XSD.xstring);
 
         // Treatement of mouse prior to engraftment
         this.hasModelTreatmentForEngraftmentProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTreatmentForEngraftment");
         this.hasModelTreatmentForEngraftmentProperty.addProperty(RDFS.label, "has Treatment for engraftment");
         this.hasModelTreatmentForEngraftmentProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasModelTreatmentForEngraftmentProperty.addProperty(RDFS.range, XSD.xstring);
 
         // Percent of successful engraftments 
         this.hasModelEngraftmentPercentProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasEngraftmentPercent");
         this.hasModelEngraftmentPercentProperty.addProperty(RDFS.label, "has Engraftment percent");
         this.hasModelEngraftmentPercentProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasModelEngraftmentPercentProperty.addProperty(RDFS.range, XSD.xstring);
 
         // Days for successful engraftment
         this.hasModelEngraftTimeInDaysProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasEngraftmentTimeInDays");
         this.hasModelEngraftTimeInDaysProperty.addProperty(RDFS.label, "has Engraftment time in days");
         this.hasModelEngraftTimeInDaysProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasModelEngraftTimeInDaysProperty.addProperty(RDFS.range, XSD.xint);
 
         this.hasModelEngraftmentProcedureProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasEngraftmentProcedure");
         this.hasModelEngraftmentProcedureProperty.addProperty(RDFS.label, "has Engraftment procedure");
         this.hasModelEngraftmentProcedureProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasModelEngraftmentProcedureProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasModelEngraftmentSiteProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasEngraftmentSite");
         this.hasModelEngraftmentSiteProperty.addProperty(RDFS.label, "has Engraftment site");
         this.hasModelEngraftmentSiteProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasModelEngraftmentSiteProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasPassagedTissueCryopreservedProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPassagedTissueCryopreserved");
         this.hasPassagedTissueCryopreservedProperty.addProperty(RDFS.label, "has Passaged tissue was cryopreserved");
@@ -1237,32 +1262,40 @@ public class PdxModel2Rdf {
         this.hasSublineOfModelProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasSublineOfModel");
         this.hasSublineOfModelProperty.addProperty(RDFS.label, "has Subline of model");
         this.hasSublineOfModelProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasSublineOfModelProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasSublineReasonProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasSublineReason");
         this.hasSublineReasonProperty.addProperty(RDFS.label, "has Subline reason");
         this.hasSublineReasonProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasSublineReasonProperty.addProperty(RDFS.range, XSD.xstring);
 
        
         this.hasBaselineTumorTargetSizeProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasBaselineTumorTargetSize");
         this.hasBaselineTumorTargetSizeProperty.addProperty(RDFS.label, "has Baseline tumor target size");
         this.hasBaselineTumorTargetSizeProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasBaselineTumorTargetSizeProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasStudyDescriptionProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyDescription");
         this.hasStudyDescriptionProperty.addProperty(RDFS.label, "has Study description");
         this.hasStudyDescriptionProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasStudyDescriptionProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasStudyHostStrainProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyHostStrain");
         this.hasStudyHostStrainProperty.addProperty(RDFS.label, "has Study host strain");
         this.hasStudyHostStrainProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasStudyHostStrainProperty.addProperty(RDFS.range, XSD.xstring);
 
+        // should be a corresponding anatomy term
         this.hasImplantationSiteProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasImplantationSite");
         this.hasImplantationSiteProperty.addProperty(RDFS.label, "has Implantation site");
         this.hasImplantationSiteProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasImplantationSiteProperty.addProperty(RDFS.range, XSD.xstring);
 
         // Tumor Characterization
         this.hasTumorCharacterizationProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorCharacterization");
         this.hasTumorCharacterizationProperty.addProperty(RDFS.label, "has Tumor characterization");
         this.hasTumorCharacterizationProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasTumorCharacterizationProperty.addProperty(RDFS.range, XSD.xstring);
 
         // Tumor is not EBV or mouse tissue
         this.tumorNotEbvNotMouseProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasNotEbvNotMouseStatus");
@@ -1274,6 +1307,7 @@ public class PdxModel2Rdf {
         this.hasPdxTumorResponseProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorResponse");
         this.hasPdxTumorResponseProperty.addProperty(RDFS.label, "has Tumor response");
         this.hasPdxTumorResponseProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasPdxTumorResponseProperty.addProperty(RDFS.range, this.pdxTreatmentResponse);
 
         // The pdx model's health status
         this.hasAnimalHealthStatusSatisfactoryProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasSatisfactoryAnimalHealthStatus");
@@ -1285,32 +1319,36 @@ public class PdxModel2Rdf {
         this.hasPassageQaPerformedProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPassageQAPerformed");
         this.hasPassageQaPerformedProperty.addProperty(RDFS.label, "has Passage QA performed");
         this.hasPassageQaPerformedProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasPassageQaPerformedProperty.addProperty(RDFS.range, XSD.xstring);
 
         // Patient current treatment drug
         this.currentTreatmentDrug = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasCurrentTreatmentDrug");
         this.currentTreatmentDrug.addProperty(RDFS.label, "has Current patient treatment drug");
         this.currentTreatmentDrug.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.currentTreatmentDrug.addProperty(RDFS.range, XSD.xstring);
 
         // Lower age range for Patient at primary diagnosis
         this.primaryDiagnosisAgeBinLowerRange = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPrimaryDiagnosisAgeBinLowerRange");
         this.primaryDiagnosisAgeBinLowerRange.addProperty(RDFS.label, "has Primary diagnosis age lower range of 5 year bin");
-        //this.primaryDiagnosisAgeBinLowerRange.addProperty(RDFS.domain, pdxPatient);
         this.primaryDiagnosisAgeBinLowerRange.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.primaryDiagnosisAgeBinLowerRange.addProperty(RDFS.range, XSD.xint);
 
         // Upper age range for Patient when sample was taken
         this.primaryDiagnosisAgeBinUpperRange = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPrimaryDiagnosisAgeBinUpperRange");
         this.primaryDiagnosisAgeBinUpperRange.addProperty(RDFS.label, "has Primary diagnosis upper range of 5 year bin");
-        // this.primaryDiagnosisAgeBinUpperRange.addProperty(RDFS.domain, pdxPatient);
         this.primaryDiagnosisAgeBinUpperRange.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.primaryDiagnosisAgeBinUpperRange.addProperty(RDFS.range, XSD.xint);
+        
         this.hasPatientTreatmentIndexProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPatientTreatmentIndex");
         this.hasPatientTreatmentIndexProperty.addProperty(RDFS.label, "has Patient treatment index");
         this.hasPatientTreatmentIndexProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasPatientTreatmentIndexProperty.addProperty(RDFS.range, XSD.xint);
+        
         this.hasPatientTreatmentRegimen = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPatientTreatmentRegimen");
         this.hasPatientTreatmentRegimen.addProperty(RDFS.label, "has Patient treatment regimen");
         this.hasPatientTreatmentRegimen.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasPatientTreatmentRegimen.addProperty(RDFS.range, XSD.xstring);
+        
         this.hasPatientTreatmentResponse = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTreatmentResponse");
         this.hasPatientTreatmentResponse.addProperty(RDFS.label, "has Treatment reponse");
         this.hasPatientTreatmentResponse.addProperty(RDF.type, OWL.ObjectProperty);
@@ -1319,23 +1357,28 @@ public class PdxModel2Rdf {
         this.hasPatientTreatmentReasonStopped = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPatientTreatmentReasonStopped");
         this.hasPatientTreatmentReasonStopped.addProperty(RDFS.label, "has Patient treatment reason stopped");
         this.hasPatientTreatmentReasonStopped.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasPatientTreatmentReasonStopped.addProperty(RDFS.range, XSD.xstring);
 
         this.hasTumorEventIndexProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorEventIndex");
         this.hasTumorEventIndexProperty.addProperty(RDFS.label, "has Tumor collection at treatment index");
         this.hasTumorEventIndexProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasTumorEventIndexProperty.addProperty(RDFS.range, XSD.xint);
+        
         this.hasTumorTreatmentNaiveProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorTreatmentNaive");
         this.hasTumorTreatmentNaiveProperty.addProperty(RDFS.label, "has Treatment naive");
         this.hasTumorTreatmentNaiveProperty.addProperty(RDF.type, OWL.DatatypeProperty);
         this.hasTumorTreatmentNaiveProperty.addProperty(RDFS.range, XSD.xboolean);
 
+        // should be binned?
         this.hasPatientAgeAtCollectionProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPatientAgeAtCollection");
         this.hasPatientAgeAtCollectionProperty.addProperty(RDFS.label, "has Patient age at collection");
         this.hasPatientAgeAtCollectionProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasPatientAgeAtCollectionProperty.addProperty(RDFS.range, XSD.xint);
 
         this.hasTumorInitialDiagnosisProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorInitialDiagnosis");
         this.hasTumorInitialDiagnosisProperty.addProperty(RDFS.label, "has Initial diagnosis");
-        this.hasTumorInitialDiagnosisProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasTumorInitialDiagnosisProperty.addProperty(RDF.type, OWL.ObjectProperty);
+        this.hasTumorInitialDiagnosisProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasTumorInitialDiagnosisTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorInitialDiagnosisTerm");
         this.hasTumorInitialDiagnosisTermProperty.addProperty(RDFS.label, "has Initial diagnosis term");
@@ -1345,6 +1388,7 @@ public class PdxModel2Rdf {
         this.hasTumorTissueOfOriginProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorTissueOfOrigin");
         this.hasTumorTissueOfOriginProperty.addProperty(RDFS.label, "has Tissue of origin");
         this.hasTumorTissueOfOriginProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasTumorTissueOfOriginProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasTumorTissueOfOriginTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorTissueOfOriginTerm");
         this.hasTumorTissueOfOriginTermProperty.addProperty(RDFS.label, "has Tissue of origin term");
@@ -1354,6 +1398,7 @@ public class PdxModel2Rdf {
         this.hasTumorSpecimenTissueProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorSpecimenTissue");
         this.hasTumorSpecimenTissueProperty.addProperty(RDFS.label, "has Specimen tissue");
         this.hasTumorSpecimenTissueProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasTumorSpecimenTissueProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasTumorSpecimenTissueTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorSpecimenTissueTerm");
         this.hasTumorSpecimenTissueTermProperty.addProperty(RDFS.label, "has Specimen tissue term");
@@ -1363,6 +1408,7 @@ public class PdxModel2Rdf {
         this.hasTumorTissueHistologyProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorTissueHistology");
         this.hasTumorTissueHistologyProperty.addProperty(RDFS.label, "has Tumor tissue histology");
         this.hasTumorTissueHistologyProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasTumorTissueHistologyProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasTumorTissueHistologyTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorTissueHistologyTerm");
         this.hasTumorTissueHistologyTermProperty.addProperty(RDFS.label, "has Tissue histology term");
@@ -1372,11 +1418,13 @@ public class PdxModel2Rdf {
         this.hasTumorClinicalMarkersProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasTumorClinicalMarkers");
         this.hasTumorClinicalMarkersProperty.addProperty(RDFS.label, "has Diagnostic clinical markers");
         this.hasTumorClinicalMarkersProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasTumorClinicalMarkersProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasStudyTreatmentDrugProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyTreatmentDrug");
         this.hasStudyTreatmentDrugProperty.addProperty(RDFS.label, "has Study treatment drug");
         this.hasStudyTreatmentDrugProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasStudyTreatmentDrugProperty.addProperty(RDFS.range, XSD.xstring);
+        
         this.hasStudyTreatmentEndpoint1ResponseProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyTreatmentEndpoint1Response");
         this.hasStudyTreatmentEndpoint1ResponseProperty.addProperty(RDFS.label, "has Study treatment endpoint 1 response");
         this.hasStudyTreatmentEndpoint1ResponseProperty.addProperty(RDF.type, OWL.ObjectProperty);
@@ -1395,15 +1443,18 @@ public class PdxModel2Rdf {
         this.hasStudyTreatmentDoseProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyTreatmentDose");
         this.hasStudyTreatmentDoseProperty.addProperty(RDFS.label, "has Study treatment dose");
         this.hasStudyTreatmentDoseProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasStudyTreatmentDoseProperty.addProperty(RDFS.range, XSD.xstring);
+        
         this.hasStudyTreatmentRouteProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyTreatmentRoute");
         this.hasStudyTreatmentRouteProperty.addProperty(RDFS.label, "has Study treatment route");
         this.hasStudyTreatmentRouteProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasStudyTreatmentRouteProperty.addProperty(RDFS.range, XSD.xstring);
+        
         this.hasStudyTreatmentFrequencyProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyTreatmentFrequency");
         this.hasStudyTreatmentFrequencyProperty.addProperty(RDFS.label, "has Study treatment frequency");
         this.hasStudyTreatmentFrequencyProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasStudyTreatmentFrequencyProperty.addProperty(RDFS.range, XSD.xstring);
+        
         // for omics files
         this.hasOmicsFile = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasFile");
         this.hasOmicsFile.addProperty(RDFS.label, "has File");
@@ -1423,38 +1474,47 @@ public class PdxModel2Rdf {
         this.hasDataCategory = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasDataCategory");
         this.hasDataCategory.addProperty(RDFS.label, "has Data category");
         this.hasDataCategory.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasDataCategory.addProperty(RDFS.range, XSD.xstring);
 
         this.hasDataFormat = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasDataFormat");
         this.hasDataFormat.addProperty(RDFS.label, "has Data format");
         this.hasDataFormat.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasDataFormat.addProperty(RDFS.range, XSD.xstring);
 
         this.hasDataType = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasDataType");
         this.hasDataType.addProperty(RDFS.label, "has Data type");
         this.hasDataType.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasDataType.addProperty(RDFS.range, XSD.xstring);
 
         this.hasSampleType = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasSampleType");
         this.hasSampleType.addProperty(RDFS.label, "has Sample type");
         this.hasSampleType.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasSampleType.addProperty(RDFS.range, XSD.xstring);
 
         this.hasExperimentalStrategy = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasExperimentalStrategy");
         this.hasExperimentalStrategy.addProperty(RDFS.label, "has Experimental strategy");
         this.hasExperimentalStrategy.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasExperimentalStrategy.addProperty(RDFS.range, XSD.xstring);
 
         this.hasFileSize = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasFileSize");
         this.hasFileSize.addProperty(RDFS.label, "has File size");
         this.hasFileSize.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasFileSize.addProperty(RDFS.range, XSD.xint);
 
         this.hasPlatform = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPlatform");
         this.hasPlatform.addProperty(RDFS.label, "has Platform");
         this.hasPlatform.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasPlatform.addProperty(RDFS.range, XSD.xstring);
 
         this.hasCaptureKit = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasCaptureKit");
         this.hasCaptureKit.addProperty(RDFS.label, "has Capture kit");
         this.hasCaptureKit.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasCaptureKit.addProperty(RDFS.range, XSD.xstring);
 
         this.hasUpdatedDateTime = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasUpdateDateTime");
         this.hasUpdatedDateTime.addProperty(RDFS.label, "has Update date and time");
         this.hasUpdatedDateTime.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasUpdatedDateTime.addProperty(RDFS.range, XSD.dateTime);
 
         this.hasFFPE = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasFFPE");
         this.hasFFPE.addProperty(RDFS.label, "has FFPE");
@@ -1469,23 +1529,28 @@ public class PdxModel2Rdf {
         this.hasFileName = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasFileName");
         this.hasFileName.addProperty(RDFS.label, "has File name");
         this.hasFileName.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasFileName.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasPassage = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasModelPassage");
         this.hasPassage.addProperty(RDFS.label, "has Model passage");
         this.hasPassage.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasPassage.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasQAMethodProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasQAMethod");
         this.hasQAMethodProperty.addProperty(RDFS.label, "has QA method");
         this.hasQAMethodProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasQAMethodProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasQAResultProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasQAResult");
         this.hasQAResultProperty.addProperty(RDFS.label, "has QA result");
         this.hasQAResultProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasQAResultProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasQAPassProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasQAPass");
         this.hasQAPassProperty.addProperty(RDFS.label, "has QA passed");
         this.hasQAPassProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasQAPassProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasQAProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasQualityAssurance");
         this.hasQAProperty.addProperty(RDFS.label, "has Quality assurance");
         this.hasQAProperty.addProperty(RDF.type, OWL.ObjectProperty);
@@ -1494,31 +1559,38 @@ public class PdxModel2Rdf {
         this.hasAnimalHealthStatusProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasAnimalHealthStatus");
         this.hasAnimalHealthStatusProperty.addProperty(RDFS.label, "has Animal health status");
         this.hasAnimalHealthStatusProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasAnimalHealthStatusProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasClinicalEventPointProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasClinicalEventPoint");
         this.hasClinicalEventPointProperty.addProperty(RDFS.label, "has Clinical event point");
         this.hasClinicalEventPointProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasClinicalEventPointProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasClinicalEventPointTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasClinicalEventPointTerm");
         this.hasClinicalEventPointTermProperty.addProperty(RDFS.label, "has Clinical event point term");
         this.hasClinicalEventPointTermProperty.addProperty(RDF.type, OWL.ObjectProperty);
-
+        this.hasClinicalEventPointTermProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasCollectionProcedureProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasCollectionProcedure");
         this.hasCollectionProcedureProperty.addProperty(RDFS.label, "has Collection procedure");
         this.hasCollectionProcedureProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasCollectionProcedureProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasStrAnalysisProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasSTRAnalysis");
         this.hasStrAnalysisProperty.addProperty(RDFS.label, "has STR analysis");
         this.hasStrAnalysisProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasStrAnalysisProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasStrEvaluationProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasSTREvaluation");
         this.hasStrEvaluationProperty.addProperty(RDFS.label, "has STR evaluation");
         this.hasStrEvaluationProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasStrEvaluationProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasStrMarkersProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasSTRMarkers");
         this.hasStrMarkersProperty.addProperty(RDFS.label, "has STR markers");
         this.hasStrMarkersProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasStrMarkersProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasCryopreservedBeforeEngraftmentProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasBeenCryopreservedBeforeEngraftment");
         this.hasCryopreservedBeforeEngraftmentProperty.addProperty(RDFS.label, "has Been cryopreserved before engraftment");
         this.hasCryopreservedBeforeEngraftmentProperty.addProperty(RDF.type, OWL.DatatypeProperty);
@@ -1527,14 +1599,17 @@ public class PdxModel2Rdf {
         this.hasDoublingTimeProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasDoublingTime");
         this.hasDoublingTimeProperty.addProperty(RDFS.label, "has Doubling time");
         this.hasDoublingTimeProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasDoublingTimeProperty.addProperty(RDFS.range,XSD.xint);
+        
         this.hasEngraftmentMaterialProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasEngraftmentMaterial");
         this.hasEngraftmentMaterialProperty.addProperty(RDFS.label, "has Engraftment material");
         this.hasEngraftmentMaterialProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasEngraftmentMaterialProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasMacroMetastasisRequiresExcisionProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasMacroMetastasisRequiresExcision");
         this.hasMacroMetastasisRequiresExcisionProperty.addProperty(RDFS.label, "has Macro metastasis requires excision");
         this.hasMacroMetastasisRequiresExcisionProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasMacroMetastasisRequiresExcisionProperty.addProperty(RDFS.range, XSD.xboolean);
 
         this.hasMetastasisProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasMetastasis");
         this.hasMetastasisProperty.addProperty(RDFS.label, "has Metastasis");
@@ -1544,7 +1619,8 @@ public class PdxModel2Rdf {
         this.hasMetastaticSitesProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasMetastaticSite");
         this.hasMetastaticSitesProperty.addProperty(RDFS.label, "has Metastastatic site");
         this.hasMetastaticSitesProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasMetastaticSitesProperty.addProperty(RDFS.range, XSD.xstring);
+        
         this.hasMetastaticSiteTermProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasMetastaticSiteTerm");
         this.hasMetastaticSiteTermProperty.addProperty(RDFS.label, "has Metastastatic site term");
         this.hasMetastaticSiteTermProperty.addProperty(RDF.type, OWL.ObjectProperty);
@@ -1554,78 +1630,96 @@ public class PdxModel2Rdf {
         this.hasViablyCryopreseredProperty.addProperty(RDFS.label, "has Viably cryopresered");
         this.hasViablyCryopreseredProperty.addProperty(RDF.type, OWL.DatatypeProperty);
         this.hasViablyCryopreseredProperty.addProperty(RDFS.range, XSD.xboolean);
-
+        
         this.hasPdtcProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPDTC");
         this.hasPdtcProperty.addProperty(RDFS.label, "has PDTC");
         this.hasPdtcProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasPdtcProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasCd45IHCProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasCD45IHC");
         this.hasCd45IHCProperty.addProperty(RDFS.label, "has CD45 IHC");
         this.hasCd45IHCProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasCd45IHCProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasCd45IHCAssayResultProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasCD45IHCAssayResult");
         this.hasCd45IHCAssayResultProperty.addProperty(RDFS.label, "has CD45 IHC assay result");
         this.hasCd45IHCAssayResultProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasCd45IHCAssayResultProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasClinicalDiagnosticMarkerAssayResultProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasClinicalDiagnosticMarkerAssayResult");
         this.hasClinicalDiagnosticMarkerAssayResultProperty.addProperty(RDFS.label, "has Clinical diagnostic marker assay result");
         this.hasClinicalDiagnosticMarkerAssayResultProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasClinicalDiagnosticMarkerAssayResultProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasClinicalDiagnosticMarkerNotesProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasClinicalDiagnosticMarkerNotes");
         this.hasClinicalDiagnosticMarkerNotesProperty.addProperty(RDFS.label, "has Clinical diagnostic marker notes");
         this.hasClinicalDiagnosticMarkerNotesProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasClinicalDiagnosticMarkerNotesProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasClinicalDiagnosticMarkersProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasClinicalDiagnosticMarkers");
         this.hasClinicalDiagnosticMarkersProperty.addProperty(RDFS.label, "has Clinical diagnostic markers");
         this.hasClinicalDiagnosticMarkersProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasClinicalDiagnosticMarkersProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasEbvTranscriptDetectionProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasEbvTranscriptDetection");
         this.hasEbvTranscriptDetectionProperty.addProperty(RDFS.label, "has EBV transcript detection");
         this.hasEbvTranscriptDetectionProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasEbvTranscriptDetectionProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasEbvTranscriptDetectionResultProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasEbvTranscriptDetectionResult");
         this.hasEbvTranscriptDetectionResultProperty.addProperty(RDFS.label, "has EBV transcript detection result");
         this.hasEbvTranscriptDetectionResultProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasEbvTranscriptDetectionResultProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasHumanSpecificCytokeratin19Property = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasHumanSpecificCytokeratin19");
         this.hasHumanSpecificCytokeratin19Property.addProperty(RDFS.label, "has Human specific cytokeratin 19");
         this.hasHumanSpecificCytokeratin19Property.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasHumanSpecificCytokeratin19Property.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasMousePathogenStatusProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasMousePathogenStatus");
         this.hasMousePathogenStatusProperty.addProperty(RDFS.label, "has Mouse pathogen status");
         this.hasMousePathogenStatusProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasMousePathogenStatusProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasOverallEvaluationProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasOverallEvaluation");
         this.hasOverallEvaluationProperty.addProperty(RDFS.label, "has Overall evaluation");
         this.hasOverallEvaluationProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasOverallEvaluationProperty.addProperty(RDFS.range,XSD.xstring);
+        
         this.hasPanCytokeratinAssayResultProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasPanCytokeratinAssayResult");
         this.hasPanCytokeratinAssayResultProperty.addProperty(RDFS.label, "has PanCytokeratin assay result");
         this.hasPanCytokeratinAssayResultProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasPanCytokeratinAssayResultProperty.addProperty(RDFS.range, XSD.xstring);
+        
         this.hasStrNotesProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasSTRNotes");
         this.hasStrNotesProperty.addProperty(RDFS.label, "has STR notes");
         this.hasStrNotesProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasStrNotesProperty.addProperty(RDFS.range, XSD.xstring);
+        
         this.hasCohortProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasCohort");
         this.hasCohortProperty.addProperty(RDFS.label, "has Cohort");
         this.hasCohortProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasCohortProperty.addProperty(RDFS.range, XSD.xstring);
 
         this.hasCohortSizeProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasCohortSize");
         this.hasCohortSizeProperty.addProperty(RDFS.label, "has Cohort size");
         this.hasCohortSizeProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasCohortSizeProperty.addProperty(RDFS.range, XSD.xint);
 
         this.hasDosingScheduleProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasDosingSchedule");
         this.hasDosingScheduleProperty.addProperty(RDFS.label, "has Dosing schedule");
         this.hasDosingScheduleProperty.addProperty(RDF.type, OWL.DatatypeProperty);
-
+        this.hasDosingScheduleProperty.addProperty(RDFS.range, XSD.xstring);
+        
         this.hasNumberOfCyclesProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasNumberOfCycles");
         this.hasNumberOfCyclesProperty.addProperty(RDFS.label, "has Number of cycles");
         this.hasNumberOfCyclesProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasNumberOfCyclesProperty.addProperty(RDFS.range, XSD.xint);
 
         this.hasStudyDurationProperty = rdfModel.createProperty(PDXNET_NAMESPACE, "#hasStudyDuration");
         this.hasStudyDurationProperty.addProperty(RDFS.label, "has Study duration");
         this.hasStudyDurationProperty.addProperty(RDF.type, OWL.DatatypeProperty);
+        this.hasStudyDurationProperty.addProperty(RDFS.range, XSD.xstring);
 
         rdfModel.setNsPrefix("PDXNET", PDXNET_NAMESPACE);
         rdfModel.setNsPrefix("NCIT", NCIT_NAMESPACE);
