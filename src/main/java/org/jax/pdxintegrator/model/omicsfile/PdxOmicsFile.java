@@ -25,7 +25,7 @@ public class PdxOmicsFile {
             private String captureKit;	
             private String updatedDateTime;
             private Boolean isFFPE;
-            private Boolean isPairedEnd;	
+            private Integer hasPairedEnd;	
             private String fileName;
             private String passage;
 
@@ -256,15 +256,15 @@ public class PdxOmicsFile {
     /**
      * @return the isPairedEnd
      */
-    public Boolean getIsPairedEnd() {
-        return isPairedEnd;
+    public Integer getPairedEnd() {
+        return hasPairedEnd;
     }
 
     /**
-     * @param isPairedEnd the isPairedEnd to set
+     * @param PairedEnd the paired End to set
      */
-    public void setIsPairedEnd(Boolean isPairedEnd) {
-        this.isPairedEnd = isPairedEnd;
+    public void setPairedEnd(Integer pairedEnd) {
+        this.hasPairedEnd = pairedEnd;
     }
     
 }
