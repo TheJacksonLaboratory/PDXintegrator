@@ -306,8 +306,8 @@ public class JAXDataCommand extends Command {
 
        
         builder.ageAtDiagnosis(Age.getAgeForString(data[labelIndex.get("Age")]));
-        builder.ethnicity(data[labelIndex.get("Ethnicity")]);
-        builder.race(data[labelIndex.get("Race")]);
+    //    builder.ethnicity(data[labelIndex.get("Ethnicity")]);
+     //   builder.race(data[labelIndex.get("Race")]);
 
         return builder.build();
     }

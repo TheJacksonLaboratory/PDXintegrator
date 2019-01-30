@@ -27,8 +27,10 @@ import org.jax.pdxintegrator.model.modelstudy.PdxStudyTreatment;
 import org.jax.pdxintegrator.model.omicsfile.PdxOmicsFile;
 import org.jax.pdxintegrator.model.patient.Age;
 import org.jax.pdxintegrator.model.patient.Consent;
+import org.jax.pdxintegrator.model.patient.Ethnicity;
 import org.jax.pdxintegrator.model.patient.PdxPatient;
 import org.jax.pdxintegrator.model.patient.PdxPatientTreatment;
+import org.jax.pdxintegrator.model.patient.Race;
 import org.jax.pdxintegrator.model.patient.Sex;
 import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
 import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
@@ -48,32 +50,38 @@ public class ParseSpreadSheetCommand extends Command {
     private static int TUMOR_COLUMNS = 22;
     private static int MODEL_DETAILS_COLUMNS = 22;
     private static int QA_COLUMNS = 18;
-    // model study has endpoint results which don't really apply they are part of study treatments
-    private static int MODEL_STUDY_COLUMNS = 10;
+    
+    private static int MODEL_STUDY_COLUMNS = 7;
     private static int STUDY_TREATMENT_COLUMNS = 14;
     private static int OMICS_FILE_COLUMNS = 17;
 
     private String spreadSheetFileString;
-    private String pdtc;
+    private String pdtc; 
     private String rdfFileString;
     
     private StringBuilder messages = new StringBuilder();
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
-    ParseSpreadSheetCommand(String spreadSheetFile, String pdtc, String rdfFile) {
+   
+    
+    public ParseSpreadSheetCommand(String spreadSheetFile, String rdfFile) {
         this.spreadSheetFileString = spreadSheetFile;
-        this.pdtc = pdtc;
+ 
         this.rdfFileString = rdfFile;
     }
 
     public static void main(String[] args) {
-        String ssfile = "";
+        
+        String xlsxFile = "C:/Users/sbn/Desktop/PDXNet/testing/HCI.xlsx";
+        String outFile = xlsxFile.replace(".xlsx", ".rdf");
+        if(xlsxFile.equals(outFile)){
+            System.out.println("Wrong format "+xlsxFile);
+            System.exit(0);
+                    
+        }
 
-        ssfile = "C:/Users/sbn/Desktop/PDXNet/testing/WISTAR.xlsx";
-        String outFile = "C:/Users/sbn/Desktop/PDXNet/testing/WISTAR.rdf";
-
-        ParseSpreadSheetCommand pssc = new ParseSpreadSheetCommand(ssfile, "WISTAR", outFile);
+        ParseSpreadSheetCommand pssc = new ParseSpreadSheetCommand(xlsxFile, outFile);
 
         pssc.execute();
         
@@ -152,6 +160,13 @@ public class ParseSpreadSheetCommand extends Command {
 
                     if(messages.indexOf("FATAL")==-1){
                         ModelTerms mt = new ModelTerms();
+                        String mappingFile = this.spreadSheetFileString.replace(".xlsx", ".mapping");
+                        if(mappingFile.equals(this.spreadSheetFileString)){
+                            System.out.println("Wrong format "+this.spreadSheetFileString);
+                            System.exit(0);
+                        }
+                        mt.setMappingFile(mappingFile);
+                        
                         mt.findTerms(models);
                         PdxModel2Rdf p2rdf = new PdxModel2Rdf(models);
                         try {
@@ -169,7 +184,7 @@ public class ParseSpreadSheetCommand extends Command {
                 messages.append("\nFATAL ERROR:No such file:" + spreadSheetFileString);
             }
         } catch (Exception e) {
-            messages.append("\n"+spreadSheetFileString);
+            messages.append("\nERROR: parsing "+spreadSheetFileString);
             e.printStackTrace();
         }
 
@@ -177,7 +192,7 @@ public class ParseSpreadSheetCommand extends Command {
 
     private HashMap<String, PdxPatient> buildPatient(ArrayList<ArrayList<String>> sheetData) {
         /*
-        0 PDTC         
+        0 PDTC  -- this  is problematic? as the patient doesn't origniate with the PDTC as in TMZ pilot       
         1 Patient ID  -- unique per row 
         2 Sex         
         3 Age at Primary Diagnosis  -- bin to 5 years
@@ -197,6 +212,7 @@ public class ParseSpreadSheetCommand extends Command {
             }
             
             pdtc = row.get(0);
+            this.pdtc = pdtc;
             ptID = fixID("Patient: Patient ID",row.get(1));
             sex = row.get(2);
             age = row.get(3);
@@ -212,14 +228,18 @@ public class ParseSpreadSheetCommand extends Command {
                     builder.sex(Sex.FEMALE);
                 } else if (sex.toUpperCase().startsWith("M")) {
                     builder.sex(Sex.MALE);
+                }else{
+                    messages.append("\nPatient: Sex '"+sex+"' can't be converted to male or female.");
                 }
             }
 
             builder.ageAtDiagnosis(Age.getAgeForString(age));
 
-            // these 3 should be classes
-            builder.race(race);
-            builder.ethnicity(ethnicity);
+            
+            builder.race(getRace(race));
+            builder.ethnicity(getEthnicity(ethnicity));
+            
+            //TODO:ENUM?
             builder.virologyStatus(vStatus);
 
             if (consent.toUpperCase().startsWith("Y")) {
@@ -280,7 +300,7 @@ public class ParseSpreadSheetCommand extends Command {
         //Tissue Histology	Clinical Diagnostic Markers	Tumor Grade	
         //T Stage	N Stage 	M Stage	Overall Stage	Sample Type	
         //Known Metastatic Sites	Short Tandem Repeat (STR) Analysis	
-        //List each STR marker in a separate column to fill in values	STR Evaluation
+        //these are wrong maybe ?List each STR marker in a separate column to fill in values	STR Evaluation
         HashMap<String, ArrayList<PdxClinicalTumor>> tumors = new HashMap<>();
         for (ArrayList<String> row : sheetData) {
 
@@ -327,7 +347,7 @@ public class ParseSpreadSheetCommand extends Command {
         /*    Tumor ID
             Model ID
             Host Strain
-            Mouse Source/Vendor
+            Mouse Source
             Source/Vendor Model Number
             Mouse Sex
             Is Mouse Humanized For Initial Engraftment?
@@ -352,9 +372,13 @@ public class ParseSpreadSheetCommand extends Command {
 
             while (row.size() < MODEL_DETAILS_COLUMNS ) {
                 row.add("");
+                
             }
 
+            
             PdxModelCreation model = new PdxModelCreation(fixID("Model Creation: Tumor ID",row.get(0)), fixID("Model Creation: Model ID",row.get(1)));
+            
+          
             model.setMouseStrain(row.get(2).trim());
 
             model.setMouseSource(row.get(3) + " " + row.get(4));
@@ -432,7 +456,7 @@ public class ParseSpreadSheetCommand extends Command {
             
             PdxQualityAssurance qa = new PdxQualityAssurance(fixID("QA: Model ID",row.get(0)));
             qa.setStrAnalysis(row.get(1));
-            qa.setPassageTested(getPassage(row.get(2)));
+            qa.setPassageTested(getPassage("QA: Passage tested",row.get(2)));
             qa.setStrEvaluation(row.get(3));
             qa.setStrNotes(row.get(4));
             qa.setClinicalDiagnosticMarkers(row.get(5).replaceAll(",", ";"));
@@ -476,14 +500,11 @@ public class ParseSpreadSheetCommand extends Command {
             
             PdxModelStudy study = new PdxModelStudy(fixID("Model Study: Model ID",row.get(0)), fixID("Model Study: Study ID",row.get(1)));
             study.setDescription(row.get(2));
-            study.setPassage(getPassage(row.get(3)));
+            study.setPassage(getPassage("Model Study: passage ",row.get(3)));
             study.setHostStrain(row.get(4));
             study.setImplantationSite(row.get(5));
             study.setBaselineTumorTargetSize(row.get(6));
-            //TODO these should only be in StudyTreatments
-            study.setEndpoint1(row.get(7));
-            study.setEndpoint2(row.get(8));
-            study.setEndpoint3(row.get(9));
+           
 
             // TODO using modelID as key won't work ??
             if (studies.containsKey(study.getModelID())) {
@@ -570,9 +591,15 @@ public class ParseSpreadSheetCommand extends Command {
             // however sometime supplied as True (=2) False (=1)
             omicsFile.setPairedEnd(getInteger("OMICS: Paired End",row.get(13)));
             omicsFile.setFileName(row.get(14));
-            // TODO make an integer ... need to make sure this bytes not KB or GB
-            omicsFile.setFileSize(row.get(15));
-            omicsFile.setPassage(row.get(16));
+            
+            try{
+                omicsFile.setFileSize(new Integer(row.get(15)).toString());
+            }catch(Exception e){
+                messages.append("\n"+row.get(15)+" OMICS: File Size is not a number. Should be in bytes");
+            }
+            
+            
+            omicsFile.setPassage(getPassage("OMICS: Passage ",row.get(16)).toString());
 
             // don't bother if no filename is provided.
             if (row.get(14).trim().length() > 0) {
@@ -584,8 +611,10 @@ public class ParseSpreadSheetCommand extends Command {
                     list.add(omicsFile);
                     omics.put(omicsFile.getModelID(), list);
                 }
+            }else{
+                messages.append("\nSkipping row in OMICS sheet no value for file name in row "+row.toString());
+                
             }
-            messages.append("\nSkipping row in OMICS sheet no value for file name in row "+row.toString());
         }
 
         return omics;
@@ -732,12 +761,12 @@ public class ParseSpreadSheetCommand extends Command {
         }
     }
 
-    public Integer getPassage(String p) {
+    private Integer getPassage(String where, String p) {
         Integer passage = null;
         try {
             passage = new Integer(p.toLowerCase().replace("p", "").trim());
         } catch (Exception e) {
-            messages.append("\ncan't convert passage '" + p + "' to integer. Defaulting to null");
+            messages.append("\n"+where+" Can not convert passage '" + p + "' to integer. Defaulting to null");
 
         }
         return passage;
@@ -753,7 +782,7 @@ public class ParseSpreadSheetCommand extends Command {
         return null;
     }
 
-    public Boolean getBoolean(String where,String b) {
+    private Boolean getBoolean(String where,String b) {
         
         if(b== null) return null;
         
@@ -771,6 +800,64 @@ public class ParseSpreadSheetCommand extends Command {
                 messages.append("\nCan't convert '"+b+"' to a boolean for "+where);
                 return null;
         }
+    }
+    
+    private Ethnicity getEthnicity(String eth){
+        
+        Ethnicity e = Ethnicity.UNKNOWN;
+        
+        if(eth != null){
+            eth = eth.toLowerCase();
+            if(eth.startsWith("not ")){
+                e = Ethnicity.NOTLATINO;
+            }else if(eth.contains("hispanic") || eth.contains("latino")){
+                e = Ethnicity.LATINO;
+            }else{
+                messages.append("\n Unable to convert "+eth+" into standard ethnicity, using 'Unknown'");
+            }
+        }else{
+            messages.append("\n No ethnicity specified, using 'Unknown'");
+        }
+        return e;
+    }
+    
+    private Race getRace(String race){
+        Race r = Race.UNKNOWN;
+        
+        if(race != null){
+            race = race.toLowerCase();
+            if(race.contains("white")){
+                r = Race.WHITE;
+            }else if(race.contains("asian")){
+                r = Race.ASIAN;
+                
+            }else if(race.contains("black")){
+                r = Race.BAA;
+                
+            }else if(race.contains("african")){
+                r = Race.BAA;
+                
+            }else if(race.contains("indian")){
+                r = Race.AMINALNA;
+                
+            }else if(race.contains("alaska")){
+                r = Race.AMINALNA;
+                
+            }else if(race.contains("hawaiian")){
+                r = Race.NHOPI;
+                
+            }else if(race.contains("pacific")){
+                r = Race.NHOPI;
+                
+            }else{
+                messages.append("\n Unable to convert "+race+" into standard race using 'Unknown'");
+            }
+        }else{
+            messages.append("\n No race specified, using 'Unknown'");
+        }
+        
+        
+        return r;
     }
 
 }

@@ -17,7 +17,7 @@ public class PdxClinicalTumor {
     private String submitterTumorID;
     private String eventIndex;
     private String collectionProcedure;
-    private boolean treatmentNaive;
+    private Boolean treatmentNaive;
     private String ageAtCollection;
     private String initialDiagnosis;
     private TermId initialDiagnosisTerm;
@@ -231,14 +231,14 @@ public class PdxClinicalTumor {
     /**
      * @return the treatmentNaive
      */
-    public boolean isTreatmentNaive() {
+    public Boolean isTreatmentNaive() {
         return treatmentNaive;
     }
 
     /**
      * @param treatmentNaive the treatmentNaive to set
      */
-    public void setTreatmentNaive(boolean treatmentNaive) {
+    public void setTreatmentNaive(Boolean treatmentNaive) {
         this.treatmentNaive = treatmentNaive;
     }
 

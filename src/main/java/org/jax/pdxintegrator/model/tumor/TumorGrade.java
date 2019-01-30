@@ -17,6 +17,9 @@ public enum TumorGrade {
     G2("G2: Moderately differentiated"),
     G3("G3: Poorly Differentiated"),
     G4("G4: Undifferentiated"),
+    Low("Low Grade"),
+    Intermediate("Intermediate Grade"),
+    High("High Grade"),
     UNK("Unknown");
 
     private final String name;
@@ -73,9 +76,14 @@ public enum TumorGrade {
                 return TumorGrade.G3;
             case "G4":
                 return TumorGrade.G4;
-            
+            case "LO":
+                return TumorGrade.Low;
+            case "HI":
+                return TumorGrade.High;
+            case "IN":
+                return TumorGrade.Intermediate;
             default:
-                System.out.println("Cant convert "+gradeIn+" to a tumor grade place holder Unknown");
+                System.out.println("Cant convert '"+gradeIn+"' to a tumor grade. Using place holder 'Unknown'");
                 return TumorGrade.UNK;
         }
     }

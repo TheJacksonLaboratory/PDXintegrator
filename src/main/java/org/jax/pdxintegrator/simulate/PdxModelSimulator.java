@@ -123,7 +123,7 @@ public class PdxModelSimulator {
         omicsFile.setFileName("simulatedOmicsFile"+omicsCount++);
         omicsFile.setFileSize("34K");
         omicsFile.setIsFFPE(true);
-        omicsFile.setIsPairedEnd(true);
+        omicsFile.setPairedEnd(1);
         omicsFile.setModelID(modelID);
         omicsFile.setPatientID(patientID);
         omicsFile.setPassage("P1");
@@ -309,8 +309,8 @@ public class PdxModelSimulator {
         builder.consent(consent);
        
         builder.ageAtDiagnosis(age);
-        builder.ethnicity("hispanic");
-        builder.race("caucasian");
+        builder.ethnicity(Ethnicity.LATINO);
+        builder.race(Race.ASIAN);
                 
         
         return builder.build();

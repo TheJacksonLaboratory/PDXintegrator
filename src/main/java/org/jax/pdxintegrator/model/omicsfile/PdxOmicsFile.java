@@ -18,7 +18,7 @@ public class PdxOmicsFile {
             private String dataCategory;	
             private String dataFormat;
             private String dataType;
-            private String sampleType;	
+            private String sampleType;	// this should be Patient Patient Normal or PDX Tumor
             private String experimentalStrategy;
             private String fileSize;
             private String platform;	

@@ -12,33 +12,22 @@ public class PdxModelStudy {
     private String hostStrain;
     private String implantationSite;
     private String baselineTumorTargetSize;
-   
-    private String endpoint1;
-    private String endpoint2;
-    private String endpoint3;
-    
+
     private ArrayList<PdxStudyTreatment> treatments = new ArrayList<>();
-    
-    public PdxModelStudy(String modelId, String studyId){
+
+    public PdxModelStudy(String modelId, String studyId) {
         this.modelID = modelId;
         this.studyID = studyId;
-        
+
     }
 
     private PdxModelStudy(String modelID, String studyID, ArrayList<PdxStudyTreatment> treatments) {
         this.modelID = modelID;
         this.studyID = studyID;
         this.treatments = treatments;
-        
-       
-        
-       
 
     }
 
-    
-
-   
     /**
      * @return the treatments
      */
@@ -53,7 +42,6 @@ public class PdxModelStudy {
         this.treatments = treatments;
     }
 
-   
     /**
      * @return the studyID
      */
@@ -132,48 +120,6 @@ public class PdxModelStudy {
     }
 
     /**
-     * @return the endpoint1
-     */
-    public String getEndpoint1() {
-        return endpoint1;
-    }
-
-    /**
-     * @param endpoint1 the endpoint1 to set
-     */
-    public void setEndpoint1(String endpoint1) {
-        this.endpoint1 = endpoint1;
-    }
-
-    /**
-     * @return the endpoint2
-     */
-    public String getEndpoint2() {
-        return endpoint2;
-    }
-
-    /**
-     * @param endpoint2 the endpoint2 to set
-     */
-    public void setEndpoint2(String endpoint2) {
-        this.endpoint2 = endpoint2;
-    }
-
-    /**
-     * @return the endpoint3
-     */
-    public String getEndpoint3() {
-        return endpoint3;
-    }
-
-    /**
-     * @param endpoint3 the endpoint3 to set
-     */
-    public void setEndpoint3(String endpoint3) {
-        this.endpoint3 = endpoint3;
-    }
-
-    /**
      * @return the baselineTumorTargetSize
      */
     public String getBaselineTumorTargetSize() {
@@ -187,35 +133,25 @@ public class PdxModelStudy {
         this.baselineTumorTargetSize = baselineTumorTargetSize;
     }
 
-    
-
     public static class Builder {
 
         private String modelID;
         private String studyID;
         private ArrayList<PdxStudyTreatment> treatments;
-     
-       
-      
-         public Builder(String modelID, String studyID){
-           this.modelID = modelID;
-           this.studyID = studyID;
-           
-       }
-        
-       public Builder treatments(ArrayList<PdxStudyTreatment> treatments){
-           this.treatments = treatments;
-           return this;
-       }
 
-      
+        public Builder(String modelID, String studyID) {
+            this.modelID = modelID;
+            this.studyID = studyID;
 
-      
-       
-     
+        }
+
+        public Builder treatments(ArrayList<PdxStudyTreatment> treatments) {
+            this.treatments = treatments;
+            return this;
+        }
 
         public PdxModelStudy build() {
-            return new PdxModelStudy(modelID,studyID, treatments);
+            return new PdxModelStudy(modelID, studyID, treatments);
         }
 
     }

@@ -42,7 +42,7 @@ public class ModelTerms {
     NcitOwlApiParser ncitParser;
     UberonOntologyParser uberonParser;
 
-   
+    private String mappingFile = null;
     
     HashMap<String, String> missingUBERON = new HashMap<>();
     HashMap<String, String> missingNCIT = new HashMap<>();
@@ -50,6 +50,9 @@ public class ModelTerms {
     HashMap<String, String> ncitMappings = new HashMap<>();
     HashMap<String, String> uberonMappings = new HashMap<>();
 
+    public void setMappingFile(String file){
+        this.mappingFile = file;
+    }
     public void findTerms(List<PdxModel> models) {
         ncitParser = new NcitOwlApiParser("data/ncit.obo");
         ncitParser.parse();
@@ -58,13 +61,14 @@ public class ModelTerms {
         uberonParser.parse();
 
         String pdtc = "";
-        String mappingFile="";
 
         for (PdxModel model : models) {
             // don't need a new file if the PDTC didn't change
             if(!pdtc.equals(model.getPDTC())){
                 pdtc = model.getPDTC();
-                mappingFile = "data/"+model.getPDTC()+"mappingFile.txt";
+                if(mappingFile == null){
+                    mappingFile = "data/"+model.getPDTC()+"mappingFile.txt";
+                }
                 loadMappings(mappingFile);
             }
             for (PdxClinicalTumor tumor : model.getClinicalTumor()) {

@@ -48,6 +48,11 @@ public class BCMDataCommand extends Command {
         logger.trace("Loading BCM data");
 
     }
+    
+    public static void main(String[] args){
+        BCMDataCommand bcm  = new BCMDataCommand();
+        bcm.execute();
+    }
 
     @Override
     public void execute() {
@@ -122,7 +127,7 @@ public class BCMDataCommand extends Command {
         }
     }
 
-    private ArrayList<String> parse(String fileStr) {
+    public ArrayList<String> parse(String fileStr) {
 
         ArrayList<String> data = new ArrayList<>();
         try {
@@ -141,7 +146,7 @@ public class BCMDataCommand extends Command {
         return data;
     }
 
-    private HashMap<String, PdxPatient> buildPatients(ArrayList<String> data) {
+    public HashMap<String, PdxPatient> buildPatients(ArrayList<String> data) {
         // PDTC	Patient ID	Sex	Age at Primary Diagnosis
         //Race	Ethnicity	Virology Status	Consent for PDX Generation
         HashMap<String, PdxPatient> patients = new HashMap<>();
@@ -160,8 +165,8 @@ public class BCMDataCommand extends Command {
             }
 
             builder.ageAtDiagnosis(Age.getAgeForString(parts[3]));
-            builder.race(parts[4]);
-            builder.ethnicity(parts[5]);
+      //      builder.race(parts[4]);
+     //       builder.ethnicity(parts[5]);
             builder.virologyStatus(parts[6]);
             String consent = parts[7];
             if (consent.toUpperCase().startsWith("Y")) {
@@ -176,7 +181,7 @@ public class BCMDataCommand extends Command {
         return patients;
     }
 
-    private HashMap<String, ArrayList<PdxClinicalTumor>> buildTumors(ArrayList<String> data) {
+    public HashMap<String, ArrayList<PdxClinicalTumor>> buildTumors(ArrayList<String> data) {
         //Patient ID	Tumor ID	Event Index	Collection Procedure
         //Treatment Naïve	Age at collection	Initial Diagnosis
         //Clinical Event Point	Primary Tumor Origin	Specimen Tissue	
@@ -227,7 +232,7 @@ public class BCMDataCommand extends Command {
         return tumors;
     }
 
-    private HashMap<String, ArrayList<PdxPatientTreatment>> buildPatientTreatments(ArrayList<String> data) {
+    public HashMap<String, ArrayList<PdxPatientTreatment>> buildPatientTreatments(ArrayList<String> data) {
         //Patient ID	Event Index	clincal treatment setting	Regimen (Drug)
         //Clinical Response	Pathological Response	Reason Stopped	Treatment Notes
 
@@ -257,7 +262,7 @@ public class BCMDataCommand extends Command {
         return treatments;
     }
 
-    private HashMap<String, ArrayList<PdxModelCreation>> buildModelCreations(ArrayList<String> data) {
+    public HashMap<String, ArrayList<PdxModelCreation>> buildModelCreations(ArrayList<String> data) {
     /*    Tumor ID
             Model ID
             Host Strain
@@ -286,7 +291,8 @@ public class BCMDataCommand extends Command {
             String[] parts = row.split("\t",-1);
             
             PdxModelCreation model = new PdxModelCreation(parts[0],parts[1]);
-            model.setMouseStrain(parts[2]);
+            model.setMouseStrain(parts[2].trim());
+            System.out.println("strain:'"+parts[2].trim()+"'");
             model.setMouseSource(parts[3]+ " "+parts[4]);
             
             String sex = parts[5];
@@ -348,7 +354,7 @@ public class BCMDataCommand extends Command {
         return models;
     }
 
-    private HashMap<String, ArrayList<PdxQualityAssurance>> buildQAs(ArrayList<String> data) {
+    public HashMap<String, ArrayList<PdxQualityAssurance>> buildQAs(ArrayList<String> data) {
         // Model ID	Short Tandem Repeat (STR) Analysis	Passage Tested	
         //STR Evaluation	STR Notes	Clinical Diagnostic Markers	
         //Assay Result	Clinical Diagnostic Marker Notes	CD45 IHC	
@@ -386,7 +392,7 @@ public class BCMDataCommand extends Command {
         return qas;
     }
 
-    private HashMap<String, ArrayList<PdxModelStudy>> buildModelStudies(ArrayList<String> data) {
+    public HashMap<String, ArrayList<PdxModelStudy>> buildModelStudies(ArrayList<String> data) {
         //Model ID	Study ID	Study Description	Passage Used	Host Strain
         //Implantation site	Baseline Tumor Target Size	Endpoint 1	Endpoint 2	Endpoint 3
 
@@ -415,11 +421,12 @@ public class BCMDataCommand extends Command {
         return studies;
     }
 
-    private HashMap<String, ArrayList<PdxStudyTreatment>> buildStudyTreatments(ArrayList<String> data) {
+    public HashMap<String, ArrayList<PdxStudyTreatment>> buildStudyTreatments(ArrayList<String> data) {
         //Model ID	Study ID	Cohort/Treatment Arm Designation	
         //Cohort Size	Drug	NSC#	Dose	Route	Dosing Schedule	Number of Cycles
         //Study Duration	Endpoint 1 Response	Endpoint 2 Response	Endpoint 3 Response
 
+        
         HashMap<String, ArrayList<PdxStudyTreatment>> treatments = new HashMap<>();
         for (String row : data) {
             String[] parts = row.split("\t",-1);
@@ -449,7 +456,7 @@ public class BCMDataCommand extends Command {
         return treatments;
     }
 
-    private HashMap<String, ArrayList<PdxOmicsFile>> buildOmicsFiles(ArrayList<String> data) {
+    public HashMap<String, ArrayList<PdxOmicsFile>> buildOmicsFiles(ArrayList<String> data) {
 
         //Patient ID, Model ID, Access Level, Created datetime, Data Category, 
         //Data Format, Data Type, Sample Type, 
@@ -460,8 +467,10 @@ public class BCMDataCommand extends Command {
         
         String modelID ="";
         String patientID = "";
+        System.out.println("REMOVING THIS FROM BCM OMICS "+data.get(0));
+        data.remove(0);
         for (String row : data) {
-            System.out.println(row);
+            
             String[] parts = row.split("\t",-1);
 
             PdxOmicsFile omicsFile = new PdxOmicsFile();
@@ -494,7 +503,10 @@ public class BCMDataCommand extends Command {
             omicsFile.setCaptureKit(parts[10]);
             omicsFile.setUpdatedDateTime(fixDate(parts[11]));
             omicsFile.setIsFFPE(getBoolean(parts[12]));
-            omicsFile.setIsPairedEnd(getBoolean(parts[13]));
+            if("TRUE".equals(parts[13].toUpperCase()))
+                omicsFile.setPairedEnd(2);
+            if("FALSE".equals(parts[13].toUpperCase()))
+                    omicsFile.setPairedEnd(1);
             omicsFile.setFileName(parts[14]);
             omicsFile.setFileSize(parts[15]);
             omicsFile.setPassage(parts[16]);
@@ -516,7 +528,7 @@ public class BCMDataCommand extends Command {
     }
 
     
-    private Integer getPassage(String p){
+    public Integer getPassage(String p){
         Integer passage = null;
         try{
             passage = new Integer(p.toLowerCase().replace("p", "").trim());
@@ -527,7 +539,7 @@ public class BCMDataCommand extends Command {
         return passage;
     }
     
-    private Boolean getBoolean(String b){
+    public Boolean getBoolean(String b){
        b = b.toLowerCase();
         switch(b){
             case "yes":
@@ -545,7 +557,7 @@ public class BCMDataCommand extends Command {
     
     // i think dates should be yyyy-mm-dd
     // we get ddmmyyyy or maybe mmddyyyy (yay)
-    private String fixDate(String date){
+    public String fixDate(String date){
         String fixedDate = null;
         if(date != null && date.length()==8){
             fixedDate = date.substring(4)+"-"+date.substring(2,4)+"-"+date.substring(0,2);

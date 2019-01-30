@@ -12,8 +12,8 @@ public class PdxPatient {
     private final Sex sex;
     private final Age ageAtDiagnosis;
     private final Consent consent;
-    private final String ethnicity;
-    private final String race;
+    private final Ethnicity ethnicity;
+    private final Race race;
     private ArrayList<PdxPatientTreatment> patientTreatments;
     private String virologyStatus;
     private String clinicalTreatmentSetting;
@@ -38,15 +38,15 @@ public class PdxPatient {
         return consent;
     }
 
-    public String getRace() {
+    public Race getRace() {
         return race;
     }
 
-    public String getEthnicity() {
+    public Ethnicity getEthnicity() {
         return ethnicity;
     }
 
-    private PdxPatient(String pdtc, String id, Sex s, Age ageAtDiagnosis,  Consent c, String race, String ethnicity, ArrayList<PdxPatientTreatment> rx, String vs,
+    private PdxPatient(String pdtc, String id, Sex s, Age ageAtDiagnosis,  Consent c, Race race, Ethnicity ethnicity, ArrayList<PdxPatientTreatment> rx, String vs,
                        String clinicalTreatmentSetting, String treatmentNotes){
         this.pdtc = pdtc;
         this.submitterPatientID=id;
@@ -143,8 +143,8 @@ public class PdxPatient {
         private  Age ageAtDiagnosis;
         
         private  Consent consent;
-        private  String ethnicity;
-        private  String race;
+        private  Ethnicity ethnicity;
+        private  Race race;
         private ArrayList<PdxPatientTreatment> patientTreatments;
         private String virologyStatus;
         private String clinicalTreatmentSetting;
@@ -175,12 +175,12 @@ public class PdxPatient {
             return this;
         }
         
-        public Builder ethnicity(String ethnicity){
+        public Builder ethnicity(Ethnicity ethnicity){
             this.ethnicity = ethnicity;
             return this;
         }
         
-        public Builder race(String race){
+        public Builder race(Race race){
             this.race = race;
             return this;
         }
@@ -195,7 +195,7 @@ public class PdxPatient {
             return this;
         }
         
-        public Builder clinicalTreatmnetSetting(String cts){
+        public Builder clinicalTreatmentSetting(String cts){
             clinicalTreatmentSetting = cts;
             return this;
         }
