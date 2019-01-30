@@ -431,10 +431,7 @@ public class PdxModelSimulator {
         return values[random.nextInt(values.length)];
     }
 
-    private EthnicityRace getRandomEthnicity() {
-        EthnicityRace[] values = EthnicityRace.values();
-        return values[random.nextInt(values.length)];
-    }
+   
 
     private TumorPrepMethod  getRandomTumorPrepMethod() {
         TumorPrepMethod[] vals = TumorPrepMethod.values();
