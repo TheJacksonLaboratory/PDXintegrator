@@ -166,7 +166,7 @@ public class BCMDataCommand extends Command {
 
             builder.ageAtDiagnosis(Age.getAgeForString(parts[3]));
       //      builder.race(parts[4]);
-     //       builder.ethnicity(parts[5]);
+      //      builder.ethnicity(parts[5]);
             builder.virologyStatus(parts[6]);
             String consent = parts[7];
             if (consent.toUpperCase().startsWith("Y")) {

@@ -59,6 +59,11 @@ public class ParseSpreadSheetCommand extends Command {
     private String pdtc; 
     private String rdfFileString;
     
+    private HashMap<String,String> patientIDs = new HashMap();
+    private HashMap<String,String> modelIDs = new HashMap();
+    private HashMap<String,String> tumorIDs = new HashMap();
+    private HashMap<String,String> modelStudyIDs = new HashMap();
+    
     private StringBuilder messages = new StringBuilder();
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -221,6 +226,8 @@ public class ParseSpreadSheetCommand extends Command {
             vStatus = row.get(6);
             consent = row.get(7);
 
+            patientIDs.put(ptID,"");
+            
             PdxPatient.Builder builder = new PdxPatient.Builder(pdtc, ptID);
 
             if (sex != null) {
@@ -270,6 +277,11 @@ public class ParseSpreadSheetCommand extends Command {
 
             ptID = fixID("PT Treatment: PT ID",row.get(0));
             
+            if(!patientIDs.containsKey(ptID)){
+                messages.append("\nPatient treatment has unknown patient id ").append(ptID);
+                continue;
+            }
+            
             PdxPatientTreatment treatment = new PdxPatientTreatment();
             treatment.setPatientID(ptID);
             treatment.setEventIndex(row.get(1));
@@ -302,15 +314,24 @@ public class ParseSpreadSheetCommand extends Command {
         //Known Metastatic Sites	Short Tandem Repeat (STR) Analysis	
         //these are wrong maybe ?List each STR marker in a separate column to fill in values	STR Evaluation
         HashMap<String, ArrayList<PdxClinicalTumor>> tumors = new HashMap<>();
+        
         for (ArrayList<String> row : sheetData) {
 
             while(row.size() < TUMOR_COLUMNS) {
                 row.add("");
             }
 
-         
-
-            PdxClinicalTumor tumor = new PdxClinicalTumor(fixID("Tumor: Patient ID",row.get(0)), fixID("Tumor: Tumor ID",row.get(1)));
+            String ptID = fixID("Tumor: Patient ID",row.get(0));
+            String tumorID = fixID("Tumor: Tumor ID",row.get(1));
+            
+            tumorIDs.put(tumorID,"");
+            
+            if(!patientIDs.containsKey(ptID)){
+                messages.append("\nTumor ").append(tumorID).append(" has unknown patient id ").append(ptID);
+                continue;
+            }
+            
+            PdxClinicalTumor tumor = new PdxClinicalTumor(ptID, tumorID);
             tumor.setEventIndex(row.get(2));
             tumor.setCollectionProcedure(row.get(3));
             tumor.setTreatmentNaive(getBoolean("Tumor: treatment naive",row.get(4)));
@@ -375,8 +396,17 @@ public class ParseSpreadSheetCommand extends Command {
                 
             }
 
+            String tumorID = fixID("Model Creation: Tumor ID",row.get(0));
+            String modelID = fixID("Model Creation: Model ID",row.get(1));
             
-            PdxModelCreation model = new PdxModelCreation(fixID("Model Creation: Tumor ID",row.get(0)), fixID("Model Creation: Model ID",row.get(1)));
+            if(!tumorIDs.containsKey(tumorID)){
+                messages.append("Model ").append(modelID).append(" contains unknown tumor ID ").append(tumorID);
+                continue;
+            }
+            
+            modelIDs.put(modelID,"");
+            
+            PdxModelCreation model = new PdxModelCreation(tumorID, modelID);
             
           
             model.setMouseStrain(row.get(2).trim());
@@ -454,7 +484,14 @@ public class ParseSpreadSheetCommand extends Command {
                 row.add("");
             }
             
-            PdxQualityAssurance qa = new PdxQualityAssurance(fixID("QA: Model ID",row.get(0)));
+            String modelID = fixID("QA: Model ID",row.get(0));
+            
+            if(!modelIDs.containsKey(modelID)){
+                messages.append("\nQA has unknown model ID ").append(modelID);
+                continue;
+            }
+            
+            PdxQualityAssurance qa = new PdxQualityAssurance(modelID);
             qa.setStrAnalysis(row.get(1));
             qa.setPassageTested(getPassage("QA: Passage tested",row.get(2)));
             qa.setStrEvaluation(row.get(3));
@@ -498,7 +535,17 @@ public class ParseSpreadSheetCommand extends Command {
                 row.add("");
             }
             
-            PdxModelStudy study = new PdxModelStudy(fixID("Model Study: Model ID",row.get(0)), fixID("Model Study: Study ID",row.get(1)));
+            String modelStudyID = fixID("Model Study: Model ID",row.get(0));
+            String modelID = fixID("Model Study: Study ID",row.get(1));
+            
+            if(!modelIDs.containsKey(modelID)){
+                messages.append("Model study ").append(modelStudyID).append(" has unknown model ID ").append("modelID");
+                continue;
+            }
+            
+            modelStudyIDs.put(modelStudyID,"");
+            
+            PdxModelStudy study = new PdxModelStudy(modelStudyID, modelID);
             study.setDescription(row.get(2));
             study.setPassage(getPassage("Model Study: passage ",row.get(3)));
             study.setHostStrain(row.get(4));
@@ -531,8 +578,15 @@ public class ParseSpreadSheetCommand extends Command {
             while (row.size() < STUDY_TREATMENT_COLUMNS ) {
                 row.add("");
             }
+            
+            String studyID = fixID("Study Treatment: Study ID",row.get(1));
+            
+            if(!modelStudyIDs.containsKey(studyID)){
+                messages.append("Studytreatment contains uknown model study id ").append(studyID);
+                continue;
+            }
 
-            PdxStudyTreatment trt = new PdxStudyTreatment(fixID("Study Treatment: Study ID",row.get(1)));
+            PdxStudyTreatment trt = new PdxStudyTreatment(studyID);
             trt.setModelID(fixID("Study Treatment: Model ID",row.get(0)));
             trt.setCohort(row.get(2));
             trt.setCohortSize(getInteger("Study Treatment: cohort size",row.get(3)));
@@ -595,7 +649,7 @@ public class ParseSpreadSheetCommand extends Command {
             try{
                 omicsFile.setFileSize(new Integer(row.get(15)).toString());
             }catch(Exception e){
-                messages.append("\n"+row.get(15)+" OMICS: File Size is not a number. Should be in bytes");
+                messages.append("\n"+row.get(15)+" is not an integer. OMICS:Filesize should be in bytes");
             }
             
             
