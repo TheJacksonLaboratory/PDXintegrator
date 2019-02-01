@@ -126,7 +126,7 @@ public class PdxModelSimulator {
         omicsFile.setPairedEnd(1);
         omicsFile.setModelID(modelID);
         omicsFile.setPatientID(patientID);
-        omicsFile.setPassage("P1");
+        omicsFile.setPassage(1);
         omicsFile.setPlatform("whole exome");
         omicsFile.setSampleType("tumor");
         omicsFile.setUpdatedDateTime("update date");
