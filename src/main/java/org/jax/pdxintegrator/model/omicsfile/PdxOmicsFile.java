@@ -27,7 +27,7 @@ public class PdxOmicsFile {
             private Boolean isFFPE;
             private Integer hasPairedEnd;	
             private String fileName;
-            private String passage;
+            private Integer passage;
 
     /**
      * @return the patientID
@@ -242,14 +242,14 @@ public class PdxOmicsFile {
     /**
      * @return the passage
      */
-    public String getPassage() {
+    public Integer getPassage() {
         return passage;
     }
 
     /**
      * @param passage the passage to set
      */
-    public void setPassage(String passage) {
+    public void setPassage(Integer passage) {
         this.passage = passage;
     }
 

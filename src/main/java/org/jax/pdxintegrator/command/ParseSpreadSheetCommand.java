@@ -653,7 +653,7 @@ public class ParseSpreadSheetCommand extends Command {
             }
             
             
-            omicsFile.setPassage(getPassage("OMICS: Passage ",row.get(16)).toString());
+            omicsFile.setPassage(getPassage("OMICS: Passage ",row.get(16)));
 
             // don't bother if no filename is provided.
             if (row.get(14).trim().length() > 0) {
@@ -678,6 +678,10 @@ public class ParseSpreadSheetCommand extends Command {
     // hopefully all IDs will start with the PDTC abbreviation but just in case ...
     // probably these messages should get logged or suppressed
     private String fixID(String what,String id){
+        if(id == null){
+            messages.append("\nFatal error: requried field "+what+" is has no value");
+            return null;
+        }
         messages.append("\n"+what+" "+id);
         if(id.endsWith(".0")){
             messages.append("\nFixing "+what+" "+id+" to ");
@@ -831,7 +835,7 @@ public class ParseSpreadSheetCommand extends Command {
             return new Integer(new Double(i).intValue());
             
         }catch(Exception e){
-            messages.append("\nCant convert "+i+" to an integer value for "+where+". Defaulting to null");
+            messages.append("\nCan not convert "+i+" to an integer value for "+where+". Defaulting to null");
         }
         return null;
     }

@@ -509,7 +509,7 @@ public class BCMDataCommand extends Command {
                     omicsFile.setPairedEnd(1);
             omicsFile.setFileName(parts[14]);
             omicsFile.setFileSize(parts[15]);
-            omicsFile.setPassage(parts[16]);
+            omicsFile.setPassage(new Integer(parts[16]));
             
             // don't bother if no filename is provided.
             if(parts[14].trim().length()>0){
