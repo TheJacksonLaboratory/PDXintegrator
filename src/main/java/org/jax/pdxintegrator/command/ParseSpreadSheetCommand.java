@@ -8,6 +8,7 @@ package org.jax.pdxintegrator.command;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,7 +79,7 @@ public class ParseSpreadSheetCommand extends Command {
 
     public static void main(String[] args) {
         
-        String xlsxFile = "C:/Users/sbn/Desktop/PDXNet/testing/HCI.xlsx";
+        String xlsxFile = "C:/Users/sbn/Desktop/PDXNet/ryan/MDA.xlsx";
         String outFile = xlsxFile.replace(".xlsx", ".rdf");
         if(xlsxFile.equals(outFile)){
             System.out.println("Wrong format "+xlsxFile);
@@ -90,7 +91,7 @@ public class ParseSpreadSheetCommand extends Command {
 
         pssc.execute();
         
-        System.out.println(pssc.messages.toString());
+       
     }
 
     public void execute() {
@@ -137,12 +138,17 @@ public class ParseSpreadSheetCommand extends Command {
                         }
 
                         for (PdxModelCreation mc : modelModelCreations) {
-                            modelQAs.addAll(qas.get(mc.getModelID()));
+                            if(qas.containsKey(mc.getModelID())){
+                                modelQAs.addAll(qas.get(mc.getModelID()));
+                            } else {
+                                messages.append("\nNo QAs for " + mc.getModelID());
+                            }
+                            
                             if (modelStudies.containsKey(mc.getModelID())) {
                                 modelModelStudies.addAll(modelStudies.get(mc.getModelID()));
-
+                            
                             } else {
-                                messages.append("\nno studies for " + mc.getModelID());
+                                messages.append("\nNo studies for " + mc.getModelID());
                             }
 
                             if (omicsFiles.containsKey(mc.getModelID())) {
@@ -158,7 +164,7 @@ public class ParseSpreadSheetCommand extends Command {
                             }
                         }
 
-                        messages.append("\nPatient " + patientID + " has " + modelTumors.size() + " tumors, " + modelModelCreations.size() + " modelcreations, " + modelQAs.size() + " qas, " + modelModelStudies.size() + " modelStudies, " + modelOmicsFiles.size() + " omicsfiles.");
+                        messages.append("\nPatient " + patientID + " has " + modelTumors.size() + " tumors, " + modelModelCreations.size() + " model details, " + modelQAs.size() + " qas, " + modelModelStudies.size() + " modelStudies, " +((PdxModelStudy)modelModelStudies.get(0)).getTreatments().size()+" treatments, " + modelOmicsFiles.size() + " omicsfiles.");
 
                         models.add(new PdxModel(this.pdtc, modelPatient, modelTumors, modelModelCreations, modelQAs, modelModelStudies, modelOmicsFiles));
                     }
@@ -170,6 +176,8 @@ public class ParseSpreadSheetCommand extends Command {
                             System.out.println("Wrong format "+this.spreadSheetFileString);
                             System.exit(0);
                         }
+                        System.out.println(messages.toString());
+                        System.out.println("No fatal errors generating RDF.");
                         mt.setMappingFile(mappingFile);
                         
                         mt.findTerms(models);
@@ -180,6 +188,9 @@ public class ParseSpreadSheetCommand extends Command {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                    }else{
+                        System.out.println("FATAL errors encounterd not generating RDF");
+                        System.out.println(messages.toString());
                     }
                 }else{
                     messages.append("\nFATAL ERROR:There must be 8 sheets there are "+workbook.getNumberOfSheets());
@@ -335,7 +346,7 @@ public class ParseSpreadSheetCommand extends Command {
             tumor.setEventIndex(row.get(2));
             tumor.setCollectionProcedure(row.get(3));
             tumor.setTreatmentNaive(getBoolean("Tumor: treatment naive",row.get(4)));
-            tumor.setAgeAtCollection(row.get(5));
+            tumor.setAgeAtCollection(getInteger("Tumor: age at collection ",row.get(5)).toString());
             tumor.setInitialDiagnosis(row.get(6));
             tumor.setClinicalEventPoint(row.get(7));
             tumor.setTissueOfOrigin(row.get(8));
@@ -444,12 +455,12 @@ public class ParseSpreadSheetCommand extends Command {
             model.setSublineOfModel(row.get(20));
             model.setSublineReason(row.get(21));
 
-            if (models.containsKey(model.getModelID())) {
-                models.get(model.getModelID()).add(model);
+            if (models.containsKey(model.getTumorID())) {
+                models.get(model.getTumorID()).add(model);
             } else {
                 ArrayList<PdxModelCreation> list = new ArrayList<>();
                 list.add(model);
-                models.put(model.getModelID(), list);
+                models.put(model.getTumorID(), list);
             }
 
         }
@@ -534,9 +545,9 @@ public class ParseSpreadSheetCommand extends Command {
             while (row.size() < MODEL_STUDY_COLUMNS ) {
                 row.add("");
             }
-            
-            String modelStudyID = fixID("Model Study: Model ID",row.get(0));
-            String modelID = fixID("Model Study: Study ID",row.get(1));
+            String modelID = fixID("Model Study: Study ID",row.get(0));
+            String modelStudyID = fixID("Model Study: Model ID",row.get(1));
+           
             
             if(!modelIDs.containsKey(modelID)){
                 messages.append("Model study ").append(modelStudyID).append(" has unknown model ID ").append("modelID");
@@ -545,7 +556,7 @@ public class ParseSpreadSheetCommand extends Command {
             
             modelStudyIDs.put(modelStudyID,"");
             
-            PdxModelStudy study = new PdxModelStudy(modelStudyID, modelID);
+            PdxModelStudy study = new PdxModelStudy(modelID,modelStudyID);
             study.setDescription(row.get(2));
             study.setPassage(getPassage("Model Study: passage ",row.get(3)));
             study.setHostStrain(row.get(4));
@@ -582,7 +593,7 @@ public class ParseSpreadSheetCommand extends Command {
             String studyID = fixID("Study Treatment: Study ID",row.get(1));
             
             if(!modelStudyIDs.containsKey(studyID)){
-                messages.append("Studytreatment contains uknown model study id ").append(studyID);
+                messages.append("\nStudy Treatment contains uknown model study id ").append(studyID);
                 continue;
             }
 
@@ -631,7 +642,10 @@ public class ParseSpreadSheetCommand extends Command {
             omicsFile.setPatientID(fixID("OMICS: PT ID",row.get(0)));
             omicsFile.setModelID(fixID("OMICS: Model ID",row.get(1)));
             omicsFile.setAccessLevel(row.get(2));
-            omicsFile.setCreatedDateTime(row.get(3));
+            //TODO validate dates 
+            try{
+                omicsFile.setCreatedDateTime(getInteger("OMICS: Create date",row.get(3)).toString());
+            }catch(Exception e){}
             omicsFile.setDataCategory(row.get(4));
             omicsFile.setDataFormat(row.get(5));
             omicsFile.setDataType(row.get(6));
@@ -639,7 +653,9 @@ public class ParseSpreadSheetCommand extends Command {
             omicsFile.setExperimentalStrategy(row.get(8));
             omicsFile.setPlatform(row.get(9));
             omicsFile.setCaptureKit(row.get(10));
-            omicsFile.setUpdatedDateTime(row.get(11));
+            try{
+                omicsFile.setUpdatedDateTime(getInteger("OMICS: Update date",row.get(11)).toString());
+            }catch(Exception e){}
             omicsFile.setIsFFPE(getBoolean("OMICS: isFFPE",row.get(12)));
             // paired end should be 1,2 or null
             // however sometime supplied as True (=2) False (=1)
@@ -647,7 +663,9 @@ public class ParseSpreadSheetCommand extends Command {
             omicsFile.setFileName(row.get(14));
             
             try{
-                omicsFile.setFileSize(new Integer(row.get(15)).toString());
+                String val = row.get(15);
+                val = fixFileSize(val);
+                omicsFile.setFileSize(new Long(val).toString());
             }catch(Exception e){
                 messages.append("\n"+row.get(15)+" is not an integer. OMICS:Filesize should be in bytes");
             }
@@ -679,16 +697,16 @@ public class ParseSpreadSheetCommand extends Command {
     // probably these messages should get logged or suppressed
     private String fixID(String what,String id){
         if(id == null){
-            messages.append("\nFatal error: requried field "+what+" is has no value");
+            messages.append("\nFATAL error: requried field "+what+" is has no value");
             return null;
         }
-        messages.append("\n"+what+" "+id);
+        //messages.append("\n"+what+" "+id);
         if(id.endsWith(".0")){
             messages.append("\nFixing "+what+" "+id+" to ");
             id = id.substring(0, id.length()-2);
             messages.append("\n"+id);
         }
-        return id;
+        return id.trim();
     }
     
     private void sheetStats(Sheet sheet) {
@@ -720,7 +738,7 @@ public class ParseSpreadSheetCommand extends Command {
         for(int i = 0; i < countList.size(); i++){
             int cellCount = getCellCount(workbook.getSheetAt(i).getRow(0));
             if (cellCount != countList.get(i)) {
-                messages.append("\n Fatal Error:"+workbook.getSheetAt(i).getSheetName()+" should have "+ countList.get(i)+" columns but has "+cellCount);
+                messages.append("\n FATAL Error:"+workbook.getSheetAt(i).getSheetName()+" should have "+ countList.get(i)+" columns but has "+cellCount);
             }
     }}
 
@@ -918,4 +936,20 @@ public class ParseSpreadSheetCommand extends Command {
         return r;
     }
 
+    
+    public String fixFileSize(String sizeStr){
+        Double size = null;
+        String[] parts = sizeStr.split(" ");
+        if(parts[1].contains("G")){
+            size  = new Double(parts[0])* 1073741824;
+        }
+        if(parts[1].contains("K")){
+            size  = new Double(parts[0])* 1024;
+        }
+        size =Math.ceil(size);
+        DecimalFormat df = new DecimalFormat("#");
+        df.setMaximumFractionDigits(0);
+        return df.format(size);
+    }
+    
 }

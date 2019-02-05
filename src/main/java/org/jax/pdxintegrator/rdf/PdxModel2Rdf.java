@@ -897,7 +897,7 @@ public class PdxModel2Rdf {
             setProperty(thisOmicsFile, this.hasPairedEnd, omicsFile.getPairedEnd());
 
             thisOmicsFile.addProperty(this.hasFileName, omicsFile.getFileName());
-            setProperty(thisOmicsFile, this.hasPassage, omicsFile.getPassage());
+            setProperty(thisOmicsFile, this.hasPassage, "P"+omicsFile.getPassage());
 
         }
 
