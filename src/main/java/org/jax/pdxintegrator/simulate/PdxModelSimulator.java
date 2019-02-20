@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import com.github.phenomics.ontolib.ontology.data.ImmutableTermId;
-import com.github.phenomics.ontolib.ontology.data.TermId;
 import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +23,7 @@ import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
 import org.jax.pdxintegrator.model.tumor.TumorGrade;
 import org.jax.pdxintegrator.ncit.neoplasm.NcitTerm;
 import org.jax.pdxintegrator.uberon.UberonTerm;
+import org.monarchinitiative.phenol.ontology.data.TermId;
 
 /**
  * This class is intended to illustrate how to instantiate the PdxPatient module with data.
@@ -42,9 +41,9 @@ public class PdxModelSimulator {
     private Random random=new Random();
 
 
-    private final TermId metastasis = ImmutableTermId.constructWithPrefix("NCIT:C19151");
-    private final TermId primaryNeoplasm = ImmutableTermId.constructWithPrefix("NCIT:C8509");
-    private final TermId recurrence = ImmutableTermId.constructWithPrefix("NCIT:C3352");
+    private final TermId metastasis = TermId.of("NCIT:C19151");
+    private final TermId primaryNeoplasm = TermId.of("NCIT:C8509");
+    private final TermId recurrence = TermId.of("NCIT:C3352");
 
 
 

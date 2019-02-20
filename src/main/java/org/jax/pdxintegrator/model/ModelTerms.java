@@ -5,7 +5,7 @@
  */
 package org.jax.pdxintegrator.model;
 
-import com.github.phenomics.ontolib.ontology.data.TermId;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -22,6 +22,7 @@ import org.jax.pdxintegrator.ncit.NcitOwlApiParser;
 import org.jax.pdxintegrator.ncit.neoplasm.NcitTerm;
 import org.jax.pdxintegrator.uberon.UberonOntologyParser;
 import org.jax.pdxintegrator.uberon.UberonTerm;
+import org.monarchinitiative.phenol.ontology.data.TermId;
 
 /**
  * Manages populating OntologyTerms for a PDXModel object

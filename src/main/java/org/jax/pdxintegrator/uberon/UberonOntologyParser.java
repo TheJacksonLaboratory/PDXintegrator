@@ -1,19 +1,16 @@
 package org.jax.pdxintegrator.uberon;
 
-import com.github.phenomics.ontolib.formats.hpo.HpoTerm;
-import com.github.phenomics.ontolib.formats.hpo.HpoTermRelation;
-import com.github.phenomics.ontolib.ontology.data.Ontology;
-import com.github.phenomics.ontolib.ontology.data.TermId;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jax.pdxintegrator.exception.PDXException;
+import org.monarchinitiative.phenol.ontology.data.Term;
 import org.obolibrary.obo2owl.OWLAPIObo2Owl;
 import org.obolibrary.oboformat.model.OBODoc;
 import org.obolibrary.oboformat.parser.OBOFormatParser;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
-import org.semanticweb.owlapi.reasoner.Node;
-import org.semanticweb.owlapi.reasoner.NodeSet;
+
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 import org.semanticweb.owlapi.search.EntitySearcher;
@@ -21,6 +18,10 @@ import org.semanticweb.owlapi.search.EntitySearcher;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
+
+import org.monarchinitiative.phenol.io.OntologyLoader;
+import org.monarchinitiative.phenol.ontology.data.Ontology;
+import org.monarchinitiative.phenol.ontology.data.TermId;
 
 public class UberonOntologyParser {
     private static final Logger logger = LogManager.getLogger();
@@ -31,10 +32,10 @@ public class UberonOntologyParser {
     private HashMap<String,UberonTerm> termMap = new HashMap<>();
 
 
-    Ontology<HpoTerm, HpoTermRelation> inheritanceSubontology=null;
-    Ontology<HpoTerm, HpoTermRelation> abnormalPhenoSubOntology=null;
+    Ontology inheritanceSubontology=null;
+    Ontology abnormalPhenoSubOntology=null;
     /** Map of all of the Phenotypic abnormality terms (i.e., not the inheritance terms). */
-    private Map<TermId,HpoTerm> termmap=null;
+    private Map<TermId, Term> termmap=null;
 
     public UberonOntologyParser(String path){
         uberonPath =path;

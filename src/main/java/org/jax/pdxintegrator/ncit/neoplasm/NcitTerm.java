@@ -1,10 +1,8 @@
 package org.jax.pdxintegrator.ncit.neoplasm;
 
-import com.github.phenomics.ontolib.ontology.data.ImmutableTermId;
-import com.github.phenomics.ontolib.ontology.data.ImmutableTermPrefix;
-import com.github.phenomics.ontolib.ontology.data.TermId;
-import com.github.phenomics.ontolib.ontology.data.TermPrefix;
+
 import org.jax.pdxintegrator.exception.PDXException;
+import org.monarchinitiative.phenol.ontology.data.TermId;
 
 /**
  * This is a convenience class for storing NCIT terms.
@@ -15,7 +13,7 @@ public class NcitTerm {
     /** The label (title) of this NCIT term. */
     private final String label;
     /** In our OLPG/ontolib library, term ids are represented by a prefix and a code. */
-    private final static TermPrefix NCIT_PREFIX= new ImmutableTermPrefix("NCIT");
+    private final static String NCIT_PREFIX= "NCIT";
 
     /**
      *
@@ -48,7 +46,7 @@ public class NcitTerm {
         return label;
     }
 
-    public TermId getTermId() { return new ImmutableTermId(NCIT_PREFIX,String.format("C%d",this.id));
+    public TermId getTermId() { return TermId.of(NCIT_PREFIX,String.format("C%d",this.id));
 
     }
 

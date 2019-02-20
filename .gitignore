@@ -31,3 +31,5 @@ docs/_build/
 src/main/java/org/jax/pdxintegrator/pdxnet/
 target/
 vc-db-1.rdf
+scripts/installRobot.sh
+scripts/installRobot.sh~

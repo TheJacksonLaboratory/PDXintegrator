@@ -16,7 +16,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jdk.version>1.8</jdk.version>
         <htsjdk.version>2.10.1</htsjdk.version>
-        <ontolib.version>0.1.4</ontolib.version>
+        <phenol.version>1.3.2</phenol.version>
         <jena.version>3.6.0</jena.version>
     </properties>
 
@@ -62,9 +62,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.phenomics</groupId>
-            <artifactId>ontolib-core</artifactId>
-            <version>${ontolib.version}</version>
+            <groupId>org.monarchinitiative.phenol</groupId>
+            <artifactId>phenol-core</artifactId>
+            <version>${phenol.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.guava</groupId>
@@ -77,9 +77,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.phenomics</groupId>
-            <artifactId>ontolib-io</artifactId>
-            <version>${ontolib.version}</version>
+            <groupId>org.monarchinitiative.phenol</groupId>
+            <artifactId>phenol-io</artifactId>
+            <version>${phenol.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.github.jsonld-java</groupId>
