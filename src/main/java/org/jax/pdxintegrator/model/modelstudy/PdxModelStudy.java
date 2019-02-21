@@ -11,55 +11,23 @@ public class PdxModelStudy {
     private Integer passage;
     private String hostStrain;
     private String implantationSite;
-    // the following were removed by Mike L. et al
-    private boolean metastasis;
-    private int metastasisPassage;
-    private String metastasisLocation; // could be multiple locations
-   
-    // these were added by Mike L. et al
-    // i don't know what they are
-    private String endpoint1;
-    private String endpoint2;
-    private String endpoint3;
-    
-    private ArrayList<PdxStudyTreatment> treatments;
+    private String baselineTumorTargetSize;
 
-    private PdxModelStudy(String modelID, String studyID, ArrayList<PdxStudyTreatment> treatments,
-            boolean metastasis, int metastasisPassage, String metastasisLocation) {
+    private ArrayList<PdxStudyTreatment> treatments = new ArrayList<>();
+
+    public PdxModelStudy(String modelId, String studyId) {
+        this.modelID = modelId;
+        this.studyID = studyId;
+
+    }
+
+    private PdxModelStudy(String modelID, String studyID, ArrayList<PdxStudyTreatment> treatments) {
         this.modelID = modelID;
         this.studyID = studyID;
         this.treatments = treatments;
-        this.metastasis = metastasis;
-        this.metastasisPassage = metastasisPassage;
-        this.metastasisLocation = metastasisLocation;
-       
-        
-       
 
     }
 
-    /**
-     * @return the metastasis
-     */
-    public boolean hasMetastasis() {
-        return metastasis;
-    }
-
-    /**
-     * @return the metastasisPassage
-     */
-    public int getMetastasisPassage() {
-        return metastasisPassage;
-    }
-
-    /**
-     * @return the metastasisLocation
-     */
-    public String getMetastasisLocation() {
-        return metastasisLocation;
-    }
-
-   
     /**
      * @return the treatments
      */
@@ -74,7 +42,6 @@ public class PdxModelStudy {
         this.treatments = treatments;
     }
 
-   
     /**
      * @return the studyID
      */
@@ -96,47 +63,95 @@ public class PdxModelStudy {
         return modelID;
     }
 
-    
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the passage
+     */
+    public Integer getPassage() {
+        return passage;
+    }
+
+    /**
+     * @param passage the passage to set
+     */
+    public void setPassage(Integer passage) {
+        this.passage = passage;
+    }
+
+    /**
+     * @return the hostStrain
+     */
+    public String getHostStrain() {
+        return hostStrain;
+    }
+
+    /**
+     * @param hostStrain the hostStrain to set
+     */
+    public void setHostStrain(String hostStrain) {
+        this.hostStrain = hostStrain;
+    }
+
+    /**
+     * @return the implantationSite
+     */
+    public String getImplantationSite() {
+        return implantationSite;
+    }
+
+    /**
+     * @param implantationSite the implantationSite to set
+     */
+    public void setImplantationSite(String implantationSite) {
+        this.implantationSite = implantationSite;
+    }
+
+    /**
+     * @return the baselineTumorTargetSize
+     */
+    public String getBaselineTumorTargetSize() {
+        return baselineTumorTargetSize;
+    }
+
+    /**
+     * @param baselineTumorTargetSize the baselineTumorTargetSize to set
+     */
+    public void setBaselineTumorTargetSize(String baselineTumorTargetSize) {
+        this.baselineTumorTargetSize = baselineTumorTargetSize;
+    }
 
     public static class Builder {
 
         private String modelID;
         private String studyID;
         private ArrayList<PdxStudyTreatment> treatments;
-        private boolean metastasis;
-        private int metastasisPassage;
-        private String metastasisLocation; // could be multiple locations
-      
-       
-      
-         public Builder(String modelID, String studyID){
-           this.modelID = modelID;
-           this.studyID = studyID;
-           
-       }
-        
-       public Builder treatments(ArrayList<PdxStudyTreatment> treatments){
-           this.treatments = treatments;
-           return this;
-       }
 
-        public Builder metastasis(boolean metastasis) {
-            this.metastasis = metastasis;
-            return this;
+        public Builder(String modelID, String studyID) {
+            this.modelID = modelID;
+            this.studyID = studyID;
+
         }
 
-        public Builder metastasisLocation(String metastasesLocation) {
-            this.metastasisLocation = metastasesLocation;
+        public Builder treatments(ArrayList<PdxStudyTreatment> treatments) {
+            this.treatments = treatments;
             return this;
         }
-
-      
-       
-     
 
         public PdxModelStudy build() {
-            return new PdxModelStudy(modelID,studyID, treatments,
-                    metastasis, metastasisPassage, metastasisLocation);
+            return new PdxModelStudy(modelID, studyID, treatments);
         }
 
     }

@@ -37,6 +37,8 @@ public class CommandParser {
     private String drugBankPath=null;
 
     private String n_cases=null;
+    
+    private String xlxsFile = null;
 
     private Command command=null;
 
@@ -120,7 +122,11 @@ public class CommandParser {
             if (commandLine.hasOption("d")) {
                 this.dataDownloadDirectory=commandLine.getOptionValue("d");
             }
-
+            
+            if (commandLine.hasOption("x")) {
+                this.xlxsFile = commandLine.getOptionValue("x");
+            }
+            
             if (mycommand.equals("download")) {
                 if (this.dataDownloadDirectory == null) {
                     System.out.println("Will download to the default location: \"data\"");
@@ -148,6 +154,18 @@ public class CommandParser {
                     printUsage("[ERROR] --drugbank option required for drugbank command");
                 }
                 this.command = new DrugBankCommand(drugBankPath,DEFAULT_DRUGBANK_OUTPUT_FILE);
+                
+            } else if (mycommand.equals("parseXLXS")){
+                if(this.xlxsFile == null){
+                    printUsage("[ERROR] --xlxsFile option required for parseXLXS command");
+                }
+                System.out.println("HERE! "+this.xlxsFile);
+                if(this.rdfFilename == null || this.rdfFilename.equals(DEFAULT_RDF_FILENAME)){
+                     this.rdfFilename = this.xlxsFile.replace(".xlsx", ".rdf");
+                     System.out.println("No RDF file name provided will output RDF to "+this.rdfFilename);
+                }
+                    this.command = new ParseSpreadSheetCommand(this.xlxsFile, this.rdfFilename);
+            
             }else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));
             }
@@ -180,7 +198,8 @@ public class CommandParser {
                 .addOption("r","rdf",true, "RDF filename (simulated cases)")
                 .addOption("u","uberon",true, "path to uberon (basic.obo)")
                 .addOption(null,"n_cases",true, "number of cases to simulate")
-                .addOption("c", "config", true, "path of configuration file");
+                .addOption("c", "config", true, "path of configuration file")
+                .addOption("x", "xlxsFile", true, "Excel metadata filename");
         return gnuOptions;
     }
 
@@ -232,6 +251,10 @@ public class CommandParser {
         writer.println();
         writer.println("query");
         writer.println("\tjava -jar PdxIntegrator.jar query [-i file]: todo.");
+        writer.println();
+        
+        writer.println("parseXLXS");
+        writer.println("\tjava -jar PdxIntegrator.jar parseXLXS [-x file]: Parse metadata from Excel file to RDF");
         writer.println();
         writer.close();
         System.exit(0);

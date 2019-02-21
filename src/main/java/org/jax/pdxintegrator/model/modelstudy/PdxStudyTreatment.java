@@ -5,6 +5,8 @@
  */
 package org.jax.pdxintegrator.model.modelstudy;
 
+import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
+
 /**
  *
  * @author sbn
@@ -12,18 +14,19 @@ package org.jax.pdxintegrator.model.modelstudy;
 public class PdxStudyTreatment {
 
     private String studyID;
+    private String modelID;
     private String cohort;
     private Integer cohortSize;
-    private String drug;
+    private String drug="";
     private Integer nsc;
-    private String dose;
+    private String dose="";
     private String route;
     private String dosingSchedule;
     private Integer numberOfCycles;
     private Integer studyDuration;
-    private String endpoint1Response;
-    private String endpoint2Response;
-    private String endpoint3Response;
+    private ResponseToTreatment endpoint1Response;
+    private ResponseToTreatment endpoint2Response;
+    private ResponseToTreatment endpoint3Response;
 
     
     public PdxStudyTreatment(String studyID) {
@@ -163,43 +166,57 @@ public class PdxStudyTreatment {
     /**
      * @return the endpoint1Response
      */
-    public String getEndpoint1Response() {
+    public ResponseToTreatment getEndpoint1Response() {
         return endpoint1Response;
     }
 
     /**
      * @param endpoint1Response the endpoint1Response to set
      */
-    public void setEndpoint1Response(String endpoint1Response) {
+    public void setEndpoint1Response(ResponseToTreatment endpoint1Response) {
         this.endpoint1Response = endpoint1Response;
     }
 
     /**
      * @return the endpoint2Response
      */
-    public String getEndpoint2Response() {
+    public ResponseToTreatment getEndpoint2Response() {
         return endpoint2Response;
     }
 
     /**
      * @param endpoint2Response the endpoint2Response to set
      */
-    public void setEndpoint2Response(String endpoint2Response) {
+    public void setEndpoint2Response(ResponseToTreatment endpoint2Response) {
         this.endpoint2Response = endpoint2Response;
     }
 
     /**
      * @return the endpoint3Response
      */
-    public String getEndpoint3Response() {
+    public ResponseToTreatment getEndpoint3Response() {
         return endpoint3Response;
     }
 
     /**
      * @param endpoint3Response the endpoint3Response to set
      */
-    public void setEndpoint3Response(String endpoint3Response) {
+    public void setEndpoint3Response(ResponseToTreatment endpoint3Response) {
         this.endpoint3Response = endpoint3Response;
+    }
+
+    /**
+     * @return the modelID
+     */
+    public String getModelID() {
+        return modelID;
+    }
+
+    /**
+     * @param modelID the modelID to set
+     */
+    public void setModelID(String modelID) {
+        this.modelID = modelID;
     }
 
    

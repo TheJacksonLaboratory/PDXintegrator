@@ -18,15 +18,16 @@ public class PdxOmicsFile {
             private String dataCategory;	
             private String dataFormat;
             private String dataType;
-            private String sampleType;	
+            private String sampleType;	// this should be Patient Patient Normal or PDX Tumor
             private String experimentalStrategy;
             private String fileSize;
             private String platform;	
             private String captureKit;	
             private String updatedDateTime;
-            private String isFFPEPairedEnd;	
+            private Boolean isFFPE;
+            private Integer hasPairedEnd;	
             private String fileName;
-            private String passage;
+            private Integer passage;
 
     /**
      * @return the patientID
@@ -211,17 +212,17 @@ public class PdxOmicsFile {
     }
 
     /**
-     * @return the isFFPEPairedEnd
+     * @return the isFFPE
      */
-    public String getIsFFPEPairedEnd() {
-        return isFFPEPairedEnd;
+    public Boolean getIsFFPE() {
+        return isFFPE;
     }
 
     /**
-     * @param isFFPEPairedEnd the isFFPEPairedEnd to set
+     * @param isFFPE the isFFPE to set
      */
-    public void setIsFFPEPairedEnd(String isFFPEPairedEnd) {
-        this.isFFPEPairedEnd = isFFPEPairedEnd;
+    public void setIsFFPE(Boolean isFFPE) {
+        this.isFFPE = isFFPE;
     }
 
     /**
@@ -241,15 +242,29 @@ public class PdxOmicsFile {
     /**
      * @return the passage
      */
-    public String getPassage() {
+    public Integer getPassage() {
         return passage;
     }
 
     /**
      * @param passage the passage to set
      */
-    public void setPassage(String passage) {
+    public void setPassage(Integer passage) {
         this.passage = passage;
+    }
+
+    /**
+     * @return the isPairedEnd
+     */
+    public Integer getPairedEnd() {
+        return hasPairedEnd;
+    }
+
+    /**
+     * @param PairedEnd the paired End to set
+     */
+    public void setPairedEnd(Integer pairedEnd) {
+        this.hasPairedEnd = pairedEnd;
     }
     
 }

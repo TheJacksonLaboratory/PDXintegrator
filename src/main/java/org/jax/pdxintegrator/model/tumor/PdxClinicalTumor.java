@@ -1,6 +1,8 @@
 package org.jax.pdxintegrator.model.tumor;
 
 import com.github.phenomics.ontolib.ontology.data.TermId;
+import java.util.ArrayList;
+import org.jax.pdxintegrator.uberon.UberonTerm;
 
 /**
  * Main class for modeling the Clinical/Tumor part of the PDX-MI
@@ -15,7 +17,7 @@ public class PdxClinicalTumor {
     private String submitterTumorID;
     private String eventIndex;
     private String collectionProcedure;
-    private boolean treatmentNaive;
+    private Boolean treatmentNaive;
     private String ageAtCollection;
     private String initialDiagnosis;
     private TermId initialDiagnosisTerm;
@@ -23,20 +25,21 @@ public class PdxClinicalTumor {
     private TermId tissueOfOriginTerm;
     private String clinicalEventPoint;
     /** NCIT Term id for primary, recurrence, metastasis. */
-    private TermId clincalEventPointTerm; // disease progression
+    private TermId clinicalEventPointTerm; // disease progression
     private String specimenTissue;
     private TermId specimenTissueTerm;
     private String tissueHistology;
     /** NCIT Term id for tissue histology */
     private TermId tissueHistologyTerm;
     private String clinicalMarkers;
-    private String tumorGrade;
+    private TumorGrade tumorGrade;
     private String tStage;
     private String nStage;
     private String mStage;
     private String overallStage;
     private String sampleType;
     private String metastaticSites;
+    private ArrayList<TermId> metastaticSiteTerms = new ArrayList<>();
     private String strAnalysis;
     private String strMarkers;
     private String strEvaluation;
@@ -165,7 +168,7 @@ public class PdxClinicalTumor {
     /**
      * @param tumorGrade the tumorGrade to set
      */
-    public void setTumorGrade(String tumorGrade) {
+    public void setTumorGrade(TumorGrade tumorGrade) {
         this.tumorGrade = tumorGrade;
     }
 
@@ -228,14 +231,14 @@ public class PdxClinicalTumor {
     /**
      * @return the treatmentNaive
      */
-    public boolean isTreatmentNaive() {
+    public Boolean isTreatmentNaive() {
         return treatmentNaive;
     }
 
     /**
      * @param treatmentNaive the treatmentNaive to set
      */
-    public void setTreatmentNaive(boolean treatmentNaive) {
+    public void setTreatmentNaive(Boolean treatmentNaive) {
         this.treatmentNaive = treatmentNaive;
     }
 
@@ -271,7 +274,7 @@ public class PdxClinicalTumor {
     /**
      * @return the tumorGrade
      */
-    public String getTumorGrade() {
+    public TumorGrade getTumorGrade() {
         return tumorGrade;
     }
 
@@ -460,19 +463,35 @@ public class PdxClinicalTumor {
     }
 
     /**
-     * @return the clincalEventPointTerm
+     * @return the clinicalEventPointTerm
      */
-    public TermId getClincalEventPointTerm() {
-        return clincalEventPointTerm;
+    public TermId getClinicalEventPointTerm() {
+        return clinicalEventPointTerm;
     }
 
     /**
-     * @param clincalEventPointTerm the clincalEventPointTerm to set
+     * @param clinicalEventPointTerm the clinicalEventPointTerm to set
      */
-    public void setClincalEventPointTerm(TermId clincalEventPointTerm) {
-        this.clincalEventPointTerm = clincalEventPointTerm;
+    public void setClinicalEventPointTerm(TermId clinicalEventPointTerm) {
+        this.clinicalEventPointTerm = clinicalEventPointTerm;
     }
 
-    
+    /**
+     * @return the metastaticSiteTerms
+     */
+    public ArrayList<TermId> getMetastaticSiteTerms() {
+        return metastaticSiteTerms;
+    }
+
+    /**
+     * @param metastaticSiteTerms the metastaticSiteTerms to set
+     */
+    public void setMetastaticSiteTerms(ArrayList<TermId> metastaticSiteTerms) {
+        this.metastaticSiteTerms = metastaticSiteTerms;
+    }
+
+    public void addMetastaticSiteTerm(TermId termId){
+        this.metastaticSiteTerms.add(termId);
+    }
 
 }

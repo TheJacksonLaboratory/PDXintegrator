@@ -95,6 +95,39 @@ public enum Age {
         return 109;
     }
 
+    
+    public static Age getAgeForString(String age){
+        Age a = Age.notProvided;
+    
+        try{
+            int ageInt = new Integer(age);
+            if(ageInt < 5) return Age.age0_4;
+            if(ageInt < 10) return Age.age5_9;
+            if(ageInt < 15) return Age.age10_14;
+            if(ageInt < 20) return Age.age15_19;
+            if(ageInt < 25) return Age.age20_24;
+            if(ageInt < 30) return Age.age25_29;
+            if(ageInt < 35) return Age.age30_34;
+            if(ageInt < 40) return Age.age35_39;
+            if(ageInt < 45) return Age.age40_44;
+            if(ageInt < 50) return Age.age45_49;
+            if(ageInt < 55) return Age.age50_54;
+            if(ageInt < 60) return Age.age55_59;
+            if(ageInt < 65) return Age.age60_64;
+            if(ageInt < 70) return Age.age65_69;
+            if(ageInt < 75) return Age.age70_74;
+            if(ageInt < 80) return Age.age75_79;
+            if(ageInt < 85) return Age.age80_84;
+            if(ageInt < 90) return Age.age85_89;
+            if(ageInt < 95) return Age.age90_94;
+            if(ageInt < 100) return Age.age95_99;
+            if(ageInt < 105) return Age.age100_104;
+        }catch(Exception e){}
+        return a;
+            
+            
+        
+    }
 
 
 }

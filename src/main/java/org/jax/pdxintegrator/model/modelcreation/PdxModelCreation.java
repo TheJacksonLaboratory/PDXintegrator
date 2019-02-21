@@ -1,5 +1,9 @@
 package org.jax.pdxintegrator.model.modelcreation;
 
+import com.github.phenomics.ontolib.ontology.data.TermId;
+import java.util.ArrayList;
+import org.jax.pdxintegrator.model.patient.Sex;
+
 /**
  * This class represents the Model Creation module of the PDX-MI.
  *
@@ -12,19 +16,20 @@ public class PdxModelCreation {
     private String modelID;
     private String mouseStrain;
     private String mouseSource;
-    private String mouseSex;
+    private Sex mouseSex;
     private Boolean humanized;
     private String humanizationType;
     private String engraftmentMaterial;
     private String treatmentForEngraftment;
     private String engraftmentProcedure;
-    private String engraftmnetSite;
+    private String engraftmentSite;
     private Boolean cryopreservedBeforeEngraftment;
     private String modelHistology;
     private Integer doublingTime;
     private Boolean viablyCryopresered;
     private Boolean metastasis;
-    private String metastastaticSites;
+    private String metastaticSites;
+    private ArrayList<TermId> metastaticSiteTerms = new ArrayList<>();
     private Boolean macroMetastasisRequiresExcision;
     private String sublineOfModel;
     private String sublineReason;
@@ -97,29 +102,29 @@ public class PdxModelCreation {
     /**
      * @return the mouseSex
      */
-    public String getMouseSex() {
+    public Sex getMouseSex() {
         return mouseSex;
     }
 
     /**
      * @param mouseSex the mouseSex to set
      */
-    public void setMouseSex(String mouseSex) {
-        this.mouseSex = mouseSex;
+    public void setMouseSex(Sex sex) {
+        this.mouseSex = sex;
     }
 
     /**
      * @return the humanized
      */
-    public boolean isHumanized() {
-        return getHumanized();
+    public Boolean isHumanized() {
+        return humanized;
     }
 
     /**
      * @param humanized the humanized to set
      */
-    public void setHumanized(boolean humanized) {
-        this.setHumanized((Boolean) humanized);
+    public void setHumanized(Boolean humanized) {
+        this.humanized = humanized;
     }
 
     /**
@@ -151,17 +156,17 @@ public class PdxModelCreation {
     }
 
     /**
-     * @return the engraftmnetSite
+     * @return the engraftmentSite
      */
-    public String getEngraftmnetSite() {
-        return engraftmnetSite;
+    public String getEngraftmentSite() {
+        return engraftmentSite;
     }
 
     /**
-     * @param engraftmnetSite the engraftmnetSite to set
+     * @param engraftmentSite the engraftmentSite to set
      */
-    public void setEngraftmnetSite(String engraftmnetSite) {
-        this.engraftmnetSite = engraftmnetSite;
+    public void setEngraftmentSite(String engraftmentSite) {
+        this.engraftmentSite = engraftmentSite;
     }
 
     /**
@@ -250,20 +255,7 @@ public class PdxModelCreation {
         this.sublineReason = sublineReason;
     }
 
-    /**
-     * @return the humanized
-     */
-    public Boolean getHumanized() {
-        return humanized;
-    }
-
-    /**
-     * @param humanized the humanized to set
-     */
-    public void setHumanized(Boolean humanized) {
-        this.humanized = humanized;
-    }
-
+    
     /**
      * @return the engraftmentMaterial
      */
@@ -335,17 +327,17 @@ public class PdxModelCreation {
     }
 
     /**
-     * @return the metastastaticSites
+     * @return the metastaticSites
      */
-    public String getMetastastaticSites() {
-        return metastastaticSites;
+    public String getMetastaticSites() {
+        return metastaticSites;
     }
 
     /**
-     * @param metastastaticSites the metastastaticSites to set
+     * @param metastaticSites the metastaticSites to set
      */
-    public void setMetastastaticSites(String metastastaticSites) {
-        this.metastastaticSites = metastastaticSites;
+    public void setMetastaticSites(String metastaticSites) {
+        this.metastaticSites = metastaticSites;
     }
 
     /**
@@ -362,6 +354,23 @@ public class PdxModelCreation {
         this.macroMetastasisRequiresExcision = macroMetastasisRequiresExcision;
     }
 
+    /**
+     * @return the metastaticSiteTerms
+     */
+    public ArrayList<TermId> getMetastaticSiteTerms() {
+        return metastaticSiteTerms;
+    }
+
+    /**
+     * @param metastaticSiteTerms the metastaticSiteTerms to set
+     */
+    public void setMetastaticSiteTerms(ArrayList<TermId> metastaticSiteTerms) {
+        this.metastaticSiteTerms = metastaticSiteTerms;
+    }
+
+     public void addMetastaticSiteTerm(TermId metastaticSiteTerm) {
+        this.metastaticSiteTerms.add(metastaticSiteTerm);
+    }
    
 
 }

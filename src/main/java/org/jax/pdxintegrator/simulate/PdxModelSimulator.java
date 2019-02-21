@@ -22,6 +22,7 @@ import org.jax.pdxintegrator.model.qualityassurance.ModelCharacterization;
 import org.jax.pdxintegrator.model.qualityassurance.PdxQualityAssurance;
 import org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment;
 import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
+import org.jax.pdxintegrator.model.tumor.TumorGrade;
 import org.jax.pdxintegrator.ncit.neoplasm.NcitTerm;
 import org.jax.pdxintegrator.uberon.UberonTerm;
 
@@ -101,7 +102,7 @@ public class PdxModelSimulator {
         omicsFiles.add(buildOmicsFile(null,patientID));
         // same for other categories
         
-        this.pdxmodel = new PdxModel(patient,clinicalTumors,modelCreations,qas, modelStudies,omicsFiles);
+        this.pdxmodel = new PdxModel("PDTCName",patient,clinicalTumors,modelCreations,qas, modelStudies,omicsFiles);
     }
 
 
@@ -121,10 +122,11 @@ public class PdxModelSimulator {
         omicsFile.setExperimentalStrategy("exp strategy");
         omicsFile.setFileName("simulatedOmicsFile"+omicsCount++);
         omicsFile.setFileSize("34K");
-        omicsFile.setIsFFPEPairedEnd("yes");
+        omicsFile.setIsFFPE(true);
+        omicsFile.setPairedEnd(1);
         omicsFile.setModelID(modelID);
         omicsFile.setPatientID(patientID);
-        omicsFile.setPassage("P1");
+        omicsFile.setPassage(1);
         omicsFile.setPlatform("whole exome");
         omicsFile.setSampleType("tumor");
         omicsFile.setUpdatedDateTime("update date");
@@ -164,7 +166,7 @@ public class PdxModelSimulator {
             PdxModelCreation modelCreation =  new PdxModelCreation(tumorID,modelID);
             modelCreation.setMouseStrain("NOD.Cg-Prkdc<scid> Il2rg<tm1Wj>l/SzJ");
             modelCreation.setMouseSource("JAX");
-            modelCreation.setMouseSex(random.nextInt(1) > 0 ? "Male":"Female");
+            modelCreation.setMouseSex(random.nextInt(1) > 0 ? Sex.MALE:Sex.FEMALE);
             modelCreation.setEngraftmentProcedure(tumorprepmethod.getTumorPrepMethodString());
             modelCreation.setTreatmentForEngraftment(mouseRx.getMouseTreatmentForEngraftmentString());
             modelCreation.setEngraftmentRate(engraftment+"");
@@ -222,13 +224,13 @@ public class PdxModelSimulator {
             TermId grade = getRandomTumorGrade();
             TermId stage = getRandomStage();
             PdxClinicalTumor tumor = new PdxClinicalTumor(patient.getSubmitterPatientID(),tumorID);
-            tumor.setClincalEventPointTerm(category);
+            tumor.setClinicalEventPointTerm(category);
             tumor.setClinicalMarkers("BRCA+");
             tumor.setMStage(("MStagePlaceholder"));
             tumor.setNStage("NstagePlaceholder");
             tumor.setTStage("TstagePlaceholder");
             tumor.setOverallStage(stage.getId());
-            tumor.setTumorGrade(grade.getId());
+            tumor.setTumorGrade(TumorGrade.getTumorGrade(grade.getId()));
             tumor.setPatientID(patientID);
             tumor.setSampleType("sampleType");
             tumor.setTissueOfOrigin(uberon.toString());
@@ -271,12 +273,7 @@ public class PdxModelSimulator {
         int count = random.nextInt(3)+1;
         while(count>0){
             PdxModelStudy.Builder builder = new PdxModelStudy.Builder(modelID, "Study-"+modelID+"-"+count);
-            if(getRandomBoolean()){
-                builder.metastasis(true);
-                builder.metastasisLocation(getUberonId(null).toString());
-                
-            }
-           
+            
             builder.treatments(buildStudyTreatments("Study-"+modelID+"-"+count));
             studies.add(builder.build());
             count--;
@@ -312,8 +309,8 @@ public class PdxModelSimulator {
         builder.consent(consent);
        
         builder.ageAtDiagnosis(age);
-        builder.ethnicity("hispanic");
-        builder.race("caucasian");
+        builder.ethnicity(Ethnicity.LATINO);
+        builder.race(Race.ASIAN);
                 
         
         return builder.build();
@@ -434,10 +431,7 @@ public class PdxModelSimulator {
         return values[random.nextInt(values.length)];
     }
 
-    private EthnicityRace getRandomEthnicity() {
-        EthnicityRace[] values = EthnicityRace.values();
-        return values[random.nextInt(values.length)];
-    }
+   
 
     private TumorPrepMethod  getRandomTumorPrepMethod() {
         TumorPrepMethod[] vals = TumorPrepMethod.values();
