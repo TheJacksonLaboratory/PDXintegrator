@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import com.github.phenomics.ontolib.ontology.data.ImmutableTermId;
-import com.github.phenomics.ontolib.ontology.data.TermId;
 import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +23,7 @@ import org.jax.pdxintegrator.model.tumor.PdxClinicalTumor;
 import org.jax.pdxintegrator.model.tumor.TumorGrade;
 import org.jax.pdxintegrator.ncit.neoplasm.NcitTerm;
 import org.jax.pdxintegrator.uberon.UberonTerm;
+import org.monarchinitiative.phenol.ontology.data.TermId;
 
 /**
  * This class is intended to illustrate how to instantiate the PdxPatient module with data.
@@ -39,12 +38,12 @@ public class PdxModelSimulator {
     private final Age age;
     private final TermId diagnosis;
     private final Consent consent;
-    private Random random=new Random();
+    private final Random random=new Random();
 
 
-    private final TermId metastasis = ImmutableTermId.constructWithPrefix("NCIT:C19151");
-    private final TermId primaryNeoplasm = ImmutableTermId.constructWithPrefix("NCIT:C8509");
-    private final TermId recurrence = ImmutableTermId.constructWithPrefix("NCIT:C3352");
+    private final TermId metastasis = TermId.of("NCIT:C19151");
+    private final TermId primaryNeoplasm = TermId.of("NCIT:C8509");
+    private final TermId recurrence = TermId.of("NCIT:C3352");
 
 
 
@@ -56,9 +55,9 @@ public class PdxModelSimulator {
 
     private final List<UberonTerm> uberonTerms;
 
-    private List<DrugBankEntry> drugbankentrylist;
+    private final List<DrugBankEntry> drugbankentrylist;
 
-    private PdxModel pdxmodel=null;
+    private PdxModel pdxmodel;
 
     public PdxModelSimulator(int id, List<NcitTerm> neoplasms, List<NcitTerm> grades, List<NcitTerm> stages, List<UberonTerm> uberons) {
         this.patientID=String.format("PAT-%d",id);
@@ -83,16 +82,16 @@ public class PdxModelSimulator {
         // really should simulate 1-N
         // simulate random # of tumors then for each random # of modles then for each random # of studies etc
         ArrayList<PdxClinicalTumor> clinicalTumors = buildClinicalTumors(patient);
-        ArrayList<PdxModelCreation> modelCreations = new ArrayList();
+        ArrayList<PdxModelCreation> modelCreations = new ArrayList<>();
         for(PdxClinicalTumor tumor : clinicalTumors){
             modelCreations.addAll(buildModelCreations(tumor.getSubmitterTumorID()));
         
         }
         
-        ArrayList<PdxOmicsFile> omicsFiles = new ArrayList();
+        ArrayList<PdxOmicsFile> omicsFiles = new ArrayList<>();
         
-        ArrayList<PdxQualityAssurance> qas = new ArrayList();
-        ArrayList<PdxModelStudy> modelStudies = new ArrayList();
+        ArrayList<PdxQualityAssurance> qas = new ArrayList<>();
+        ArrayList<PdxModelStudy> modelStudies = new ArrayList<>();
         for(PdxModelCreation modelCreation : modelCreations){
             modelStudies.addAll(buildModelStudies(modelCreation.getModelID()));
             qas.add(buildQualityAssuranceModule(modelCreation.getModelID()));
@@ -154,7 +153,7 @@ public class PdxModelSimulator {
             private String engraftmentTime;
         
         */
-        ArrayList<PdxModelCreation> modelCreations = new ArrayList();
+        ArrayList<PdxModelCreation> modelCreations = new ArrayList<>();
         int count = random.nextInt(3)+1;
         while(count>0){
             String modelID=String.format("PDXModel-%s",tumorID)+"-"+count;
@@ -183,7 +182,7 @@ public class PdxModelSimulator {
 
 
     private ArrayList<PdxClinicalTumor> buildClinicalTumors(PdxPatient patient ) {
-        ArrayList<PdxClinicalTumor> tumors = new ArrayList();
+        ArrayList<PdxClinicalTumor> tumors = new ArrayList<>();
         int count = random.nextInt(2)+1;
         while(count>0){
             /* Populate these fields
@@ -269,7 +268,7 @@ public class PdxModelSimulator {
         private ResponseToTreatment response;
         private ArrayList<PdxStudyTreatment> treatments;
         */
-        ArrayList<PdxModelStudy> studies = new ArrayList();
+        ArrayList<PdxModelStudy> studies = new ArrayList<>();
         int count = random.nextInt(3)+1;
         while(count>0){
             PdxModelStudy.Builder builder = new PdxModelStudy.Builder(modelID, "Study-"+modelID+"-"+count);
@@ -318,7 +317,7 @@ public class PdxModelSimulator {
 
     
     private ArrayList<PdxPatientTreatment> buildPatientTreatments(){
-        ArrayList<PdxPatientTreatment> treatments = new ArrayList();
+        ArrayList<PdxPatientTreatment> treatments = new ArrayList<>();
         int numTreatments = random.nextInt(4);
         while(numTreatments > 0){
             PdxPatientTreatment treatment = new PdxPatientTreatment();
@@ -335,7 +334,7 @@ public class PdxModelSimulator {
     
     
     private ArrayList<PdxStudyTreatment> buildStudyTreatments(String studyID){
-        ArrayList<PdxStudyTreatment> treatments = new ArrayList();
+        ArrayList<PdxStudyTreatment> treatments = new ArrayList<>();
         int numTreatments = random.nextInt(4);
          while(numTreatments > 0){
             PdxStudyTreatment treatment = new PdxStudyTreatment(studyID);

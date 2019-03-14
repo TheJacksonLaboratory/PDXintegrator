@@ -16,7 +16,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jdk.version>1.8</jdk.version>
         <htsjdk.version>2.10.1</htsjdk.version>
-        <phenol.version>1.3.2</phenol.version>
+        <phenol.version>1.3.3</phenol.version>
         <jena.version>3.6.0</jena.version>
     </properties>
 
@@ -402,6 +402,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
                 <configuration>
                     <shadedArtifactAttached>false</shadedArtifactAttached>
                     <transformers>
