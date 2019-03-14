@@ -1,7 +1,6 @@
 package org.jax.pdxintegrator.rdf;
 
-import com.github.phenomics.ontolib.ontology.data.ImmutableTermId;
-import com.github.phenomics.ontolib.ontology.data.TermId;
+
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
@@ -34,6 +33,7 @@ import static org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment.P
 import static org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment.PROGRESSIVE_DISEASE;
 import static org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment.STABLE_DISEASE;
 import org.jax.pdxintegrator.model.tumor.TumorGrade;
+import org.monarchinitiative.phenol.ontology.data.TermId;
 
 /**
  * This class coordinates the transformation of one or more
@@ -51,8 +51,8 @@ public class PdxModel2Rdf {
     //private Model rdfModel = ModelFactory.createDefaultModel();
     private OntModel rdfModel;
 
-    public final TermId male = ImmutableTermId.constructWithPrefix("NCIT:C20197");
-    public final TermId female = ImmutableTermId.constructWithPrefix("NCIT:C16576");
+    private final TermId male = TermId.of("NCIT:C20197");
+    private final TermId female = TermId.of("NCIT:C16576");
 
     // RDF properties needed throughout the model
     private Property hasPatientIdProperty;
@@ -789,14 +789,14 @@ public class PdxModel2Rdf {
     }
 
     /**
-     * @TODO @param model
+     * @param model TODO
      */
     private void outputQualityAssuranceRdf(PdxModel model) {
 
         ArrayList<PdxQualityAssurance> qas = model.getQualityAssurance();
 
         for (PdxQualityAssurance quality : qas) {
-            /**
+            /*
              * @TODO PassageTested can be null what to do then? -- "Passage not
              * specified"?
              */
@@ -963,7 +963,7 @@ public class PdxModel2Rdf {
     
     private Resource setDataFormat(Resource resource, String dataFormat){
         dataFormat = dataFormat.toLowerCase();
-        Resource format = null;
+        Resource format;
          switch(dataFormat){
             case "md5":
                     format = this.md5;

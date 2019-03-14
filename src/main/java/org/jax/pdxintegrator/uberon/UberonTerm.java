@@ -1,10 +1,8 @@
 package org.jax.pdxintegrator.uberon;
 
-import com.github.phenomics.ontolib.ontology.data.ImmutableTermId;
-import com.github.phenomics.ontolib.ontology.data.ImmutableTermPrefix;
-import com.github.phenomics.ontolib.ontology.data.TermId;
-import com.github.phenomics.ontolib.ontology.data.TermPrefix;
+
 import org.jax.pdxintegrator.exception.PDXException;
+import org.monarchinitiative.phenol.ontology.data.TermId;
 
 public class UberonTerm {
 
@@ -13,7 +11,7 @@ public class UberonTerm {
     /** The label (title) of this NCIT term. */
     private final String label;
     /** In our OLPG/ontolib library, term ids are represented by a prefix and a code. */
-    private final static TermPrefix UBERON_PREFIX= new ImmutableTermPrefix("UBERON:");
+    private final static String UBERON_PREFIX= "UBERON:";
 
     /**
      *
@@ -46,7 +44,7 @@ public class UberonTerm {
         return label;
     }
 
-    public TermId getTermId() { return new ImmutableTermId(UBERON_PREFIX,String.format("%07d",this.id));
+    public TermId getTermId() { return TermId.of(UBERON_PREFIX,String.format("%07d",this.id));
 
     }
 

@@ -1,13 +1,13 @@
 package org.jax.pdxintegrator.io;
 
 
-import com.github.phenomics.ontolib.formats.hpo.HpoOntology;
-import com.github.phenomics.ontolib.formats.hpo.HpoTerm;
-import com.github.phenomics.ontolib.formats.hpo.HpoTermRelation;
-import com.github.phenomics.ontolib.io.obo.hpo.HpoOboParser;
-import com.github.phenomics.ontolib.ontology.data.*;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.monarchinitiative.phenol.io.OntologyLoader;
+import org.monarchinitiative.phenol.ontology.data.Ontology;
+import org.monarchinitiative.phenol.ontology.data.Term;
+import org.monarchinitiative.phenol.ontology.data.TermId;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,10 +29,10 @@ public class HpoOntologyParser {
     private String hpoOntologyPath=null;
 
 
-    Ontology<HpoTerm, HpoTermRelation> inheritanceSubontology=null;
-    Ontology<HpoTerm, HpoTermRelation> abnormalPhenoSubOntology=null;
+    Ontology inheritanceSubontology=null;
+    Ontology abnormalPhenoSubOntology=null;
     /** Map of all of the Phenotypic abnormality terms (i.e., not the inheritance terms). */
-    private Map<TermId,HpoTerm> termmap=null;
+    private Map<TermId, Term> termmap=null;
 
     public HpoOntologyParser(String path){
         hpoOntologyPath=path;
@@ -44,17 +44,18 @@ public class HpoOntologyParser {
      * @throws IOException
      */
     public void parseOntology() throws IOException {
-        HpoOntology hpo;
-        TermPrefix pref = new ImmutableTermPrefix("HP");
-        TermId inheritId = new ImmutableTermId(pref,"0000005");
-        HpoOboParser hpoOboParser = new HpoOboParser(new File(hpoOntologyPath));
-        hpo = hpoOboParser.parse();
-        this.abnormalPhenoSubOntology = hpo.getPhenotypicAbnormalitySubOntology();
+        Ontology hpo;
+
+        TermId inheritId = TermId.of("HP:0000005");
+        TermId phenotypicAbId= TermId.of("HP:0000118");
+
+        hpo =  OntologyLoader.loadOntology(new File(this.hpoOntologyPath));
+        this.abnormalPhenoSubOntology = hpo.subOntology(phenotypicAbId);
         this.inheritanceSubontology = hpo.subOntology(inheritId);
     }
 
-    public Ontology<HpoTerm, HpoTermRelation> getPhenotypeSubontology() { return this.abnormalPhenoSubOntology; }
-    public Ontology<HpoTerm, HpoTermRelation> getInheritanceSubontology() { return  this.inheritanceSubontology; }
+    public Ontology getPhenotypeSubontology() { return this.abnormalPhenoSubOntology; }
+    public Ontology getInheritanceSubontology() { return  this.inheritanceSubontology; }
 
 
 

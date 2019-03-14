@@ -1,8 +1,9 @@
 package org.jax.pdxintegrator.model.tumor;
 
-import com.github.phenomics.ontolib.ontology.data.TermId;
+
 import java.util.ArrayList;
-import org.jax.pdxintegrator.uberon.UberonTerm;
+
+import org.monarchinitiative.phenol.ontology.data.TermId;
 
 /**
  * Main class for modeling the Clinical/Tumor part of the PDX-MI
