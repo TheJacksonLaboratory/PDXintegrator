@@ -1,6 +1,7 @@
 package org.jax.pdxintegrator.rdf;
 
-
+import com.github.phenomics.ontolib.ontology.data.ImmutableTermId;
+import com.github.phenomics.ontolib.ontology.data.TermId;
 import org.apache.jena.datatypes.xsd.XSDDatatype;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
@@ -33,7 +34,6 @@ import static org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment.P
 import static org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment.PROGRESSIVE_DISEASE;
 import static org.jax.pdxintegrator.model.qualityassurance.ResponseToTreatment.STABLE_DISEASE;
 import org.jax.pdxintegrator.model.tumor.TumorGrade;
-import org.monarchinitiative.phenol.ontology.data.TermId;
 
 /**
  * This class coordinates the transformation of one or more
@@ -51,8 +51,8 @@ public class PdxModel2Rdf {
     //private Model rdfModel = ModelFactory.createDefaultModel();
     private OntModel rdfModel;
 
-    public final TermId male = TermId.of("NCIT:C20197");
-    public final TermId female = TermId.of("NCIT:C16576");
+    public final TermId male = ImmutableTermId.constructWithPrefix("NCIT:C20197");
+    public final TermId female = ImmutableTermId.constructWithPrefix("NCIT:C16576");
 
     // RDF properties needed throughout the model
     private Property hasPatientIdProperty;
@@ -213,9 +213,10 @@ public class PdxModel2Rdf {
     private Resource noConsent;
     private Resource yesConsent;
     private Resource academicConsent;
-
+    
     private Literal trueLiteral;
     private Literal falseLiteral;
+    
 
     /**
      * Tumor preparation types
@@ -741,6 +742,16 @@ public class PdxModel2Rdf {
                         ResourceFactory.createTypedLiteral(String.valueOf(mcreation.getEngraftmentTime()),
                                 XSDDatatype.XSDinteger));
             }
+            
+            
+            setProperty(modelCreation,hasCryopreservedBeforeEngraftmentProperty,mcreation.getCryopreservedBeforeEngraftment());
+            setProperty(modelCreation,hasDoublingTimeProperty,mcreation.getDoublingTime());
+            setProperty(modelCreation,hasEngraftmentMaterialProperty,mcreation.getEngraftmentMaterial());
+            
+            setProperty(modelCreation,hasMacroMetastasisRequiresExcisionProperty,mcreation.getMacroMetastasisRequiresExcision());
+            
+            setProperty(modelCreation,hasViablyCryopreseredProperty,mcreation.getViablyCryopresered());
+
 
             setProperty(modelCreation, hasCryopreservedBeforeEngraftmentProperty, mcreation.getCryopreservedBeforeEngraftment());
             setProperty(modelCreation, hasDoublingTimeProperty, mcreation.getDoublingTime());
@@ -1036,6 +1047,10 @@ public class PdxModel2Rdf {
         }
         return resource;
     }
+    
+    
+   
+
 
     private void createEntities() {
 
