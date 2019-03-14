@@ -79,7 +79,7 @@ public class ParseSpreadSheetCommand extends Command {
 
     public static void main(String[] args) {
         
-        String xlsxFile = "C:/Users/sbn/Desktop/PDXNet/ryan/MDA.xlsx";
+        String xlsxFile = "C:/Users/sbn/Desktop/PDXNet/BCM2/BCM.xlsx";
         String outFile = xlsxFile.replace(".xlsx", ".rdf");
         if(xlsxFile.equals(outFile)){
             System.out.println("Wrong format "+xlsxFile);
@@ -202,6 +202,7 @@ public class ParseSpreadSheetCommand extends Command {
         } catch (Exception e) {
             messages.append("\nERROR: parsing "+spreadSheetFileString);
             e.printStackTrace();
+            System.out.println(messages.toString());
         }
 
     }
@@ -656,6 +657,7 @@ public class ParseSpreadSheetCommand extends Command {
             try{
                 omicsFile.setUpdatedDateTime(getInteger("OMICS: Update date",row.get(11)).toString());
             }catch(Exception e){}
+            
             omicsFile.setIsFFPE(getBoolean("OMICS: isFFPE",row.get(12)));
             // paired end should be 1,2 or null
             // however sometime supplied as True (=2) False (=1)
@@ -704,7 +706,7 @@ public class ParseSpreadSheetCommand extends Command {
         if(id.endsWith(".0")){
             messages.append("\nFixing "+what+" "+id+" to ");
             id = id.substring(0, id.length()-2);
-            messages.append("\n"+id);
+            messages.append(id+"\n");
         }
         return id.trim();
     }

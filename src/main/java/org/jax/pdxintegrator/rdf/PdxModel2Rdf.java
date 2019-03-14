@@ -863,9 +863,11 @@ public class PdxModel2Rdf {
             System.out.println(date);
             if(date != null && date.trim().length()>0){
                 if(date.length()==7)date = "0"+date;
-                Calendar c = new Calendar.Builder().setDate(new Integer(date.substring(4)),new Integer(date.substring(0,2))-1, new Integer(date.substring(2,4))).build();
-          
-                System.out.println(date+" parsed as "+new Integer(date.substring(4))+","+new Integer(date.substring(0,2))+","+new Integer(date.substring(2,4)));
+                
+                Calendar c = new Calendar.Builder().setDate(new Integer(date.substring(0,4)),new Integer(date.substring(5,6))-1, new Integer(date.substring(6,8))).build();
+                System.out.println(date+" parsed as "+new Integer(date.substring(0,4))+","+new Integer(date.substring(5,6))+","+new Integer(date.substring(6,8)));
+               
+                
                 System.out.println(c.getTime().toString());
                 System.out.println(rdfModel.createTypedLiteral(c));
                 thisOmicsFile.addProperty(this.hasCreatedDateTime,rdfModel.createTypedLiteral(c));
@@ -895,8 +897,9 @@ public class PdxModel2Rdf {
 
               if(date != null){
                 if(date.length()==7)date = "0"+date;
-                Calendar c = new Calendar.Builder().setDate(new Integer(date.substring(4)),new Integer(date.substring(0,2))-1, new Integer(date.substring(2,4))).build();
+               Calendar c = new Calendar.Builder().setDate(new Integer(date.substring(0,4)),new Integer(date.substring(5,6))-1, new Integer(date.substring(6,8))).build();
           
+               
             //    System.out.println(date+" parsed as "+new Integer(date.substring(4))+","+new Integer(date.substring(0,2))+","+new Integer(date.substring(2,4)));
             //    System.out.println(c.getTime().toString());
             //    System.out.println(rdfModel.createTypedLiteral(c));
@@ -982,8 +985,11 @@ public class PdxModel2Rdf {
                     break;
             default:
                     format =  null;
+                    System.out.println("unknown data format "+dataFormat);
          }
-         resource.addProperty(this.hasDataFormat,format);
+         if(format!=null){
+            resource.addProperty(this.hasDataFormat,format);
+         }
          return resource;
     }
 

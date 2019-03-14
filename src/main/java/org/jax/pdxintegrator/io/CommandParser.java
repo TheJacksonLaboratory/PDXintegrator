@@ -159,7 +159,7 @@ public class CommandParser {
                 if(this.xlxsFile == null){
                     printUsage("[ERROR] --xlxsFile option required for parseXLXS command");
                 }
-                System.out.println("HERE! "+this.xlxsFile);
+              
                 if(this.rdfFilename == null || this.rdfFilename.equals(DEFAULT_RDF_FILENAME)){
                      this.rdfFilename = this.xlxsFile.replace(".xlsx", ".rdf");
                      System.out.println("No RDF file name provided will output RDF to "+this.rdfFilename);

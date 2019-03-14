@@ -112,9 +112,9 @@ public class PdxModelSimulator {
     private static int omicsCount = 1;
     private PdxOmicsFile buildOmicsFile(String modelID, String patientID){
         PdxOmicsFile omicsFile = new PdxOmicsFile();
-        omicsFile.setAccessLevel("access level value");
+        omicsFile.setAccessLevel("controlled");
         omicsFile.setCaptureKit("capture kit value");
-        omicsFile.setCreatedDateTime("Tuesday at noon");
+        omicsFile.setCreatedDateTime("20190229");
         omicsFile.setDataCategory("data category value");
         omicsFile.setDataFormat("data format value");
         omicsFile.setDataType("data type value");
@@ -128,7 +128,7 @@ public class PdxModelSimulator {
         omicsFile.setPassage(1);
         omicsFile.setPlatform("whole exome");
         omicsFile.setSampleType("tumor");
-        omicsFile.setUpdatedDateTime("update date");
+        omicsFile.setUpdatedDateTime("20190320");
         
         return omicsFile;
     }
