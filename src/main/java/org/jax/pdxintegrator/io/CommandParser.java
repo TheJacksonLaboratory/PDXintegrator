@@ -161,10 +161,10 @@ public class CommandParser {
                 }
               
                 if(this.rdfFilename == null || this.rdfFilename.equals(DEFAULT_RDF_FILENAME)){
-                     this.rdfFilename = this.xlxsFile.replace(".xlsx", ".rdf");
+                     this.rdfFilename = this.xlxsFile.replace(".xlxs", ".rdf");
                      System.out.println("No RDF file name provided will output RDF to "+this.rdfFilename);
                 }
-                    this.command = new ParseSpreadSheetCommand(this.xlxsFile, this.rdfFilename);
+                this.command = new ParseSpreadSheetCommand(this.xlxsFile, this.rdfFilename);
             
             }else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));
@@ -254,7 +254,7 @@ public class CommandParser {
         writer.println();
         
         writer.println("parseXLXS");
-        writer.println("\tjava -jar PdxIntegrator.jar parseXLXS [-x file]: Parse metadata from Excel file to RDF");
+        writer.println("\tjava -jar PdxIntegrator.jar parseXLXS -x xlxs file [-r rdf file]: Parse metadata from Excel file to RDF");
         writer.println();
         writer.close();
         System.exit(0);

@@ -79,7 +79,7 @@ public class ParseSpreadSheetCommand extends Command {
 
     public static void main(String[] args) {
         
-        String xlsxFile = "C:/Users/sbn/Desktop/PDXNet/BCM2/BCM.xlsx";
+        String xlsxFile = "C:/NewPDXNet/WISTAR/WISTAR.xlsx";
         String outFile = xlsxFile.replace(".xlsx", ".rdf");
         if(xlsxFile.equals(outFile)){
             System.out.println("Wrong format "+xlsxFile);
@@ -96,6 +96,7 @@ public class ParseSpreadSheetCommand extends Command {
 
     public void execute() {
 
+        System.out.println("'allo");
         try {
             File file = new File(spreadSheetFileString);
 
@@ -131,13 +132,20 @@ public class ParseSpreadSheetCommand extends Command {
                         ArrayList<PdxOmicsFile> modelOmicsFiles = new ArrayList<>();
 
                         ArrayList<PdxModelCreation> modelModelCreations = new ArrayList<>();
-                        for (PdxClinicalTumor tumor : modelTumors) {
-                            if(modelCreations.get(tumor.getSubmitterTumorID()) != null){
-                                modelModelCreations.addAll(modelCreations.get(tumor.getSubmitterTumorID()));
+                        String model ="";
+                        if(modelTumors != null){
+                            for (PdxClinicalTumor tumor : modelTumors) {
+                                if(modelCreations.get(tumor.getSubmitterTumorID()) != null){
+                                    modelModelCreations.addAll(modelCreations.get(tumor.getSubmitterTumorID()));
+                                }
                             }
+                        }else{
+                            messages.append("no tumors for patient "+patientID);
+                            modelTumors = new ArrayList<>();
                         }
-
+                        
                         for (PdxModelCreation mc : modelModelCreations) {
+                            model = mc.getModelID();
                             if(qas.containsKey(mc.getModelID())){
                                 modelQAs.addAll(qas.get(mc.getModelID()));
                             } else {
@@ -158,13 +166,18 @@ public class ParseSpreadSheetCommand extends Command {
                             }
 
                         }
+                        if(modelModelStudies != null){
                         for (PdxModelStudy study : modelModelStudies) {
                             if (studyTreatments.containsKey(study.getModelID())) {
                                 study.setTreatments(studyTreatments.get(study.getModelID()));
                             }
                         }
+                        }else{
+                            messages.append("no model studies for model "+model);
+                            modelModelStudies = new ArrayList<>();
+                        }
 
-                        messages.append("\nPatient " + patientID + " has " + modelTumors.size() + " tumors, " + modelModelCreations.size() + " model details, " + modelQAs.size() + " qas, " + modelModelStudies.size() + " modelStudies, " +((PdxModelStudy)modelModelStudies.get(0)).getTreatments().size()+" treatments, " + modelOmicsFiles.size() + " omicsfiles.");
+                        messages.append("\nPatient " + patientID + " has " + modelTumors.size() + " tumors, " + modelModelCreations.size() + " model details, " + modelQAs.size() + " qas, " + modelModelStudies.size() + " modelStudies, "  + modelOmicsFiles.size() + " omicsfiles.");
 
                         models.add(new PdxModel(this.pdtc, modelPatient, modelTumors, modelModelCreations, modelQAs, modelModelStudies, modelOmicsFiles));
                     }
@@ -201,8 +214,9 @@ public class ParseSpreadSheetCommand extends Command {
             }
         } catch (Exception e) {
             messages.append("\nERROR: parsing "+spreadSheetFileString);
-            e.printStackTrace();
-            System.out.println(messages.toString());
+           
+            //System.out.println(messages.toString());
+             e.printStackTrace();
         }
 
     }
@@ -347,7 +361,11 @@ public class ParseSpreadSheetCommand extends Command {
             tumor.setEventIndex(row.get(2));
             tumor.setCollectionProcedure(row.get(3));
             tumor.setTreatmentNaive(getBoolean("Tumor: treatment naive",row.get(4)));
-            tumor.setAgeAtCollection(getInteger("Tumor: age at collection ",row.get(5)).toString());
+            try{
+                tumor.setAgeAtCollection(getInteger("Tumor: age at collection ",row.get(5)).toString());
+            }catch(Exception e){
+                messages.append("Not setting age at collection to '"+row.get(5)+"'");
+            }
             tumor.setInitialDiagnosis(row.get(6));
             tumor.setClinicalEventPoint(row.get(7));
             tumor.setTissueOfOrigin(row.get(8));
@@ -537,8 +555,7 @@ public class ParseSpreadSheetCommand extends Command {
 
     public HashMap<String, ArrayList<PdxModelStudy>> buildModelStudies(ArrayList<ArrayList<String>> sheetData) {
         //Model ID	Study ID	Study Description	Passage Used	Host Strain	
-        //Implantation site	Baseline Tumor Target Size	Endpoint 1	Endpoint 2	Endpoint 3
-
+        //Implantation site	Baseline Tumor Target Size
 
         HashMap<String, ArrayList<PdxModelStudy>> studies = new HashMap<>();
         for (ArrayList<String> row : sheetData) {
@@ -806,6 +823,7 @@ public class ParseSpreadSheetCommand extends Command {
                         default:
                             // this is a log message the user can't do anything...
                             messages.append("\n"+cell.getCellType() + " not managed skipping");
+                            messages.append("\nRow "+r.getRowNum()+" Cell "+i+" sheet "+sheet.getSheetName());
 
                     }
                     i++;
