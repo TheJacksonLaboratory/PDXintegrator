@@ -38,7 +38,7 @@ public class CommandParser {
 
     private String n_cases=null;
     
-    private String xlxsFile = null;
+    private String xlsxFile = null;
 
     private Command command=null;
 
@@ -124,7 +124,7 @@ public class CommandParser {
             }
             
             if (commandLine.hasOption("x")) {
-                this.xlxsFile = commandLine.getOptionValue("x");
+                this.xlsxFile = commandLine.getOptionValue("x");
             }
             
             if (mycommand.equals("download")) {
@@ -156,15 +156,15 @@ public class CommandParser {
                 this.command = new DrugBankCommand(drugBankPath,DEFAULT_DRUGBANK_OUTPUT_FILE);
                 
             } else if (mycommand.equals("parseXLXS")){
-                if(this.xlxsFile == null){
+                if(this.xlsxFile == null){
                     printUsage("[ERROR] --xlxsFile option required for parseXLXS command");
                 }
               
                 if(this.rdfFilename == null || this.rdfFilename.equals(DEFAULT_RDF_FILENAME)){
-                     this.rdfFilename = this.xlxsFile.replace(".xlxs", ".rdf");
+                     this.rdfFilename = this.xlsxFile.replace(".xlsx", ".rdf");
                      System.out.println("No RDF file name provided will output RDF to "+this.rdfFilename);
                 }
-                this.command = new ParseSpreadSheetCommand(this.xlxsFile, this.rdfFilename);
+                this.command = new ParseSpreadSheetCommand(this.xlsxFile, this.rdfFilename);
             
             }else {
                 printUsage(String.format("Did not recognize command: %s", mycommand));

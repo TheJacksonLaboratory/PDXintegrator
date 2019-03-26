@@ -41,7 +41,7 @@ public enum ResponseToTreatment {
             case "log2":
                 return ResponseToTreatment.LOG2_FOLD_CHANGE;
             default:
-                System.out.println("Cant convert '"+response+"' to a response for treatment. Using 'Not assessed'");
+          //      System.out.println("Cant convert '"+response+"' to a response for treatment. Using 'Not assessed'");
                 return ResponseToTreatment.NOT_ASSESSED;
         }
     }

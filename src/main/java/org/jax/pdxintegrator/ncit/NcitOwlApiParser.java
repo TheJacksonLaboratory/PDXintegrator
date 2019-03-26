@@ -93,8 +93,8 @@ public class NcitOwlApiParser {
                         //System.out.println("\t"+annot.toString());
                         if (annot.getProperty().isLabel()) {
                             String label = annot.getValue().toString();
-                            if(label.toLowerCase().replaceAll("\"","").contains("metastatic breast"))
-                            System.out.println("Term:"+label);
+                         
+                         //   System.out.println("Term:"+label);
                            addTerm(termlist,iri.getShortForm(),label);
                            break;
                         }
@@ -112,7 +112,7 @@ public class NcitOwlApiParser {
                         if (annot.getProperty().isLabel()) {
                             String label = annot.getValue().toString();
                             if(label.replaceAll("\"","").startsWith("Grade"))
-                            System.out.println("Grade:"+label+" "+iri.getShortForm());
+                      //      System.out.println("Grade:"+label+" "+iri.getShortForm());
                             
                             addTerm(gradeTermList,iri.getShortForm(),label);
                             break;
@@ -130,7 +130,7 @@ public class NcitOwlApiParser {
                        
                         if (annot.getProperty().isLabel()) {
                             String label = annot.getValue().toString();
-                            System.out.println("Stage:"+label);
+                      //      System.out.println("Stage:"+label);
                             addTerm(stageTermList, iri.getShortForm(), label);
                             break;
                         }

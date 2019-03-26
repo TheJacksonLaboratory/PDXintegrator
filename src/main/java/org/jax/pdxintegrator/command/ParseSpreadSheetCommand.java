@@ -66,6 +66,7 @@ public class ParseSpreadSheetCommand extends Command {
     private HashMap<String,String> modelStudyIDs = new HashMap();
     
     private StringBuilder messages = new StringBuilder();
+    private StringBuilder stats = new StringBuilder();
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
@@ -75,11 +76,16 @@ public class ParseSpreadSheetCommand extends Command {
         this.spreadSheetFileString = spreadSheetFile;
  
         this.rdfFileString = rdfFile;
+        
+        if(spreadSheetFile.equals(rdfFile)){
+            System.out.println("Wrong format: "+spreadSheetFile);
+            System.exit(0);
+        }
     }
 
     public static void main(String[] args) {
         
-        String xlsxFile = "C:/NewPDXNet/WISTAR/WISTAR.xlsx";
+        String xlsxFile = "C:/test/PDXNetMetadata03262019.xlsx";
         String outFile = xlsxFile.replace(".xlsx", ".rdf");
         if(xlsxFile.equals(outFile)){
             System.out.println("Wrong format "+xlsxFile);
@@ -96,7 +102,7 @@ public class ParseSpreadSheetCommand extends Command {
 
     public void execute() {
 
-        System.out.println("'allo");
+       
         try {
             File file = new File(spreadSheetFileString);
 
@@ -111,14 +117,21 @@ public class ParseSpreadSheetCommand extends Command {
                     validateCounts(workbook);
 
                     HashMap<String, PdxPatient> patients = buildPatient(getSheetData(workbook.getSheetAt(0)));
+                    
                     HashMap<String, ArrayList<PdxPatientTreatment>> patientTreatments = buildPatientTreatments(getSheetData(workbook.getSheetAt(1)));
+                    
                     HashMap<String, ArrayList<PdxClinicalTumor>> clinicalTumors = buildTumors(getSheetData(workbook.getSheetAt(2)));
+                    
                     HashMap<String, ArrayList<PdxModelCreation>> modelCreations = buildModelDetails(getSheetData(workbook.getSheetAt(3)));
+                    
                     HashMap<String, ArrayList<PdxQualityAssurance>> qas = buildQAs(getSheetData(workbook.getSheetAt(4)));
+                    
                     HashMap<String, ArrayList<PdxModelStudy>> modelStudies = buildModelStudies(getSheetData(workbook.getSheetAt(5)));
+                    
                     HashMap<String, ArrayList<PdxStudyTreatment>> studyTreatments = buildStudyTreatments(getSheetData(workbook.getSheetAt(6)));
+                    
                     HashMap<String, ArrayList<PdxOmicsFile>> omicsFiles = buildOmicsFiles(getSheetData(workbook.getSheetAt(7), true));
-
+                  
                     ArrayList<PdxModel> models = new ArrayList<>();
 
                     for (String patientID : patients.keySet()) {
@@ -187,10 +200,14 @@ public class ParseSpreadSheetCommand extends Command {
                         String mappingFile = this.spreadSheetFileString.replace(".xlsx", ".mapping");
                         if(mappingFile.equals(this.spreadSheetFileString)){
                             System.out.println("Wrong format "+this.spreadSheetFileString);
-                            System.exit(0);
+                            return;
                         }
                         System.out.println(messages.toString());
-                        System.out.println("No fatal errors generating RDF.");
+                        messages = new StringBuilder();
+                        System.out.println("No fatal errors. Generating RDF.");
+                        System.out.println(stats.toString());
+                        stats = new StringBuilder();
+                        
                         mt.setMappingFile(mappingFile);
                         
                         mt.findTerms(models);
@@ -198,6 +215,7 @@ public class ParseSpreadSheetCommand extends Command {
                         try {
                             FileOutputStream fos = new FileOutputStream(rdfFileString, false);
                             p2rdf.outputRDF(fos);
+                            
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -217,8 +235,10 @@ public class ParseSpreadSheetCommand extends Command {
            
             //System.out.println(messages.toString());
              e.printStackTrace();
+             System.out.println(messages.toString());
         }
 
+        System.out.println(messages.toString());
     }
 
     private HashMap<String, PdxPatient> buildPatient(ArrayList<ArrayList<String>> sheetData) {
@@ -364,7 +384,9 @@ public class ParseSpreadSheetCommand extends Command {
             try{
                 tumor.setAgeAtCollection(getInteger("Tumor: age at collection ",row.get(5)).toString());
             }catch(Exception e){
-                messages.append("Not setting age at collection to '"+row.get(5)+"'");
+                if(!row.get(5).isEmpty()){
+                    messages.append("Not setting age at collection to '"+row.get(5)+"'");
+                }
             }
             tumor.setInitialDiagnosis(row.get(6));
             tumor.setClinicalEventPoint(row.get(7));
@@ -648,7 +670,7 @@ public class ParseSpreadSheetCommand extends Command {
         //Experimental Strategy, Platform, Capture Kit, Updated Datetime, 
         //Is FFPE, Paired_end, File name, File Size, Passage            
         HashMap<String, ArrayList<PdxOmicsFile>> omics = new HashMap<>();
-
+System.out.println(sheetData.size()+" rows of OMICS Files");
         for (ArrayList<String> row : sheetData) {
             
             while (row.size() < OMICS_FILE_COLUMNS ) {
@@ -682,18 +704,19 @@ public class ParseSpreadSheetCommand extends Command {
             omicsFile.setFileName(row.get(14));
             
             try{
-                String val = row.get(15);
+                String val = getInteger("OMCIS: File Size",row.get(15)).toString();
                 val = fixFileSize(val);
                 omicsFile.setFileSize(new Long(val).toString());
             }catch(Exception e){
-                messages.append("\n"+row.get(15)+" is not an integer. OMICS:Filesize should be in bytes");
+                e.printStackTrace();
+                messages.append("\n"+row.get(15)).append(" is not an integer. OMICS:Filesize should be in bytes");
             }
             
             
             omicsFile.setPassage(getPassage("OMICS: Passage ",row.get(16)));
 
             // don't bother if no filename is provided.
-            if (row.get(14).trim().length() > 0) {
+            if (!row.get(14).isEmpty()) {
                 if (omics.containsKey(omicsFile.getModelID())) {
                     omics.get(omicsFile.getModelID()).add(omicsFile);
                 } else {
@@ -769,7 +792,7 @@ public class ParseSpreadSheetCommand extends Command {
             Cell c = it.next();
             if(c.getCellType()!=CellType.BLANK){
                 // these are column headers and should all be strings
-                if(c.getStringCellValue().trim().length()>0){
+                if(!c.getStringCellValue().isEmpty()){
                     count++;
                 }
                 
@@ -840,7 +863,7 @@ public class ParseSpreadSheetCommand extends Command {
 
     private boolean rowNotEmpty(ArrayList<String> row) {
         for (String s : row) {
-            if (s.trim().length() > 0) {
+            if (!s.isEmpty()) {
                 return true;
             }
         }
@@ -873,7 +896,9 @@ public class ParseSpreadSheetCommand extends Command {
             return new Integer(new Double(i).intValue());
             
         }catch(Exception e){
-            messages.append("\nCan not convert "+i+" to an integer value for "+where+". Defaulting to null");
+            if(!i.isEmpty()){
+                messages.append("\nCan not convert '"+i+"' to an integer value for "+where+". Defaulting to null");
+            }
         }
         return null;
     }
@@ -893,7 +918,9 @@ public class ParseSpreadSheetCommand extends Command {
             case "false":
                 return false;
             default:
-                messages.append("\nCan't convert '"+b+"' to a boolean for "+where);
+                if(!b.isEmpty()){
+                    messages.append("\nCan't convert '"+b+"' to a boolean for "+where);
+                }
                 return null;
         }
     }
@@ -909,7 +936,9 @@ public class ParseSpreadSheetCommand extends Command {
             }else if(eth.contains("hispanic") || eth.contains("latino")){
                 e = Ethnicity.LATINO;
             }else{
-                messages.append("\n Unable to convert "+eth+" into standard ethnicity, using 'Unknown'");
+                if(!eth.isEmpty()){
+                    messages.append("\n Unable to convert "+eth+" into standard ethnicity, using 'Unknown'");
+                }
             }
         }else{
             messages.append("\n No ethnicity specified, using 'Unknown'");
@@ -946,7 +975,9 @@ public class ParseSpreadSheetCommand extends Command {
                 r = Race.NHOPI;
                 
             }else{
-                messages.append("\n Unable to convert "+race+" into standard race using 'Unknown'");
+                if(!race.isEmpty()){
+                    messages.append("\n Unable to convert "+race+" into standard race using 'Unknown'");
+                }
             }
         }else{
             messages.append("\n No race specified, using 'Unknown'");
@@ -960,16 +991,27 @@ public class ParseSpreadSheetCommand extends Command {
     public String fixFileSize(String sizeStr){
         Double size = null;
         String[] parts = sizeStr.split(" ");
-        if(parts[1].contains("G")){
-            size  = new Double(parts[0])* 1073741824;
-        }
-        if(parts[1].contains("K")){
-            size  = new Double(parts[0])* 1024;
+        size = new Double(parts[0]);
+        if(parts.length>1){
+            if(parts[1].contains("G")){
+                size  = new Double(parts[0])* 1073741824;
+            }
+            if(parts[1].contains("K")){
+                size  = new Double(parts[0])* 1024;
+            }
         }
         size =Math.ceil(size);
         DecimalFormat df = new DecimalFormat("#");
         df.setMaximumFractionDigits(0);
         return df.format(size);
     }
+    
+   private int getCount(HashMap<String,ArrayList> items){
+       int count = 0;
+        for(ArrayList<Object> list : items.values()){
+            count += list.size();
+        }
+        return count;
+   }
     
 }

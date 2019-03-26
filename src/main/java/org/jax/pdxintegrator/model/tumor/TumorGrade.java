@@ -83,7 +83,7 @@ public enum TumorGrade {
             case "IN":
                 return TumorGrade.Intermediate;
             default:
-                System.out.println("Cant convert '"+gradeIn+"' to a tumor grade. Using place holder 'Unknown'");
+              //  System.out.println("Cant convert '"+gradeIn+"' to a tumor grade. Using place holder 'Unknown'");
                 return TumorGrade.UNK;
         }
     }

@@ -616,7 +616,7 @@ public class PdxModel2Rdf {
 
             // bi directional
             tumorSample.addProperty(hasPatientProperty, rdfModel.getResource(String.format("%s/%s", PDXNET_NAMESPACE + "/patient", clintumor.getPatientID())));
-            System.out.println(tumorSample.getURI() + " has patient " + String.format("%s/%s", PDXNET_NAMESPACE + "/patient", clintumor.getPatientID()));
+        //    System.out.println(tumorSample.getURI() + " has patient " + String.format("%s/%s", PDXNET_NAMESPACE + "/patient", clintumor.getPatientID()));
             rdfModel.getResource(String.format("%s/%s", PDXNET_NAMESPACE + "/patient", clintumor.getPatientID())).addProperty(this.hasTumorProperty, tumorSample);
 
         }
@@ -860,16 +860,16 @@ public class PdxModel2Rdf {
 
             setAccessLevel(thisOmicsFile, omicsFile.getAccessLevel());
             String date = omicsFile.getCreatedDateTime();
-            System.out.println(date);
+           // System.out.println(date);
             if(date != null && date.trim().length()>0){
                 if(date.length()==7)date = "0"+date;
                 
                 Calendar c = new Calendar.Builder().setDate(new Integer(date.substring(0,4)),new Integer(date.substring(5,6))-1, new Integer(date.substring(6,8))).build();
-                System.out.println(date+" parsed as "+new Integer(date.substring(0,4))+","+new Integer(date.substring(5,6))+","+new Integer(date.substring(6,8)));
+            //    System.out.println(date+" parsed as "+new Integer(date.substring(0,4))+","+new Integer(date.substring(5,6))+","+new Integer(date.substring(6,8)));
                
                 
-                System.out.println(c.getTime().toString());
-                System.out.println(rdfModel.createTypedLiteral(c));
+            //    System.out.println(c.getTime().toString());
+            //    System.out.println(rdfModel.createTypedLiteral(c));
                 thisOmicsFile.addProperty(this.hasCreatedDateTime,rdfModel.createTypedLiteral(c));
             }
             
